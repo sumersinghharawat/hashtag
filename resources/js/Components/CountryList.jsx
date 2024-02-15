@@ -1,5 +1,8 @@
 export default [
         {
+            "name":"Select Country"
+        },
+        {
             "name": "Afghanistan",
             "code": "AF",
             "capital": "Kabul",

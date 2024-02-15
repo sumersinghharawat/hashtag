@@ -1,18 +1,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import CustomerAuthenticatedLayout from '@/Layouts/CustomerAuthenticatedLayout';
+import FounderAuthenticatedLayout from '@/Layouts/FounderAuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
 
-export default function CustomerDashboard({ auth,children }) {
+export default function FounderDashboard({ auth,children,step }) {
     return (
-        <CustomerAuthenticatedLayout
+        <FounderAuthenticatedLayout
             user={auth.user}
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Customer Dashboard</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Founder Dashboard</h2>}
         >
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div className={step==0?"mx-auto max-w-2xl  sm:px-6 lg:px-8":"mx-auto max-w-7xl  sm:px-6 lg:px-8"}>
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     {children}
                     {/* {step==1?<LetsBegin data={customer_info} errors={errors} processing={processing} step={step}></LetsBegin>:
@@ -34,6 +34,6 @@ export default function CustomerDashboard({ auth,children }) {
                     </div>
                 </div>
             </div>
-        </CustomerAuthenticatedLayout>
+        </FounderAuthenticatedLayout>
     );
 }

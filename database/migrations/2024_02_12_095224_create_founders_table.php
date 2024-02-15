@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('founders', function (Blueprint $table) {
             $table->id();
-            $table->string('company_id');
-            $table->string('user_id');
-            $table->string('ownership_percentage');
+            $table->integer('company_id')->nullable();
+            $table->integer('user_id');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->boolean('manager')->default(0);
+            $table->boolean('visa_status')->nullable();
+            $table->string('ownership_percentage')->default(0);
             $table->timestamps();
         });
     }

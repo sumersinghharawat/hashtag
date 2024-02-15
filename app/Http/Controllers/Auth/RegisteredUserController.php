@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Customer;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Socialite\Facades\Socialite;
 
 class RegisteredUserController extends Controller
 {
@@ -65,5 +67,57 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::FOUNDERHOME);
+    }
+
+    public function redirectToGoogle(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            //create a user using socialite driver google
+            $user = Socialite::driver('google')->user();
+            // if the user exits, use that user and login
+
+            $finduser = User::where('google_id', $user->id)->first();
+            if($finduser){
+                //if the user exists, login and show dashboard
+                Auth::login($finduser);
+                return redirect(RouteServiceProvider::FOUNDERHOME);
+            }else{
+                $count = User::where('email', $user->email)->count();
+                if($count>0){
+                    $updateuserid = User::where('email', $user->email)->update(['google_id'=> $user->id]);
+                    // if($updateuserid){
+                    $finduser = User::where('google_id', $user->id)->first();
+                    Auth::login($finduser);
+                    return redirect(RouteServiceProvider::FOUNDERHOME);
+                    // }
+                }
+                //user is not yet created, so create first
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'first_name' => $user->user['given_name'],
+                    'last_name' => $user->user['family_name'],
+                    'email' => $user->email,
+                    'google_id'=> $user->id,
+                    'password' => encrypt('')
+                ]);
+
+                $newUser->assignRole('founder');
+                Auth::login($newUser);
+                // go to the dashboard
+                return redirect(RouteServiceProvider::FOUNDERHOME);
+            }
+            //catch exceptions
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
     }
 }

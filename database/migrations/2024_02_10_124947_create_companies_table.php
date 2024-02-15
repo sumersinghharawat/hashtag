@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('industry')->nullable();
             $table->longText('description')->nullable();
             $table->string('country')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

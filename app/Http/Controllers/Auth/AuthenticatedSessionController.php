@@ -42,8 +42,8 @@ class AuthenticatedSessionController extends Controller
         $roles = $user->getRoleNames()->toArray();
 
 
-        if(in_array('customer',$roles)){
-            return redirect()->intended(RouteServiceProvider::CUSTOMERHOME);
+        if(in_array('founder',$roles)){
+            return redirect()->intended(RouteServiceProvider::FOUNDERHOME);
         }else{
             return redirect()->intended(RouteServiceProvider::HOME);
         }
