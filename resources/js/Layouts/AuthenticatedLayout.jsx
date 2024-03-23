@@ -9,7 +9,7 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen mt-8 bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
@@ -27,8 +27,32 @@ export default function Authenticated({ user, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('admin.dashboard.viewrequest')} active={route().current('admin.dashboard.viewrequest')}>
-                                    View Requests
+                                <NavLink href={route('admin.dashboard.viewrequests')} active={route().current('admin.dashboard.viewrequests')}>
+                                    Requests
+                                </NavLink>
+                            </div>
+
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('admin.dashboard.viewleads')} active={route().current('admin.dashboard.viewleads')}>
+                                    Leads
+                                </NavLink>
+                            </div>
+
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('admin.dashboard.viewagents')} active={route().current('admin.dashboard.viewagents')}>
+                                    Agents
+                                </NavLink>
+                            </div>
+
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('admin.dashboard.forms')} active={route().current('admin.dashboard.forms')}>
+                                    Forms
+                                </NavLink>
+                            </div>
+
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:hidden">
+                                <NavLink href={route('admin.dashboard.viewindustry')} active={route().current('admin.dashboard.viewindustry')}>
+                                    Industries
                                 </NavLink>
                             </div>
                         </div>

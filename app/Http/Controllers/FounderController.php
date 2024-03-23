@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Founder;
 use App\Models\User;
+use App\Rules\UniqueNameCombination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
@@ -23,30 +24,41 @@ class FounderController extends Controller
 
         $step = 0;
 
-        if($user->mobile_number == "" || $user->country_of_residenace == ""){
+        if($user->formstep == -1){
                 return redirect('/founder/letsbegin');
         }
 
         $founder_info = Founder::where(['user_id'=>$user->id])->first();
 
-        if(!$founder_info->company_id){
+        if($user->formstep == 0){
             return redirect('/founder/companyname');
         }
 
-        $company = Company::where(['user_id'=>$user->id,'id'=>$founder_info->company_id])->first();
-        if(empty($company->industry) || empty($company->description)){
+        if($user->formstep == 1){
             return redirect(route('founder.dashboard.companydetails'));
         }
 
-        $founder = Founder::where(['user_id'=>$user->id])->first();
+        if($user->formstep == 2){
+            return redirect(route('founder.dashboard.foundersdetail'));
+        }
 
-        if(empty($founder->visa_status)){
+        if($user->formstep == 3){
             return redirect(route('founder.dashboard.foundersvisa'));
         }
 
-        if(empty($company->status)){
+        if($user->formstep == 4){
             return redirect(route('founder.dashboard.summary'));
         }
+
+        if($user->formstep == 5){
+            return redirect(route('founder.dashboard.paynow'));
+        }
+
+        if($user->formstep == 6){
+            return redirect(route('founder.dashboard.viewrequest'));
+        }
+
+        $company = Company::where(['user_id'=>$user->id])->first();
 
         if($company->status == 0){
             return redirect(route('founder.dashboard.thankyou'));
@@ -76,15 +88,14 @@ class FounderController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'first_name' => 'required|string|max:255|unique:'.Founder::class,
-            'last_name' => 'required|string|max:255'
+            'first_name' => ['required','string','max:255',new UniqueNameCombination],
         ]);
 
         $company = Company::where(['user_id'=>$user->id])->first();
 
         Founder::create([
             'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
+            'last_name' => $request->last_name?$request->last_name:"",
             'user_id' => $user->id,
             'company_id' => $company->id
         ]);
@@ -139,7 +150,13 @@ class FounderController extends Controller
 
         $user = Auth::user();
 
-        return Inertia::render('Founder/LetsBegin',['auth' => ["user"=>$user]]);
+        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+
+        if($count){
+            return redirect('/founder/viewrequest');
+        }else{
+            return Inertia::render('Founder/LetsBegin',['auth' => ["user"=>$user]]);
+        }
     }
 
     public function letsbeginstore(Request $request){
@@ -173,6 +190,12 @@ class FounderController extends Controller
                 'last_name' => $request->last_name,
             ]);
         }
+        $step = 0;
+
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
+
 
         return redirect('/founder');
     }
@@ -191,12 +214,22 @@ class FounderController extends Controller
             $totalSplits = $totalSplits + $founder->ownership_percentage;
         }
 
-        return Inertia::render('Founder/StepsForm/FoundersDetail',['step'=>$step,'foundersList'=>$founders,'totalSplits'=>$totalSplits]);
+        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+
+        if($count){
+            return redirect('/founder/viewrequest');
+        }else{
+            return Inertia::render('Founder/StepsForm/FoundersDetail',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'totalSplits'=>fn () => $totalSplits]);
+        }
 
     }
 
     public function founderssplitstore(Request $request){
         $split = $request->split;
+
+        $user = Auth::user();
+
+        $step = 3;
 
         foreach ($split as $splitKey => $splitValue) {
             # code...
@@ -206,7 +239,13 @@ class FounderController extends Controller
             ]);
         }
 
-        return redirect('/founder');
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
+
+        return redirect('/founder/foundersvisa');
+        // return redirect('/founder');
+
     }
 
     public function foundersvisa(){
@@ -217,7 +256,14 @@ class FounderController extends Controller
 
         $founders = Founder::where(['user_id'=>$user->id])->get();
 
-        return Inertia::render('Founder/StepsForm/FounderVisa',['step'=>$step,'foundersList'=>$founders]);
+        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+
+        if($count){
+            return redirect('/founder/viewrequest');
+        }else{
+            return Inertia::render('Founder/StepsForm/FounderVisa',['step'=>fn () => $step,'foundersList'=>fn () => $founders]);
+        }
+
     }
 
     public function foundersvisastore(Request $request){
@@ -239,6 +285,13 @@ class FounderController extends Controller
             }
         }
 
+        $user = Auth::user();
+
+        $step = 4;
+
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
 
         return redirect('/founder/summary');
     }
@@ -253,7 +306,11 @@ class FounderController extends Controller
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
 
-        return Inertia::render('Founder/StepsForm/Summary',['step'=>$step,'foundersList'=>$founders,'company_info'=>$company_info]);
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
+
+        return Inertia::render('Founder/StepsForm/Summary',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'company_info'=>fn () => $company_info]);
     }
 
     public function paynow(){
@@ -262,16 +319,20 @@ class FounderController extends Controller
 
         $step = 6;
 
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
+
         $founders = Founder::where(['user_id'=>$user->id])->get();
 
-        return Inertia::render('Founder/StepsForm/PayNow',['step'=>$step,'foundersList'=>$founders]);
+        return Inertia::render('Founder/StepsForm/PayNow',['step'=>fn () => $step,'foundersList'=>fn () => $founders]);
     }
 
     public function thankyou(){
 
         $user = Auth::user();
 
-        Company::where(['user_id'=>$user->id])->update(['status'=>0]);
+        Company::where(['user_id'=>$user->id])->update(['status'=>1]);
 
         $founders = Founder::where(['user_id'=>$user->id])->get();
 
@@ -279,13 +340,53 @@ class FounderController extends Controller
     }
 
 
-    public function viewsubmitedrequest(){
+    public function founderviewsubmitedrequest(){
 
         $user = Auth::user();
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
         $company_info['founders'] = Founder::where(['user_id'=>$user->id])->get();
 
+        return Inertia::render('Founder/ViewSubmitedRequest',['request'=>$company_info]);
+    }
+
+    public function adminviewsubmitedrequest($id){
+
+        $user = Auth::user();
+
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $company_info['founders'] = Founder::where(['user_id'=>$company_info->user_id])->get();
+
+        if($company_info['founders']){
+            $company_info['founders'] = [User::where(['id'=>$company_info->user_id])->first()];
+        }
+
         return Inertia::render('Admin/ViewSubmitedRequest',['request'=>$company_info]);
     }
+
+    public function adminviewsubmitedrequeststore(Request $request,$id){
+
+        Company::where(['id'=>$id])->update(['status'=>$request->company_status]);
+
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $company_info['founders'] = Founder::where(['user_id'=>$company_info->user_id])->get();
+
+        return Inertia::render('Admin/ViewSubmitedRequest',['request'=>$company_info]);
+    }
+
+
+    // public function viewrequest($id){
+
+    //     $user = Auth::user();
+
+    //     $company_info = Company::where(['user_id'=>$user->id])->first();
+
+    //     $company_info['founders'] = Founder::where(['user_id'=>$user->id])->get();
+
+    //     return Inertia::render('Admin/ViewSubmitedRequest',['request'=>$company_info]);
+    // }
+
+
 }

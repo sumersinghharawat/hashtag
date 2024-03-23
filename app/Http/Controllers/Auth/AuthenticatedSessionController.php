@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Company;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -64,5 +67,45 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function getagentlist(){
+
+        $allagents = User::role('admin')->get();
+
+        return Inertia::render('Admin/Agents/ViewAgents',['agents'=>$allagents]);
+    }
+
+    public function addagent(){
+
+        $user = Auth::user();
+
+        return Inertia::render('Admin/Agents/AddAgents');
+    }
+
+    public function editagent($id){
+
+        $agent = User::where(['id'=>$id])->first();
+
+        return Inertia::render('Admin/Agents/AddAgents',['agent'=>$agent]);
+    }
+
+    public function dashboard(){
+        $dashboard = [];
+        $user = Auth::user();
+        // DB::enableQueryLog();
+
+        $dashboard['paymentdue'] = Company::whereNull('status')
+        ->orWhere('status', 0)
+        ->count();
+        // $queries = DB::getQueryLog();
+        // dd($queries);
+        $dashboard['todayapplications'] = Company::whereNotIn('status', ['0', null])->whereDate('created_at', today())->count();
+        $dashboard['underreview'] = Company::where('status','1')->count();
+        $dashboard['inprogress'] = Company::where('status','2')->count();
+
+        // dd($dashboard);
+
+        return Inertia::render('Dashboard',['auth'=> $user,'dashboard'=>$dashboard]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Http\Controllers\CustomerController;
 use App\Models\Founder;
 use App\Models\Industry;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -71,14 +72,21 @@ class CompanyController extends Controller
 
     public function companyname(){
         $step = 1;
+
         $user = Auth::user();
 
         $company_info_existornot = Company::where(['user_id'=>$user->id])->count();
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
 
-        return Inertia::render('Founder/StepsForm/CompanyName',['auth' => ["user"=>$user],'step'=>$step,'company_info'=>$company_info]);
 
+        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+
+        if($count){
+            return redirect('/founder/viewrequest');
+        }else{
+            return Inertia::render('Founder/StepsForm/CompanyName',['auth' => fn () => ["user"=>$user],'step'=>fn () => $step,'company_info'=>fn () => $company_info]);
+        }
     }
 
     public function companynamestore(Request $request){
@@ -99,12 +107,20 @@ class CompanyController extends Controller
                 'user_id'=>$user->id,
                 'country'=>$user->country_of_residenace
             ]);
+
+            if($user->formstep <= $step){
+                User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+            }
         }else{
             Company::create([
                 'name' => $request->company_name,
                 'user_id'=>$user->id,
                 'country'=>$user->country_of_residenace
             ]);
+
+            if($user->formstep <= $step){
+                User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+            }
         }
 
         return redirect('/founder/companydetails');
@@ -116,11 +132,23 @@ class CompanyController extends Controller
 
         $step = 2;
 
-        $listIndusties = Industry::select(['name'])->get();
+        $listIndustiesData = Industry::select(['name'])->get();
+
+        $listIndusties[] = ["name" => "Select Industry"];
+
+        foreach($listIndustiesData as $listIndusty){
+            $listIndusties[] = ["name"=> $listIndusty->name];
+        }
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
 
-        return Inertia::render('Founder/StepsForm/CompanyDetails',['step'=>$step,'listindusties'=>$listIndusties,'company_info'=>$company_info]);
+        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+
+        if($count){
+            return redirect('/founder/viewrequest');
+        }else{
+            return Inertia::render('Founder/StepsForm/CompanyDetails',['auth' =>fn () =>  ["user"=>$user],'step'=>fn () => $step,'listindusties'=>fn () => $listIndusties,'company_info'=>fn () => $company_info]);
+        }
 
     }
 
@@ -142,6 +170,10 @@ class CompanyController extends Controller
             'country' => $user->country_of_residenace,
         ]);
 
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
+
         $founder = Founder::where(['user_id'=>$user->id])->update(['company_id'=>$company]);
 
         return redirect('/founder/foundersdetail');
@@ -151,18 +183,32 @@ class CompanyController extends Controller
 
         $user = Auth::user();
 
-        $companies = Company::get();
+        $companies = Company::where('status','<>','0')->get();
 
-        // $companyrequests = [];
+        foreach($companies as $index => $company){
 
-        // foreach($companyrequests as $index => $company){
-        //     $companyrequests[$index]['founders'] = Founder::where(['user_id'=>$company->user_id])->get();
-        // }
-
-        // // $requests = $companies;
-
+            $founders = Founder::where(['user_id'=>$company->user_id])->get();
+            $company['founders'] = $founders;
+        }
 
         return Inertia::render('Admin/ViewSubmitedRequestList',['auth'=>$user,'companyrequests'=>$companies]);
+
+    }
+
+    public function viewleads(){
+
+        $user = Auth::user();
+
+        $companies = Company::where(['status'=>0])->orWhere(['status'=>null])->get();
+
+
+        foreach($companies as $index => $company){
+
+            $founders = Founder::where(['user_id'=>$company->user_id])->get();
+            $company['founders'] = $founders;
+        }
+
+        return Inertia::render('Admin/ViewSubmitedLeadList',['auth'=>$user,'companyleads'=>$companies]);
 
     }
 }

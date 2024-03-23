@@ -9,21 +9,15 @@ export default function FounderAuthenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="bg-white border-b border-gray-100">
-                <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="min-h-screen mt-8">
+            <nav className="container mx-auto bg-white rounded-3xl">
+                <div className="px-4 mx-auto sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex items-center shrink-0">
                                 <Link href="/">
-                                    <ApplicationLogo className="block w-auto text-gray-800 fill-current h-9" />
+                                    <ApplicationLogo className="block w-auto h-12 text-gray-800 fill-current" />
                                 </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('founder.dashboard')} active={route().current('founder.dashboard')}>
-                                    Dashboard
-                                </NavLink>
                             </div>
                         </div>
 
@@ -113,11 +107,7 @@ export default function FounderAuthenticated({ user, header, children }) {
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">{header}</div>
-                </header>
-            )}
+
 
             <main>{children}</main>
         </div>

@@ -12,8 +12,8 @@ export default function FounderDashboard({ auth,children,step }) {
             <Head title="Dashboard" />
 
             <div className="py-12">
-                <div className={step==0?"mx-auto max-w-2xl  sm:px-6 lg:px-8":"mx-auto max-w-7xl  sm:px-6 lg:px-8"}>
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                <div className={step==0?"mx-auto container":"mx-auto container"}>
+                    <div className="overflow-hidden sm:rounded-lg">
                     {children}
                     {/* {step==1?<LetsBegin data={customer_info} errors={errors} processing={processing} step={step}></LetsBegin>:
                     <div className='flex p-6'>

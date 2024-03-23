@@ -28,7 +28,18 @@ export default function LetsBegin({ auth }) {
             data.last_name = auth.user.last_name?auth.user.last_name:"";
             setValue(auth.user.mobile_number);
             setCountryCode(auth.user.country_of_residenace);
+
+            data.country_of_residenace = auth.user.country_of_residenace?auth.user.country_of_residenace:country.name;
         }
+
+        data.first_name = data.first_name?.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+        data.last_name = data.last_name?.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
     },[]);
 
     const [value, setValue] = useState();
@@ -59,60 +70,66 @@ export default function LetsBegin({ auth }) {
 
     country = Array.from(new Set(CountryList));
 
+    console.log(auth)
+
     return (
         <CustomerDashboard auth={auth} step={0}>
             <div className="w-full p-6">
-                <div className="p-5">
-                    <h2 className="pb-6 text-xl font-semibold leading-tight text-gray-800">
-                        Let's begin
+                <div className="p-5 mx-auto" style={{maxWidth:"440px"}}>
+                    <h2 className="text-xl font-semibold leading-tight text-center text-gray-800">
+                        Let’s Setup Your Company
                     </h2>
-                    <p>
+                    <p className="mt-6 text-sm text-center" style={{color:"#545454"}}>
                         Enter your name, phone number and country of residence
                         to get started
                     </p>
-                    <div className="grid grid-cols-1 mt-10 gap-x-6 gap-y-8 sm:grid-cols-1">
+                    <div className="grid grid-cols-1 mt-10 sm:grid-cols-1">
                         <form onSubmit={submit}>
-                            <div>
-                                <InputLabel htmlFor="first_name" value="First Name" />
+                            <div className="flex items-center gap-4">
+                                <div className="w-6/12">
+                                    <InputLabel htmlFor="first_name" value="First Name" />
 
-                                <TextInput
-                                    id="first_name"
-                                    name="first_name"
-                                    value={data.first_name}
-                                    className="block w-full mt-1"
-                                    autoComplete="first_name"
-                                    isFocused={true}
-                                    onChange={(e) =>
-                                        setData("first_name", e.target.value)
-                                    }
-                                />
+                                    <TextInput
+                                        id="first_name"
+                                        name="first_name"
+                                        value={data.first_name}
+                                        className="block w-full py-4 mt-1 bg-transparent"
+                                        autoComplete="first_name"
+                                        isFocused={true}
+                                        placeholder="First Name"
+                                        onChange={(e) =>
+                                            setData("first_name", e.target.value)
+                                        }
+                                    />
 
-                                <InputError
-                                    message={errors.first_name}
-                                    className="mt-2"
-                                />
+                                    <InputError
+                                        message={errors.first_name}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div  className="w-6/12 ">
+                                    <InputLabel htmlFor="last_name" value="Last Name" />
+
+                                    <TextInput
+                                        id="last_name"
+                                        name="last_name"
+                                        value={data.last_name}
+                                        className="block w-full py-4 mt-1 bg-transparent"
+                                        autoComplete="last_name"
+                                        placeholder="Last Name"
+                                        isFocused={true}
+                                        onChange={(e) =>
+                                            setData("last_name", e.target.value)
+                                        }
+                                    />
+
+                                    <InputError
+                                        message={errors.last_name}
+                                        className="mt-2"
+                                    />
+                                </div>
                             </div>
-                            <div className="mt-2">
-                                <InputLabel htmlFor="last_name" value="Last Name" />
-
-                                <TextInput
-                                    id="last_name"
-                                    name="last_name"
-                                    value={data.last_name}
-                                    className="block w-full mt-1"
-                                    autoComplete="last_name"
-                                    isFocused={true}
-                                    onChange={(e) =>
-                                        setData("last_name", e.target.value)
-                                    }
-                                />
-
-                                <InputError
-                                    message={errors.last_name}
-                                    className="mt-2"
-                                />
-                            </div>
-                            <div className="mt-2">
+                            <div className="mt-4">
                                 <InputLabel
                                     htmlFor="mobile_number"
                                     value="Phone Number"
@@ -124,7 +141,8 @@ export default function LetsBegin({ auth }) {
                                     placeholder="Enter phone number"
                                     value={value}
                                     onChange={setValue}
-                                    className="border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 "
+                                    style={{background:"transparent"}}
+                                    className="mt-1 bg-transparent border-gray-300 rounded-md focus:border-gray-500 focus:ring-gray-500"
                                 />
 
                                 <InputError
@@ -133,32 +151,38 @@ export default function LetsBegin({ auth }) {
                                 />
                             </div>
 
-                            <div className="w-full mt-2">
+                            <div className="w-full mt-4">
                                 <label
                                     htmlFor="country_of_residenace"
-                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                    className="block text-sm font-medium text-gray-900"
                                 >
-                                    Country
+                                    Country of Residenace
                                 </label>
-                                <div className="w-full mt-2">
+                                <div className="w-full mt-1">
                                     <SelectInput
+                                        className="py-4 bg-transparent"
                                         dropdown={country ? country : []}
                                         name="country_of_residenace"
-                                        selectedValue={(data.country_of_residenace)?data.country_of_residenace:''}
+                                        selectedvalue={(auth.user.country_of_residenace=="")?country.name:auth.user.country_of_residenace}
                                         onChange={(e) => {
                                             data.country_of_residenace = e.target.value;
                                         }}
                                     />
                                 </div>
+
+                                <InputError
+                                    message={errors.country_of_residenace}
+                                    className="mt-2"
+                                />
                             </div>
 
-                            <div className="flex items-center justify-end mt-4">
-                                <button
-                                    className="w-full p-5 px-4 py-2 text-xs font-semibold tracking-widest text-center text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            <div className="flex items-center justify-end w-full mt-10">
+                                <PrimaryButton
+                                    className="justify-center w-full"
                                     disabled={processing}
                                 >
                                     Continue
-                                </button>
+                                </PrimaryButton>
                             </div>
                         </form>
                     </div>

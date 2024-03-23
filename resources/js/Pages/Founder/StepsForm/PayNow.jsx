@@ -13,10 +13,6 @@ export default function PayNow({ company_info, auth, step }) {
     const { data, setData, post, processing, errors, reset } = useForm({
     });
 
-
-    useEffect(() => {
-    }, [])
-
     const submitFounders = (e) => {
         e.preventDefault();
 
@@ -29,28 +25,36 @@ export default function PayNow({ company_info, auth, step }) {
     }
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
-            <StepFormLayout step={step}>
-                <h2 className="mb-10 text-4xl">Pay</h2>
-                <p className="text-sm">Your $599 payment covers DOYOU's service fee. Precise government costs will be provided for payment after document submission.</p>
+            <StepFormLayout step={step}  filledSteps={auth.user.formstep}>
+                <h2 className="text-2xl font-extrabold">Pay</h2>
+                <p className="pb-6 mt-4 mb-6 text-sm text-gray-500 border-b">Pay the service and kick start your company formation journey</p>
 
                 <form onSubmit={submitFounders} className="flex flex-wrap mt-4 align-top">
-                    <div className="flex justify-between w-full p-4 mt-5 mb-0 border border-b-0 bg-gray-50 rounded-tl-3xl rounded-tr-3xl">
-                        <div className="w-3/6 text-xl">
-                            HashTag Service Fee
-                        </div>
-                        <div className="w-3/6 text-xl text-end">
-                            $599.00
-                        </div>
-                    </div>
-                    <div className="flex justify-between w-full p-4 mb-5 border bg-gray-50 rounded-bl-3xl rounded-br-3xl">
+                    <div className="flex justify-between w-full">
                         <div className="w-3/6 text-xl font-bold">
-                            Due now
+                            Kick Start Service Fee
                         </div>
-                        <div className="w-3/6 text-xl font-bold text-end">
+                        <div className="w-3/6 text-2xl font-bold text-end">
                             $599.00
+                            <p className="text-base text-gray-500">one time fee</p>
                         </div>
                     </div>
-                    <div className="flex items-center justify-start w-full gap-2 mt-4">
+                    <div className="flex justify-between w-full pb-6">
+                        <div className="w-3/6">
+                            <ul className="p-0 m-0 ml-8 text-base text-gray-500 list-disc">
+                                <li>Expert Consultation</li>
+                                <li>Formation Filings</li>
+                                <li>Annual State Filings</li>
+                                <li>Business bank account opening</li>
+                                <li>Visa and Emirates ID support</li>
+                                <li>Lifetime Compliance Support</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="w-full pt-4 text-base text-gray-500 border-t">
+                        <p className="text-base text-gray-500">Precise government costs will be provided for payment after document submission</p>
+                    </div>
+                    <div className="flex items-center justify-start w-full gap-2 mt-10">
                         <SecondaryButton className="justify-center text-center" disabled={processing} onClick={goBack}>
                             Back
                         </SecondaryButton>

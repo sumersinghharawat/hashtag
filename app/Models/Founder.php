@@ -15,6 +15,7 @@ class Founder extends Model
         'visa_status',
         'first_name',
         'last_name',
+        'manager',
         'ownership_percentage',
     ];
 }

@@ -21,18 +21,18 @@ export default function CompanyName({company_info={}, auth, step}){
 
     return (
         <CustomerDashboard auth={auth}>
-            <StepFormLayout step={step}>
-                <h2 className="text-4xl">Company Name</h2>
-                <p className="pt-2 mb-12">This will be your legally registered company name if it is available to use</p>
+            <StepFormLayout step={step} filledSteps={auth.user.formstep}>
+                <h2 className="text-2xl font-extrabold ">Company Name</h2>
+                <p className="mt-4 mb-6 text-sm text-gray-500">Please enter the name for your company</p>
                 <form onSubmit={submit}>
                     <div>
-                        <InputLabel htmlFor="company_name" className="text-xl" value="Name your company" />
+                        <InputLabel htmlFor="company_name" className="text-base" value="Name your company" />
 
                         <TextInput
                             id="company_name"
                             name="company_name"
                             value={data.company_name}
-                            className="block w-full mt-4"
+                            className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="company_name"
                             placeholder='Name your company'
                             isFocused={true}
@@ -40,10 +40,9 @@ export default function CompanyName({company_info={}, auth, step}){
                         />
 
                         <InputError message={errors.company_name} className="mt-2" />
-                        <span className="text-sm text-gray-400">You will need to provide alternate name options if your choice isn't available</span>
                     </div>
 
-                    <div className="flex items-center justify-start mt-4">
+                    <div className="flex items-center justify-start mt-10">
                         <PrimaryButton className="justify-center w-full text-center" disabled={processing}>
                             Continue
                         </PrimaryButton>

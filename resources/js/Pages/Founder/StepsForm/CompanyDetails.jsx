@@ -26,6 +26,12 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
     const submit = (e) => {
         e.preventDefault();
 
+        if(data.company_industry){
+            if(data.company_industry == "Select Industry"){
+                data.company_industry = "";
+            }
+        }
+
         post(route('founder.dashboard.companydetailsstore'));
     }
 
@@ -46,38 +52,26 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
-            <StepFormLayout step={step}>
-                <h2 className="text-4xl">Company Details</h2>
-                <p className="pt-6 font-bold">Entity Type</p>
-                <p className="pt-0 mb-6 text-sm">This will be your legally registered company name if it is available to use</p>
-                <div className="p-4 bg-gray-100 rounded-lg ">
-                    <h4 className="font-bold text-black-200">Freezone</h4>
-                    <p className="text-gray-600">Often used by digital enterpreneurs, that are:</p>
-                    <ul className="list-disc list-inside ">
-                        <li className="text-gray-600">Selling goods or services online.</li>
-                        <li className="text-gray-600">Do not require a physical office.</li>
-                    </ul>
-                </div>
-                <form onSubmit={submit} className="mt-6">
+            <StepFormLayout step={step} filledSteps={auth.user.formstep}>
+                <h2 className="text-2xl font-extrabold">Company Details</h2>
+                <p className="mt-4 mb-6 text-sm text-gray-500">Please enter three name choices for your company in order of preference.</p>
+
+                <form onSubmit={submit}>
 
                     <div>
-                        <InputLabel htmlFor="industry" className="text-xl" value="Company Industry" />
-                        <TextInput
-                            id="company_description"
-                            name="company_description"
-                            value={data.company_industry}
-                            className="block w-full mt-4"
-                            autoComplete="on"
-                            placeholder='Company Industry'
-                            isFocused={false}
-                            list="listindusties"
-                            onChange={(e) => CheckIndustryName(e)}
-                        />
-                        <datalist id="listindusties">
+                        <InputLabel htmlFor="industry" className="text-base" value="Company Industry" />
+                        <select className="block w-full p-4 mt-1 bg-transparent border-gray-300 rounded"
+                        value={data.company_industry}
+                        autoComplete="off"
+                        placeholder='Company Industry'
+                        id="company_description"
+                        name="company_description"
+                        onChange={(e) => CheckIndustryName(e)}
+                        >
                             {listindusties ? (
-                                listindusties.map((element) => {
+                                listindusties.map((element,index) => {
                                     return element.name ? (
-                                        <option key={element.name} value={element.name}>
+                                        <option key={element.name} value={index==0?"":element.name}>
                                             {element.name}
                                         </option>
                                     ) : (
@@ -87,21 +81,20 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
                             ) : (
                                 <></>
                             )}
-                        </datalist>
+                        </select>
 
 
                         <InputError message={errors.company_industry} className="mt-2" />
-                        <span className="text-sm text-gray-400">Select the industry your company belongs to </span>
                     </div>
 
-                    <div>
-                        <InputLabel htmlFor="company_description" className="text-xl" value="Company description" />
+                    <div className="mt-4">
+                        <InputLabel htmlFor="company_description" className="text-base" value="Company description" />
 
                         <TextInput
                             id="company_description"
                             name="company_description"
                             value={data.company_description}
-                            className="block w-full mt-4"
+                            className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="company_description"
                             placeholder='Company Description'
                             isFocused={false}
@@ -109,10 +102,9 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
                         />
 
                         <InputError message={errors.company_description} className="mt-2" />
-                        <span className="text-sm text-gray-400">Describe your product or service in a sentence or two (minimum of 20 characters)</span>
                     </div>
 
-                    <div className="flex items-center justify-start gap-2 mt-4">
+                    <div className="flex items-center justify-start gap-2 mt-10">
                         <SecondaryButton className="justify-center text-center" disabled={processing} onClick={goBack}>
                             Back
                         </SecondaryButton>

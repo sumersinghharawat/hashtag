@@ -1,3 +1,183 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+:root{
+    --primary-bg:#FCF7ED;
+    --primary-button-bg:#52B596;
+    --primary-button-color:#fff;
+    --button-color-black:#000;
+}
+
+*{
+    font-family: "Inter", sans-serif;
+}
+
+body{
+    background-color: var(--primary-bg);
+}
+
+.bg-primary{
+    background-color: var(--primary-bg);
+}
+
+.bg-secondary{
+    background-color: var(--primary-button-bg);
+}
+
+.text-primary{
+    color: var(--primary-button-bg);
+}
+
+.primary-button{
+    background-color: var(--primary-button-bg);
+    color: var(--primary-button-color);
+    padding: 16px 24px;
+    border-radius: 50px;
+}
+
+.primary-button__disable{
+    background-color: #E0E0E0;
+    color: #fff;
+}
+
+.heading-1{
+    font-size: 44px;
+    line-height: 52px;
+    font-weight: 700;
+}
+
+.form-box{
+    border-radius: 56px 56px 0px 0px;
+}
+
+.process-dot{
+    height: 24px;
+    width: 24px;
+    background-color: #fff;
+    border-radius: 40px;
+    border: 4px solid var(--primary-button-bg);
+}
+.process-line {
+    width: 90%;
+    left: 55%;
+    top: 48%;
+}
+
+.process-line.active {
+    width: 0%;
+    background-color: var(--primary-button-bg);
+}
+
+.process {
+    padding: 30px;
+    position: relative;
+}
+
+.other-service-section{
+    background: linear-gradient(90deg, rgba(239,246,255,1) 50%, rgba(255,255,255,1) 50%);
+}
+
+.testimonial{
+    position: relative;
+}
+
+/* Landing Page */
+/* Hero Section CSS */
+.free-consulation {
+    position: absolute;
+    top: 20%;
+    right: -25%;
+}
+img.setup-your-uae-company {
+    position: absolute;
+    top: 10%;
+    left: -15%;
+}
+
+.guest-image {
+    width: 80%;
+    object-fit: cover;
+    height: calc(100vh - 148px);
+    margin: 24px auto;
+    border-radius: 40px;
+}
+
+/* Form */
+.progressbar-form{
+    height: 24px;
+    background-color: #EFF6FF;
+}
+.progressbar-form > div{
+    background-color: var(--primary-button-bg);
+}
+.step-form-radio {
+    height: 24px;
+    width: 24px;
+    border: 2px solid #E0E0E0;
+    background: #FFFFFF;
+    border-radius: 40px;
+    margin-right: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.step-form-radio.filed {
+    border-color: var(--primary-button-bg);
+    color: #fff;
+    background-color: var(--primary-button-bg);
+}
+.step-form-radio.current {
+    border-color: var(--primary-button-bg);
+    background-color: transparent;
+}
+.step-form-radio::after {
+    content: "";
+    height: 40px;
+    width: 4px;
+    background: #E0E0E0;
+    top: 27px;
+    left: 10px;
+    position: absolute;
+}
+.step-form-last-child:after {
+    display: none;
+}
+.step-form-radio.filed::after{
+    transition: 5s;
+    background: var(--primary-button-bg);
+}
+
+.step-form-radio.filed.current::after{
+    background: #E0E0E0;
+}
+input.PhoneInputInput {
+    background: transparent;
+    padding: 16px;
+    border-radius: 0px 4px 4px 0px;
+    border-color: #d1d5db;
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.PhoneInputCountry {
+    border: 1px solid #d1d5db;
+    margin: 0px !important;
+    padding: 0px 30px;
+    border-right: 0px;
+    border-radius: 4px 0px 0px 4px;
+    box-shadow: none !important;
+}
+
+.PhoneInputCountrySelectArrow {
+    margin-left: 16px !important;
+    font-size: 30px;
+}
+
+select.PhoneInputCountrySelect {
+    padding: 0px;
+}
+
+html {
+    scroll-behavior: smooth;
+  }

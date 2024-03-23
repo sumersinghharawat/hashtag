@@ -1,9 +1,11 @@
 import { forwardRef, useEffect, useRef } from 'react';
 
-export default forwardRef(function SelectInput({ dropdown, selectedValue, className = '',name,value, isFocused = false, ...props }, ref) {
+export default forwardRef(function SelectInput({ dropdown, className = '',name,selectedvalue, value,isFocused = false, ...props }, ref) {
     const input = ref ? ref : useRef();
 
     useEffect(() => {
+
+        console.log(selectedvalue);
         if (isFocused) {
             input.current.focus();
         }
@@ -19,12 +21,12 @@ export default forwardRef(function SelectInput({ dropdown, selectedValue, classN
             }
             name={name}
             ref={input}
-            value={value}
+            value={selectedvalue}
             >
             {dropdown?<>
             {dropdown.map((element) => {
 
-                return element.name?<option key={element.name || element.value} value={element.name || element.value} >
+                return element.name?<option key={element.name || element.value} value={element.value!=null?element.value:element.name} >
                     {element.name}
                 </option>:<></>
             })}</>:<></>}

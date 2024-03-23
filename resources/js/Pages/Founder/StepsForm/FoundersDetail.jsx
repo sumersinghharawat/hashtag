@@ -5,7 +5,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import StepFormLayout from "@/Layouts/StepFormLayout";
 import CustomerDashboard from "@/Pages/CustomerDashboard";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
@@ -29,8 +29,8 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
             }
             return obj;
         });
-
-        setTotalSplit(totalSplits);
+        var totalSplitsNumber = parseInt(totalSplits);
+        setTotalSplit(totalSplitsNumber);
 
         setFounderSplitList(updatedFoundersList);
 
@@ -55,7 +55,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
     }
 
     const goBack = () => {
-        location.replace(route('founder.dashboard.companydetails'));
+        router.replace(route('founder.dashboard.companydetails'));
     }
 
     const updateSplit = (id, newValue) => {
@@ -69,21 +69,20 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
             if (obj.id === id) {
 
                 obj = { ...obj, ownership_percentage: parseInt(newValue) }
-                founderTotalSplit = founderTotalSplit + obj.ownership_percentage;
+                founderTotalSplit = parseInt(founderTotalSplit?founderTotalSplit:0) + parseInt((obj.ownership_percentage)?(obj.ownership_percentage):0);
                 return obj;
             }
-            founderTotalSplit = founderTotalSplit + obj.ownership_percentage;
+            founderTotalSplit = parseInt(founderTotalSplit?founderTotalSplit:0) + parseInt((obj.ownership_percentage)?(obj.ownership_percentage):0);
             return obj;
         });
-        setTotalSplit(founderTotalSplit);
+
+        setTotalSplit(parseInt(founderTotalSplit));
 
         setFounderSplitList(updatedFoundersList);
 
     };
 
     const updateManager = (id) => {
-
-        console.log(founderSplitList);
 
         const updatedFoundersList = founderSplitList.map(obj => {
 
@@ -100,20 +99,19 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
-            <StepFormLayout step={step}>
-                <h2 className="mb-10 text-4xl">Founders</h2>
-                <p className="pt-2 font-bold">Names</p>
-                <p className="text-sm">List the names of all founders as they appear on government ID's</p>
+            <StepFormLayout step={step} filledSteps={auth.user.formstep} >
+                <h2 className="text-2xl font-extrabold ">Founders & Ownership</h2>
+                <p className="mt-4 mb-6 text-sm text-gray-500">Enter the legal name of the founders, split the company between the founders and select managers</p>
 
-                <form onSubmit={submitFounders} className="flex gap-2 mt-4 align-top">
-                    <div className="w-5/12">
+                <form onSubmit={submitFounders} className="flex items-start gap-2">
+                    <div className="w-full">
                         <InputLabel htmlFor="first_name" className="text-lg" value="First Name" />
 
                         <TextInput
                             id="first_name"
                             name="first_name"
                             value={data.first_name}
-                            className="block w-full mt-4"
+                            className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="first_name"
                             placeholder='First Name'
                             isFocused={true}
@@ -123,14 +121,14 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                         <InputError message={errors.first_name} className="mt-2" />
 
                     </div>
-                    <div className="w-5/12">
+                    <div className="w-full">
                         <InputLabel htmlFor="last_name" className="text-lg" value="Last Name" />
 
                         <TextInput
                             id="last_name"
                             name="last_name"
                             value={data.last_name}
-                            className="block w-full mt-4"
+                            className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="last_name"
                             placeholder='Last Name'
                             isFocused={false}
@@ -141,23 +139,23 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
 
                     </div>
 
-                    <div className="w-2/12 pt-9">
-                        <PrimaryButton className="pt-3 pb-3 text-center" disabled={processing}>
-                            Add Founder
-                        </PrimaryButton>
+                    <div className="w-auto pt-7">
+                        <button className="px-10 py-4 mt-1 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button" disabled={processing}>
+                            Add
+                        </button>
                     </div>
 
                 </form>
-                <p className="pt-2 mt-4 font-bold">Ownership</p>
-                <p className="pb-2 text-sm">Split the company between the founders and select managers</p>
-                <form onSubmit={submit}>
-                    <FoundersList founderSplitList={founderSplitList} updateSplit={updateSplit} updateManager={updateManager} />
-                    <div className="flex justify-end ">
-                        <div className={"w-2/12 text-center border rounded" + ((totalSplit == 100) ? " border-green-500 text-green-500 bg-green-200" : " border-red-500 text-red-500 bg-red-200")}>
+                <div className="flex items-center justify-between pb-4 mt-10">
+                    <p className="font-bold">Split the ownership between the founders</p>
+                    <div className="flex items-center justify-end">
+                        <div className={"w-auto text-center border px-4 rounded" + ((totalSplit == 100) ? " border-green-500 text-green-500 bg-green-200" : " border-red-500 text-red-500 bg-red-200")}>
                             <span>{totalSplit}% out of 100%</span>
                         </div>
                     </div>
-
+                </div>
+                <form onSubmit={submit}>
+                    <FoundersList founderSplitList={founderSplitList} updateSplit={updateSplit} updateManager={updateManager} />
                     <div className="flex items-center justify-start gap-2 mt-4">
                         <SecondaryButton className="justify-center text-center" disabled={processing} onClick={goBack}>
                             Back

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Founder;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,19 +38,17 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->first_name,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        Company::create(['user_id'=>$user->id]);
 
         $user->assignRole('founder');
 
@@ -78,11 +78,13 @@ class RegisteredUserController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(Request $request)
     {
         try {
             //create a user using socialite driver google
-            $user = Socialite::driver('google')->user();
+            // $user = Socialite::driver('google')->user();
+            $user = Socialite::driver('google')->stateless()->user();
+
             // if the user exits, use that user and login
 
             $finduser = User::where('google_id', $user->id)->first();
@@ -100,6 +102,7 @@ class RegisteredUserController extends Controller
                     return redirect(RouteServiceProvider::FOUNDERHOME);
                     // }
                 }
+
                 //user is not yet created, so create first
                 $newUser = User::create([
                     'name' => $user->name,
@@ -110,6 +113,8 @@ class RegisteredUserController extends Controller
                     'password' => encrypt('')
                 ]);
 
+                Company::create(['user_id'=>$newUser->id]);
+
                 $newUser->assignRole('founder');
                 Auth::login($newUser);
                 // go to the dashboard
@@ -117,7 +122,49 @@ class RegisteredUserController extends Controller
             }
             //catch exceptions
         } catch (Exception $e) {
-            dd($e->getMessage());
+            dd($e);
         }
+    }
+
+    public function agentregister(Request $request){
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'password' => ['required', Rules\Password::defaults()],
+        ]);
+
+        $user = User::create([
+            'name' => $request->first_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $user->assignRole('admin');
+
+        return redirect(route('admin.dashboard.viewagents'));
+    }
+
+
+
+    public function agenteditstore(Request $request,$id){
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255',
+            'password' => ['required', Rules\Password::defaults()],
+        ]);
+
+        $user = User::where(['id'=>$id])->update([
+            'name' => $request->first_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect(route('admin.dashboard.viewagents'));
     }
 }
