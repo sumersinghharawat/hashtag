@@ -18,6 +18,6 @@
         <li><strong>Message:</strong> {{ $messages }}</li>
     </ul>
 
-    <p>Best regards,<br> Kick Start</p>
+    <p>Best regards,<br> incorpX</p>
 </body>
 </html>

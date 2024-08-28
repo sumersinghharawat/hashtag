@@ -104,7 +104,7 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function(){
 });
 
 // Founder Dashboard Routes
-Route::middleware(['auth', 'verified', 'role:founder'])->group(function (){
+Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/founder',[FounderController::class,'index'])->name('founder.dashboard');
 
     Route::get('/founder/letsbegin',[FounderController::class,'letsbegin'])->name('founder.dashboard.letsbegin');

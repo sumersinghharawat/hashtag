@@ -55,7 +55,7 @@ export const PopUpForm = ({showPopUp,emailSent}) => {
 
     return (
         <div className="fixed z-50 flex items-center justify-center w-screen h-screen bg-black/80">
-            <div className="w-2/5 p-10 mx-auto bg-white border border-gray-700 rounded-3xl shadow-neutral-100 drop-shadow">
+            <div className="w-4/5 p-8 mx-auto bg-white border border-gray-700 md:p-10 md:w-2/5 rounded-3xl shadow-neutral-100 drop-shadow">
             <button onClick={showPopUp} className='absolute w-6 h-6 text-2xl right-3 top-3'><FontAwesomeIcon icon={faClose} /></button>
             {emailSent?<div className="flex flex-col items-center p-16 align-middle rounded">
                     <div className="flex items-center justify-center w-32 h-32 mb-10 border-8 border-green-400 rounded-full text-7xl">

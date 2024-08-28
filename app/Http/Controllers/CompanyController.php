@@ -92,10 +92,14 @@ class CompanyController extends Controller
     public function companynamestore(Request $request){
         $step = 1;
 
+        // dd($request->all());
+
         $user = Auth::user();
 
         $request->validate([
-            'company_name' => 'required|string|max:255'
+            'company_name_1' => 'required|string|max:255',
+            'company_name_2' => 'required|string|max:255',
+            'company_name_3' => 'required|string|max:255'
         ]);
 
         $company_info_existornot = Company::where(['user_id'=>$user->id])->count();
@@ -103,23 +107,27 @@ class CompanyController extends Controller
         if($company_info_existornot>0){
 
             Company::where(['user_id'=>$user->id])->update([
-                'name' => $request->company_name,
-                'user_id'=>$user->id,
-                'country'=>$user->country_of_residenace
+                'company_name_1' => $request->company_name_1,
+                'company_name_2' => $request->company_name_2,
+                'company_name_3' => $request->company_name_3,
+                'user_id' => $user->id,
+                'country' => $user->country_of_residenace
             ]);
 
             if($user->formstep <= $step){
-                User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+                User::where(['id' => $user->id])->update(["formstep"=>$step]);
             }
         }else{
             Company::create([
-                'name' => $request->company_name,
-                'user_id'=>$user->id,
-                'country'=>$user->country_of_residenace
+                'company_name_1' => $request->company_name_1,
+                'company_name_2' => $request->company_name_2,
+                'company_name_3' => $request->company_name_3,
+                'user_id' => $user->id,
+                'country' => $user->country_of_residenace
             ]);
 
             if($user->formstep <= $step){
-                User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+                User::where(['id' => $user->id])->update(["formstep"=>$step]);
             }
         }
 
@@ -159,12 +167,14 @@ class CompanyController extends Controller
         $step = 2;
 
         $request->validate([
+            'type_of_freezone' => 'required|string|max:255',
             'company_industry' => 'required|string|max:255',
             'company_description' => 'required|string|min:20|max:255',
         ]);
 
         $company = Company::where(['user_id'=>$user->id])->update([
             'user_id'=>$user->id,
+            'type_of_freezone' => $request->type_of_freezone,
             'industry' => $request->company_industry,
             'description' => $request->company_description,
             'country' => $user->country_of_residenace,

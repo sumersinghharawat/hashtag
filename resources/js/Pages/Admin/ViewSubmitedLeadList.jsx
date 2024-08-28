@@ -9,7 +9,7 @@ export default function ViewSubmitedLeadList ({auth, companyleads}) {
     return (
         <Dashboard auth={auth} >
         <div className="py-12">
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl sm:px-6 lg:px-4">
                 <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div className="flex flex-row">
                         <div className="flex flex-col justify-between w-full p-6 border-r-2 border-gray-200">

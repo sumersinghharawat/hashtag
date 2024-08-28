@@ -27,12 +27,12 @@ export default function PayNow({ company_info, auth, step }) {
         <CustomerDashboard company_info={company_info} auth={auth}>
             <StepFormLayout step={step}  filledSteps={auth.user.formstep}>
                 <h2 className="text-2xl font-extrabold">Pay</h2>
-                <p className="pb-6 mt-4 mb-6 text-sm text-gray-500 border-b">Pay the service and kick start your company formation journey</p>
+                <p className="pb-6 mt-4 mb-6 text-sm text-gray-500 border-b">Pay the service and incorpX your company formation journey</p>
 
                 <form onSubmit={submitFounders} className="flex flex-wrap mt-4 align-top">
                     <div className="flex justify-between w-full">
                         <div className="w-3/6 text-xl font-bold">
-                            Kick Start Service Fee
+                            incorpX Service Fee
                         </div>
                         <div className="w-3/6 text-2xl font-bold text-end">
                             $599.00

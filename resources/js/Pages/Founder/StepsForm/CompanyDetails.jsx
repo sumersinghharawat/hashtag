@@ -2,7 +2,6 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import StepFormLayout from "@/Layouts/StepFormLayout";
 import CustomerDashboard from "@/Pages/CustomerDashboard";
@@ -12,7 +11,8 @@ import { useEffect } from "react";
 export default function CompanyDetails({company_info, auth, step, listindusties}){
     const { data, setData, post, processing, errors, reset } = useForm({
         company_industry: company_info.industry?company_info.industry:'',
-        company_description: company_info.description?company_info.description:''
+        company_description: company_info.description?company_info.description:'',
+        type_of_freezone: company_info.type_of_freezone?company_info.type_of_freezone:'',
     });
 
     const goBack = () => {
@@ -21,6 +21,8 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
 
     useEffect(()=>{
         setData('company_industry',company_info.industry?company_info.industry:'');
+        setData('type_of_freezone',company_info.type_of_freezone?company_info.type_of_freezone:(data.type_of_freezone?data.type_of_freezone:''));
+        console.log('type_of_freezone',data);
     },[])
 
     const submit = (e) => {
@@ -31,6 +33,8 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
                 data.company_industry = "";
             }
         }
+
+        console.log(data);
 
         post(route('founder.dashboard.companydetailsstore'));
     }
@@ -47,8 +51,9 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
             errors.company_industry = '';
             setData('company_industry', e.target.value);
         }
-
     }
+
+    console.log(data.type_of_freezone)
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
@@ -57,6 +62,53 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please enter three name choices for your company in order of preference.</p>
 
                 <form onSubmit={submit}>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="type_of_freezone" className="text-base " value="Select the Type of Freezone" />
+                    <div className="flex mt-4 mb-4">
+                        <div className="col-auto">
+                            <input
+                                type="radio"
+                                name="type_of_freezone"
+                                value="DMCC"
+                                id="dmcc"
+                                checked={data.type_of_freezone === "DMCC"}
+                                className="radio-btn"
+                                onChange={(e) => setData('type_of_freezone', e.target.value)}
+                            />
+                            <label className="radio-btn-input" htmlFor="dmcc">DMCC</label>
+                        </div>
+
+                        <div className="col-auto">
+                            <input
+                                type="radio"
+                                name="type_of_freezone"
+                                value="IFZA"
+                                id="ifza"
+                                checked={data.type_of_freezone === "IFZA"}
+                                className="radio-btn"
+                                onChange={(e) => setData('type_of_freezone', e.target.value)}
+                            />
+                            <label className="radio-btn-input" htmlFor="ifza">IFZA</label>
+                        </div>
+
+                        <div className="col-auto">
+                            <input
+                                type="radio"
+                                name="type_of_freezone"
+                                value="Not Sure"
+                                id="notsure"
+                                checked={data.type_of_freezone === "Not Sure"}
+                                className="radio-btn"
+                                onChange={(e) => setData('type_of_freezone', e.target.value)}
+                            />
+                            <label className="radio-btn-input" htmlFor="notsure">Not Sure</label>
+                        </div>
+                    </div>
+
+                    <InputError message={errors.type_of_freezone} className="mt-2" />
+                </div>
+
 
                     <div>
                         <InputLabel htmlFor="industry" className="text-base" value="Company Industry" />

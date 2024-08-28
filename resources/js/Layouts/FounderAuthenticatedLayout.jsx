@@ -10,8 +10,8 @@ export default function FounderAuthenticated({ user, header, children }) {
 
     return (
         <div className="min-h-screen mt-8">
-            <nav className="container mx-auto bg-white rounded-3xl">
-                <div className="px-4 mx-auto sm:px-6 lg:px-8">
+            <nav className="container w-auto mx-4 bg-white md:mx-auto rounded-3xl">
+                <div className="px-4 mx-auto sm:px-6 lg:px-4">
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="flex items-center shrink-0">

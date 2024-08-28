@@ -317,7 +317,7 @@ class FounderController extends Controller
 
         $user = Auth::user();
 
-        $step = 6;
+        $step = 5;
 
         if($user->formstep <= $step){
             User::where(['id'=>$user->id])->update(["formstep"=>$step]);
@@ -331,6 +331,11 @@ class FounderController extends Controller
     public function thankyou(){
 
         $user = Auth::user();
+
+        $step = 6;
+        if($user->formstep <= $step){
+            User::where(['id'=>$user->id])->update(["formstep"=>$step]);
+        }
 
         Company::where(['user_id'=>$user->id])->update(['status'=>1]);
 

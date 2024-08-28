@@ -11,7 +11,7 @@ export default function FounderDashboard({ auth,children,step }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
+            <div className="md:py-12">
                 <div className={step==0?"mx-auto container":"mx-auto container"}>
                     <div className="overflow-hidden sm:rounded-lg">
                     {children}

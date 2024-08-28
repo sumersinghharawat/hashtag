@@ -180,4 +180,78 @@ select.PhoneInputCountrySelect {
 
 html {
     scroll-behavior: smooth;
-  }
+}
+.footer-bg{
+    background-size: 110% 100%;
+    background-position: 30% 100%;
+    background-repeat: no-repeat;
+}
+.radio-btn {
+    opacity: 0;
+    display: none;
+}
+.radio-btn-input {
+    cursor: pointer;
+    border: 1px solid #BDBDBD;
+    color: #BDBDBD;
+    margin-right: 20px;
+    padding: 4px 10px;
+    width: 120px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+[type='radio']:checked + .radio-btn-input{
+    border: 1px solid #52B596 !important;
+    color: #52B596 !important;
+}
+/* Mobile */
+@media(max-width: 768px){
+
+    .primary-button{
+        background-color: var(--primary-button-bg);
+        color: var(--primary-button-color);
+        padding: 16px 10px;
+        border-radius: 50px;
+        font-size: 16px;
+    }
+
+    .heading-1{
+        font-size: 32px;
+        line-height: 40px;
+        font-weight: 700;
+    }
+    .free-consulation {
+        position: absolute;
+        top: 5%;
+        right: -5%;
+        width: 40%;
+    }
+    img.setup-your-uae-company {
+        position: absolute;
+        top: -5%;
+        left: -5%;
+        width: 40%;
+    }
+    .footer-bg {
+        background-size: 345% 55% !important;
+        background-position: 73% 100% !important;
+        background-repeat: no-repeat !important;
+    }
+    .step-form-radio {
+        margin: 0px;
+    }
+    .step-form-radio::after{
+        height: 4px;
+        width: 30px;
+        top: 50%;
+        left: -3px;
+        transform: translateX(100%) translateY(-50%);
+    }
+    .tab-mobile .form-tab-title,.active-tab-mobile .form-tab-title {
+        display: none;
+    }
+    .other-service-section {
+        background: rgba(239, 246, 255, 1) 50%;
+    }
+}

@@ -64,7 +64,7 @@ export default function FounderVisa({  auth, step, foundersList }) {
                 <form onSubmit={submit} className="">
 
                 <div className="w-full">
-                            <div className="flex items-center h-8 border-t border-b border-gray-300">
+                            <div className="flex items-center h-16 border-t border-b border-gray-300 md:h-8">
                                 <div className="w-2/3 text-base font-medium">Founder’s Name</div>
                                 <div className="w-1/3 text-base font-medium text-center">Visa / Emirates ID</div>
                             </div>

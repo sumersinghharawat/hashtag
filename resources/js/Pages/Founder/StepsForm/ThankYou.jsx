@@ -4,7 +4,7 @@ import { Link } from "@inertiajs/react";
 export default function ThankYou({auth}) {
     return (
         <CustomerDashboard auth={auth}>
-        <div className="flex items-center justify-center h-full p-40">
+        <div className="flex items-center justify-center h-full p-12 md:p-40">
             <div>
                 <div className="flex flex-col items-center space-y-2">
                     <svg xmlns="http://www.w3.org/2000/svg" className="text-green-600 w-28 h-28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">

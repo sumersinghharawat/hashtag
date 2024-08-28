@@ -103,7 +103,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                 <h2 className="text-2xl font-extrabold ">Founders & Ownership</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Enter the legal name of the founders, split the company between the founders and select managers</p>
 
-                <form onSubmit={submitFounders} className="flex items-start gap-2">
+                <form onSubmit={submitFounders} className="flex flex-col items-start gap-2 md:flex-row">
                     <div className="w-full">
                         <InputLabel htmlFor="first_name" className="text-lg" value="First Name" />
 
@@ -139,7 +139,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
 
                     </div>
 
-                    <div className="w-auto pt-7">
+                    <div className="w-auto md:pt-7">
                         <button className="px-10 py-4 mt-1 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button" disabled={processing}>
                             Add
                         </button>

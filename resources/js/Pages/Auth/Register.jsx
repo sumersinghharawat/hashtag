@@ -47,7 +47,7 @@ export default function Register() {
             <div>
                 <div className="flex flex-col justify-center">
                     <h2 className="text-2xl font-bold text-center">Create Account</h2>
-                    <p className="mb-12 text-center text-gray-500">Embark on Your Business Journey – Create Your Kick Start Account Today!</p>
+                    <p className="mb-12 text-center text-gray-500">Embark on Your Business Journey – Create Your incorpX Account Today!</p>
                     <a
                         href={route("google.auth")}
                         className="flex items-center justify-center w-full py-3 text-xs font-semibold tracking-widest text-black transition duration-150 ease-in-out bg-white border border-gray-400 rounded hover:bg-gray-100 active:bg-gray-100 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25"

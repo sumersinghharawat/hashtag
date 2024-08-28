@@ -27,7 +27,7 @@ export default function FoundersList ({founderSplitList,updateSplit,updateManage
                             id={"split-"+element.id}
                             name={"split_["+element.id+"]"}
                             value={element.ownership_percentage}
-                            className="w-20 py-4 bg-transparent"
+                            className="w-16 py-4 bg-transparent md:w-20"
                             autoComplete="split"
                             placeholder='Split'
                             isFocused={false}

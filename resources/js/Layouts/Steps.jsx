@@ -7,26 +7,32 @@ export default function Steps({filledSteps,step}) {
 
     const StepsDetails = [
         {
+            key:0,
             step:1,
             title:"Company Name"
         },
         {
+            key:1,
             step:2,
             title:"Company Details"
         },
         {
+            key:2,
             step:3,
             title:"Founders"
         },
         {
+            key:3,
             step:4,
             title:"Visa"
         },
         {
+            key:4,
             step:5,
             title:"Summary"
         },
         {
+            key:5,
             step:6,
             title:"Pay"
         }
@@ -67,31 +73,31 @@ export default function Steps({filledSteps,step}) {
     },[formStep])
 
     return (
-            <>{StepsDetails.map((element,index)=>{
+            <><h2 className='text-xl'>{(StepsDetails[step])?(StepsDetails[step].title):''}</h2><div className='flex justify-between w-full mt-2 md:flex-col md:space-y-6'>{StepsDetails.map((element,index)=>{
 
-            return <>{(filledSteps>=element.step)?<div className={"relative flex flex-col gap-x-3" + (filledSteps >= element.step ? " cursor-pointer" : "")} onClick={()=>{ ChangeStep(); setFormStep(element.step)}}>
+            return <div key={element.key}>{(filledSteps>=element.step)?<div key={step} className={"relative flex flex-col gap-x-3" + (filledSteps >= element.step ? " cursor-pointer" : "") + (step == element.step? " active-tab-mobile":" tab-mobile")} onClick={()=>{ ChangeStep(); setFormStep(element.step)}}>
                 <label htmlFor="push-everything" className="flex text-sm font-medium leading-6 text-gray-900 cursor-pointer">
                     <div className={"step-form-radio" + ((filledSteps >= element.step) ? " filed" : "") + (step == element.step ? " current" : "")+(element.step==6?" step-form-last-child":"")}>
                         {(filledSteps >= element.step && step != element.step) ? <FontAwesomeIcon style={{ fontSize: "12px" }} className='mx-3' icon={faCheck} /> : <></>}
                     </div>
                     <input id="push-everything" name="push-notifications" type="radio" className="hidden w-4 h-4" checked={step == element.step ? true : false} value={element.step} disabled={step >= element.step ? false : true} onChange={() => false} />
-                    <div className={"flex flex-col" + (step != element.step ? " opacity-50" : "")}>
+                    <div className={"flex flex-col form-tab-title" + (step != element.step ? " opacity-50" : "")}>
                         <span className="text-sm text-gray-500">Step {element.step}</span>
                         <span className="text-lg font-medium">{element.title}</span>
                     </div>
                 </label>
-            </div>:<div key={index} className={"relative flex flex-col gap-x-3 pointer-events-none" + (filledSteps >= element.step ? " cursor-pointer" : "")} >
+            </div>:<div key={index} className={"relative flex flex-col gap-x-3 pointer-events-none" + (filledSteps >= element.step ? " cursor-pointer" : "") + (step == element.step? " active-tab-mobile":" tab-mobile")} >
                 <label htmlFor="push-everything" className="flex text-sm font-medium leading-6 text-gray-900 cursor-pointer">
                     <div className={"step-form-radio" + ((filledSteps >= element.step) ? " filed" : "") + (step == element.step ? " current" : "")+(element.step==6?" step-form-last-child":"")}>
                         {(filledSteps >= element.step && step != element.step) ? <FontAwesomeIcon style={{ fontSize: "12px" }} className='mx-3' icon={faCheck} /> : <></>}
                     </div>
                     <input id="push-everything" name="push-notifications" type="radio" className="hidden w-4 h-4" checked={step == element.step ? true : false} value={element.step} disabled={step >= element.step ? false : true} onChange={() => false} />
-                    <div className={"flex flex-col" + (step != element.step ? " opacity-50" : "")}>
+                    <div className={"flex flex-col form-tab-title" + (step != element.step ? " opacity-50" : "")}>
                         <span className="text-sm text-gray-500">Step {element.step}</span>
                         <span className="text-lg font-medium">{element.title}</span>
                     </div>
                 </label>
-            </div>}</>
-            })}</>
+            </div>}</div>
+            })}</div></>
     );
 };

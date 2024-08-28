@@ -5,7 +5,7 @@ import guestBanner from '../images/guest-banner.png';
 export default function Guest({ children }) {
     return (
         <div className="container flex items-center w-full h-screen mx-auto">
-            <div className="flex items-center w-full overflow-hidden lg:w-6/12" style={{maxHeight:"700px"}}>
+            <div className="items-center hidden w-full overflow-hidden md:flex lg:w-6/12" style={{maxHeight:"700px"}}>
                 <img src={guestBanner} className="guest-image rounded-3xl" />
             </div>
             <div className="w-full lg:w-6/12">
@@ -15,7 +15,7 @@ export default function Guest({ children }) {
                             <ApplicationLogo className="h-20" />
                         </Link>
                     </div>
-                    <div className="w-full">
+                    <div className="w-full px-4">
                         {children}
                     </div>
                 </div>

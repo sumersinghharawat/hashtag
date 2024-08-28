@@ -16,8 +16,21 @@
     height: auto;
     width: 25vw;
 }
+@media(max-width: 768px){
+    .slide-track {
+        animation: scroll 100s linear infinite;
+        display: flex;
+        width: calc(100vw * 10);
+    }
+
+    .slide {
+        height: auto;
+        width: 100vw;
+    }
+}
 
 @keyframes scroll {
     0% { transform: translateX(0); }
     50% { transform: translateX(calc(-25vw*6)); }
 }
+

@@ -27,21 +27,29 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                 <h2 className="text-2xl font-extrabold">Summary</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please review all information about your company</p>
                 <div className="">
-                    <div className="flex h-full py-6 border-t">
-                        <div className="w-3/6">
+                    <div className="flex flex-col w-full h-full py-6 border-t">
+                        <div className="flex items-center justify-between w-full">
                             <p className="font-bold">Company Name</p>
-                            <p className="mt-4 ml-8">{company_info.name}</p>
-                        </div>
-                        <div className="flex justify-end w-3/6 h-full">
                             <Link className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button" href="/founder/companyname">
                                 Edit
                             </Link>
                         </div>
+                        <div className="flex justify-start w-full h-full">
+                            <p className="mt-4 md:ml-8">{company_info.name}</p>
+                        </div>
                     </div>
-                    <div className="flex h-full py-6 border-t">
-                        <div className="w-4/6">
+                    <div className="flex flex-col w-full h-full py-6 border-t">
+                        <div className="flex items-center justify-between w-full">
                             <p className="font-bold">Company Details</p>
-                            <div className="flex flex-col mt-4 ml-8">
+                            <Link
+                                className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button"
+                                href="/founder/companydetails"
+                            >
+                                Edit
+                            </Link>
+                        </div>
+                        <div className="flex flex-col justify-start w-full h-full">
+                            <div className="flex flex-col mt-4 md:ml-8">
                                 <div className="flex flex-wrap py-2">
                                     <div className="w-4/12 font-semibold">Industry</div><div className="w-1/12">:</div><div className="w-7/12"> {company_info.industry}</div>
                                 </div>
@@ -50,18 +58,10 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-end w-2/6 h-full">
-                            <Link
-                                className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button"
-                                href="/founder/companydetails"
-                            >
-                                Edit
-                            </Link>
-                        </div>
                     </div>
-                    <div className="flex flex-col h-full py-4 border-t">
-                        <div className="flex justify-between">
-                            <div className="w-3/6">
+                    <div className="flex flex-col w-full h-full py-6 border-t">
+                        <div className="flex items-center justify-between w-full">
+                            <div className="w-full md:w-3/6">
                                 <p className="mt-2 font-bold">Ownership & Visa</p>
                             </div>
                             <div className="flex justify-end w-3/6 h-full">
@@ -74,7 +74,7 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                             </div>
                         </div>
                         <div className="w-full mt-2 founder-list">
-                            <div className="pb-4 mt-4 ml-8 rounded-lg">
+                            <div className="pb-4 mt-4 rounded-lg md:ml-8">
                                 <table className="w-full bg-transparent table-auto rounded-2xl">
                                     <thead>
                                         <tr className="p-5 rounded-2xl">
@@ -89,7 +89,7 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                                     <tbody>
                                         {foundersList.map((element, index) => {
                                             return (
-                                                <tr key={index} className="px-8 border-t border-b rounded-2xl">
+                                                <tr key={index} className="px-4 border-t border-b rounded-2xl">
                                                     <td className="p-2">
                                                         {element.first_name + " " + element.last_name}
                                                     </td>

@@ -9,7 +9,7 @@ export default function Dashboard({ auth, children, dashboard }) {
         >
             <Head title="Dashboard" />
 
-            <main>{children?children:<div className='px-4 mx-auto my-4 sm:px-6 lg:px-8'>
+            <main>{children?children:<div className='px-4 mx-auto my-4 sm:px-6 lg:px-4'>
                 <div>
                     <h2 className='text-5xl'>Welcome {auth.first_name}</h2>
                 </div>

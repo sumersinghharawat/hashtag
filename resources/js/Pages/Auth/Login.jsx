@@ -47,7 +47,7 @@ export default function Login({ status, canResetPassword }) {
             <div>
                 <div className="flex flex-col justify-center">
                     <h2 className="text-2xl font-bold text-center">Sign in</h2>
-                    <p className="mb-12 text-center text-gray-500">Continue Your Incorporation Journey with Ease – Sign In to Your Kick Start Account Now!</p>
+                    <p className="mb-12 text-center text-gray-500">Continue Your Incorporation Journey with Ease – Sign In to Your incorpX Account Now!</p>
                     <a
                         href={route("google.auth")}
                         className="flex items-center justify-center w-full py-3 text-xs font-semibold tracking-widest text-black transition duration-150 ease-in-out bg-white border border-gray-400 rounded hover:bg-gray-100 active:bg-gray-100 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25"

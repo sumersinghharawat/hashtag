@@ -12,10 +12,13 @@ class Company extends Model
 
     protected $fillable = [
         'user_id',
-        'name',
+        'company_name_1',
+        'company_name_2',
+        'company_name_3',
         'entity_type',
         'industry',
         'description',
+        'type_of_freezone',
         'country',
     ];
 }
