@@ -19,8 +19,16 @@ export default function ViewSubmitedRequest({ auth, request }) {
                             {request.status==3?<dd className={"mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0 border w-max px-6 border-green-500 bg-green-100 font-bold p-2 rounded-xl text-green-500"}>Completed</dd>:<></>}
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                            <dt className="text-sm font-medium leading-6 text-gray-900">Company name</dt>
-                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.name}</dd>
+                            <dt className="text-sm font-medium leading-6 text-gray-900">Company name 1</dt>
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_1}</dd>
+                        </div>
+                        <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <dt className="text-sm font-medium leading-6 text-gray-900">Company name 2</dt>
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_2}</dd>
+                        </div>
+                        <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <dt className="text-sm font-medium leading-6 text-gray-900">Company name 3</dt>
+                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_3}</dd>
                         </div>
                         <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                             <dt className="text-sm font-medium leading-6 text-gray-900">Company Industry</dt>

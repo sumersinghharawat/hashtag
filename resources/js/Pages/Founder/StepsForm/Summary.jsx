@@ -34,8 +34,10 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                                 Edit
                             </Link>
                         </div>
-                        <div className="flex justify-start w-full h-full">
-                            <p className="mt-4 md:ml-8">{company_info.name}</p>
+                        <div className="flex flex-col justify-start w-full h-full flex-nowrap">
+                            <p className="mt-4 col-12 col-md-12 md:ml-8">1. {company_info.company_name_1}</p>
+                            <p className="mt-4 col-12 col-md-12 md:ml-8">2. {company_info.company_name_2}</p>
+                            <p className="mt-4 col-12 col-md-12 md:ml-8">3. {company_info.company_name_3}</p>
                         </div>
                     </div>
                     <div className="flex flex-col w-full h-full py-6 border-t">

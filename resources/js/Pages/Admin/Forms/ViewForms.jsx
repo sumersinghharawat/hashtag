@@ -5,8 +5,6 @@ import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function ViewForms ({auth, forms}) {
 
-    console.log(forms);
-
     return (
         <Dashboard auth={auth.user} >
         <div className="py-12">

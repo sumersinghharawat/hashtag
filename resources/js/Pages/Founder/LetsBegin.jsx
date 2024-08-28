@@ -70,8 +70,6 @@ export default function LetsBegin({ auth }) {
 
     country = Array.from(new Set(CountryList));
 
-    console.log(auth)
-
     return (
         <CustomerDashboard auth={auth} step={0}>
             <div className="w-full p-6">

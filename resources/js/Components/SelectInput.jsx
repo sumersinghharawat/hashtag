@@ -4,8 +4,6 @@ export default forwardRef(function SelectInput({ dropdown, className = '',name,s
     const input = ref ? ref : useRef();
 
     useEffect(() => {
-
-        console.log(selectedvalue);
         if (isFocused) {
             input.current.focus();
         }

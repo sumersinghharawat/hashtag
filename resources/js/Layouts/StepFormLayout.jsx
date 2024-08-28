@@ -16,37 +16,37 @@ export default function StepFormLayout({ props, children, step, filledSteps }) {
         let completion = 0;
         let completionNumber = 0;
 
-       if(filledSteps == 0){
+        if (filledSteps == 0) {
             completion = 10;
             completionNumber = 90;
-       }
+        }
 
-       if(filledSteps == 1){
+        if (filledSteps == 1) {
             completion = 25;
             completionNumber = 75;
-       }
+        }
 
-       if(filledSteps == 2){
+        if (filledSteps == 2) {
             completion = 40;
             completionNumber = 60;
-       }
+        }
 
-       if(filledSteps == 3){
+        if (filledSteps == 3) {
             completion = 55;
             completionNumber = 45;
-       }
+        }
 
-       if(filledSteps == 4){
+        if (filledSteps == 4) {
             completion = 70;
             completionNumber = 30;
-       }
+        }
 
-       if(filledSteps == 5){
+        if (filledSteps == 5) {
             completion = 85;
             completionNumber = 15;
-       }
+        }
 
-        if(filledSteps == 6){
+        if (filledSteps == 6) {
             completion = 85;
             completionNumber = 15;
         }
@@ -56,15 +56,15 @@ export default function StepFormLayout({ props, children, step, filledSteps }) {
     })
 
     return (
-        <div className="flex flex-col w-full p-8 md:flex-row">
-            <div className="flex flex-col justify-between w-full md:justify-start md:flex-row md:bg-white md:p-10 h-min rounded-3xl" style={{ maxWidth: "410px" }}>
+        <div className="relative flex flex-col w-full h-full p-8 md:flex-row">
+            <div className="sticky top-0 flex flex-col justify-between w-full md:justify-start md:flex-row md:bg-white md:p-10 h-min rounded-3xl" style={{ maxWidth: "410px" }}>
                 <div className="flex flex-col-reverse w-full mb-8 md:flex-col">
                     <div className="mt-4 md:mb-8">
                         <div className="pb-2 text-gray-400">{parseInt(formCompletionNumber)}% To Complete</div>
                         <Progress value={formCompletion} className="w-full h-2 transition-all progressbar-form" ></Progress>
                     </div>
                     <div className="md:mt-2">
-                        <Steps filledSteps={filledSteps} step={step}/>
+                        <Steps filledSteps={filledSteps} step={step} />
                     </div>
                 </div>
             </div>

@@ -363,9 +363,9 @@ class FounderController extends Controller
 
         $company_info['founders'] = Founder::where(['user_id'=>$company_info->user_id])->get();
 
-        if($company_info['founders']){
-            $company_info['founders'] = [User::where(['id'=>$company_info->user_id])->first()];
-        }
+        // if($company_info['founders']){
+        //     $company_info['user'] = [User::where(['id'=>$company_info->user_id])->first()];
+        // }
 
         return Inertia::render('Admin/ViewSubmitedRequest',['request'=>$company_info]);
     }

@@ -4,8 +4,6 @@ import Dashboard from "../Dashboard";
 
 export default function ViewSubmitedLeadList ({auth, companyleads}) {
 
-    console.log(companyleads);
-
     return (
         <Dashboard auth={auth} >
         <div className="py-12">

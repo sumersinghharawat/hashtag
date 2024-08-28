@@ -7,8 +7,6 @@ export default function ViewSubmitedRequest({ auth, request }) {
         company_id: request.id
     });
 
-    console.log(request);
-
     var selectOption = [
         {name:'Under Review',value:1},
         {name:'In Progress',value:2},
@@ -49,8 +47,16 @@ export default function ViewSubmitedRequest({ auth, request }) {
                                         {request.status==3?<dd className={"mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0 border w-auth border-green-500 bg-green-100 font-bold p-2 rounded-xl text-green-500"}>Completed</dd>:<></>}
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-gray-900">Company name</dt>
-                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.name?request.name:'pending'}</dd>
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Company name 1</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_1?request.company_name_1:'pending'}</dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Company name 2</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_2?request.company_name_2:'pending'}</dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Company name 3</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{request.company_name_3?request.company_name_3:'pending'}</dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Company Contact</dt>

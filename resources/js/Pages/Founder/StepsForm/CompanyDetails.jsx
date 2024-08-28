@@ -22,7 +22,6 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
     useEffect(()=>{
         setData('company_industry',company_info.industry?company_info.industry:'');
         setData('type_of_freezone',company_info.type_of_freezone?company_info.type_of_freezone:(data.type_of_freezone?data.type_of_freezone:''));
-        console.log('type_of_freezone',data);
     },[])
 
     const submit = (e) => {
@@ -33,8 +32,6 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
                 data.company_industry = "";
             }
         }
-
-        console.log(data);
 
         post(route('founder.dashboard.companydetailsstore'));
     }
@@ -52,8 +49,6 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
             setData('company_industry', e.target.value);
         }
     }
-
-    console.log(data.type_of_freezone)
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
