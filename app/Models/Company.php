@@ -18,7 +18,9 @@ class Company extends Model
         'entity_type',
         'industry',
         'description',
-        'type_of_freezone',
+        // 'type_of_freezone',
         'country',
+        'payment_status',
+        'application_status',
     ];
 }

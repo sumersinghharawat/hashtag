@@ -4,6 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import addmore from '../Icons/add-more.svg';
 
 export default function FounderAuthenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -14,10 +15,22 @@ export default function FounderAuthenticated({ user, header, children }) {
                 <div className="px-4 mx-auto sm:px-6 lg:px-4">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            <div className="flex items-center shrink-0">
+                            <div className="flex items-center justify-between w-full shrink-0">
                                 <Link href="/">
-                                    <ApplicationLogo className="block w-auto h-12 text-gray-800 fill-current" />
+                                    <ApplicationLogo className="block object-contain w-64 h-12 text-gray-800 fill-current" />
                                 </Link>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-end w-full h-full gap-4">
+                            <div className='w-auto'>
+                                <NavLink href={route('founder.dashboard.index')} active={route().current('founder.dashboard.index')} className='focus:border-0 active:text-green-500'>Dashboard</NavLink>
+                            </div>
+                            <div className='w-auto'>
+                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'>My Applications</NavLink>
+                            </div>
+                            <div className='w-auto'>
+                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'><img src={addmore} style={{marginTop:4,height:16,width:16}} /></NavLink>
                             </div>
                         </div>
 

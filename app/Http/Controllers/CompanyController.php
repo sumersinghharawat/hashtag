@@ -80,10 +80,10 @@ class CompanyController extends Controller
         $company_info = Company::where(['user_id'=>$user->id])->first();
 
 
-        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+        $count = Company::where(['user_id'=>$user->id,'payment_status'=>'success'])->count();
 
         if($count){
-            return redirect('/founder/viewrequest');
+            return redirect(route('founder.dashboard.applications'));
         }else{
             return Inertia::render('Founder/StepsForm/CompanyName',['auth' => fn () => ["user"=>$user],'step'=>fn () => $step,'company_info'=>fn () => $company_info]);
         }
@@ -150,10 +150,10 @@ class CompanyController extends Controller
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
 
-        $count = Company::where(['user_id'=>$user->id,'status'=>1])->count();
+        $count = Company::where(['user_id'=>$user->id,'payment_status'=>'success'])->count();
 
         if($count){
-            return redirect('/founder/viewrequest');
+            return redirect(route('founder.dashboard.applications'));
         }else{
             return Inertia::render('Founder/StepsForm/CompanyDetails',['auth' =>fn () =>  ["user"=>$user],'step'=>fn () => $step,'listindusties'=>fn () => $listIndusties,'company_info'=>fn () => $company_info]);
         }
@@ -167,14 +167,14 @@ class CompanyController extends Controller
         $step = 2;
 
         $request->validate([
-            'type_of_freezone' => 'required|string|max:255',
+            // 'type_of_freezone' => 'required|string|max:255',
             'company_industry' => 'required|string|max:255',
             'company_description' => 'required|string|min:20|max:255',
         ]);
 
         $company = Company::where(['user_id'=>$user->id])->update([
             'user_id'=>$user->id,
-            'type_of_freezone' => $request->type_of_freezone,
+            // 'type_of_freezone' => $request->type_of_freezone,
             'industry' => $request->company_industry,
             'description' => $request->company_description,
             'country' => $user->country_of_residenace,

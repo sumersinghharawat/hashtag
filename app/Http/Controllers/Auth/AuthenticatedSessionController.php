@@ -95,14 +95,14 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
         // DB::enableQueryLog();
 
-        $dashboard['paymentdue'] = Company::whereNull('status')
-        ->orWhere('status', 0)
+        $dashboard['paymentdue'] = Company::whereNull('payment_status')
+        ->orWhere('payment_status', 'pending')
         ->count();
         // $queries = DB::getQueryLog();
         // dd($queries);
-        $dashboard['todayapplications'] = Company::whereNotIn('status', ['0', null])->whereDate('created_at', today())->count();
-        $dashboard['underreview'] = Company::where('status','1')->count();
-        $dashboard['inprogress'] = Company::where('status','2')->count();
+        $dashboard['todayapplications'] = Company::whereNotIn('application_status', ['pending', null])->whereDate('created_at', today())->count();
+        $dashboard['underreview'] = Company::where('application_status','underreview')->count();
+        $dashboard['inprogress'] = Company::where('application_status','success')->count();
 
         // dd($dashboard);
 

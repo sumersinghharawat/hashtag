@@ -128,7 +128,9 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/founder/paynow',[FounderController::class,'paynow'])->name('founder.dashboard.paynow');
 
     Route::get('/founder/thankyou',[FounderController::class,'thankyou'])->name('founder.dashboard.thankyou');
-    Route::get('/founder/viewrequest',[FounderController::class,'founderviewsubmitedrequest'])->name('founder.dashboard.viewrequest');
+    Route::get('/founder/applications',[FounderController::class,'applications'])->name('founder.dashboard.applications');
+
+    Route::get('/founder/dashboard',[FounderController::class,'founderviewdashboard'])->name('founder.dashboard.index');
 
 
 

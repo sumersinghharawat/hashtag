@@ -12,7 +12,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
     const { data, setData, post, processing, errors, reset } = useForm({
         company_industry: company_info.industry?company_info.industry:'',
         company_description: company_info.description?company_info.description:'',
-        type_of_freezone: company_info.type_of_freezone?company_info.type_of_freezone:'',
+        // type_of_freezone: company_info.type_of_freezone?company_info.type_of_freezone:'',
     });
 
     const goBack = () => {
@@ -21,7 +21,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
 
     useEffect(()=>{
         setData('company_industry',company_info.industry?company_info.industry:'');
-        setData('type_of_freezone',company_info.type_of_freezone?company_info.type_of_freezone:(data.type_of_freezone?data.type_of_freezone:''));
+        // setData('type_of_freezone',company_info.type_of_freezone?company_info.type_of_freezone:(data.type_of_freezone?data.type_of_freezone:''));
     },[])
 
     const submit = (e) => {
@@ -58,7 +58,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
 
                 <form onSubmit={submit}>
 
-                <div className="mt-4">
+                <div className="hidden mt-4">
                     <InputLabel htmlFor="type_of_freezone" className="text-base " value="Select the Type of Freezone" />
                     <div className="flex mt-4 mb-4">
                         <div className="col-auto">

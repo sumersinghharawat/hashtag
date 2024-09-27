@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('industry')->nullable();
             $table->longText('description')->nullable();
             $table->string('country')->nullable();
-            $table->string('status')->nullable();
+            $table->enum('payment_status', ['cancel', 'pending', 'success'])->default('pending');
+            $table->enum('application_status', ['Rejected', 'Uncompleted', 'In Progress', 'Under Process' ,'Completed'])->default('Uncompleted');
             $table->timestamps();
         });
     }
