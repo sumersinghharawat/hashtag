@@ -16,6 +16,10 @@ class FormSubmission extends Model
      */
     protected $fillable = [
         'title',
+        'user_id',
+        'company_id',
+        'details',
+        'step',
         'status',
     ];
 

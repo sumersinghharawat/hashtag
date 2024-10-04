@@ -23,12 +23,13 @@ export default function LetsBegin({ auth }) {
     }
 
     useEffect(()=>{
+
+        fetchCountryCode();
+
         if(auth){
             data.first_name = auth.user.first_name;
             data.last_name = auth.user.last_name?auth.user.last_name:"";
             setValue(auth.user.mobile_number);
-            setCountryCode(auth.user.country_of_residenace);
-
             data.country_of_residenace = auth.user.country_of_residenace?auth.user.country_of_residenace:country.name;
         }
 
@@ -51,14 +52,13 @@ export default function LetsBegin({ auth }) {
                 "https://ipinfo.io/json?token=712e53b5f2cc22"
             );
             const data = await response.json();
-
             setCountryCode(data.country);
         } catch (error) {
             console.error("Error getting country code:", error);
         }
     };
 
-    fetchCountryCode();
+
 
     var country = [{ name: "select", value: "select" }];
 
@@ -67,6 +67,9 @@ export default function LetsBegin({ auth }) {
         data.mobile_number = value;
         post(route('founder.dashboard.letsbeginstore'));
     }
+
+    localStorage.clear();
+
 
     country = Array.from(new Set(CountryList));
 
@@ -161,9 +164,9 @@ export default function LetsBegin({ auth }) {
                                         className="py-4 bg-transparent"
                                         dropdown={country ? country : []}
                                         name="country_of_residenace"
-                                        selectedvalue={(auth.user.country_of_residenace=="")?country.name:auth.user.country_of_residenace}
+                                        selectedvalue={(data.country_of_residenace=="")?country.name:data.country_of_residenace}
                                         onChange={(e) => {
-                                            data.country_of_residenace = e.target.value;
+                                            setData("country_of_residenace", e.target.value)
                                         }}
                                     />
                                 </div>

@@ -9,12 +9,13 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
-export default function FounderVisa({  auth, step, foundersList }) {
+export default function FounderVisa({  auth, step, foundersList, registration_completed_step, company_info }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
-        split: [],
+        founders_list: [],
         visastatus: true,
+        company_id: company_info.id
     });
 
     const [founderSplitList, setFounderSplitList] = useState(foundersList);
@@ -31,13 +32,14 @@ export default function FounderVisa({  auth, step, foundersList }) {
     const submit = (e) => {
         e.preventDefault();
 
-        data.split = founderSplitList;
+        data.founders_list = founderSplitList;
 
-        post(route('founder.dashboard.foundersvisastore'));
+        post(route('founder.dashboard.foundersvisastore', data.company_id));
     }
 
     const goBack = () => {
-        router.replace(route('founder.dashboard.foundersdetail'));
+        console.log(data);
+        router.get(route('founder.dashboard.foundersdetail',data.company_id));
     }
 
     const updateVisa = (id) => {
@@ -57,7 +59,7 @@ export default function FounderVisa({  auth, step, foundersList }) {
 
     return (
         <CustomerDashboard auth={auth} >
-            <StepFormLayout step={step}  filledSteps={auth.user.formstep}>
+            <StepFormLayout step={step}  filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold">Visa</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Select the founders that require UAE Visa or Emirates ID</p>
 

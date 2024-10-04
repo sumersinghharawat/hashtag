@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Accordion, AccordionBody, AccordionHeader, Carousel } from '@material-tailwind/react';
 import { FastEasyProcess } from './Shared/FastEasyProcess';
 import { Testimonial } from './Shared/Testimonial';
-import logo from '../images/Logo.png';
+import logo from '../images/incorpX-logo.png';
 import serviceDummyImage from './../images/demo-service.png';
 import freeConsultation from './../Icons/free-consultation.svg';
 import footerImage from './../Icons/dubai-skeleton.svg';
@@ -101,11 +101,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent })
                     <p className='text-white'>Have questions about company formation?</p> <button onClick={showPopUp} className='px-10 py-2 text-white bg-black border-2 border-white rounded-full'>Free consultation<FontAwesomeIcon style={{fontSize: "12px"}} className='ml-3' icon={faChevronRight} /></button>
             </div>
             <div className="relative flex items-center justify-between h-full px-2 mx-auto lg:container">
-                <div className={openMenu?'':''}></div>
-                <div className="flex items-center gap-14 text-start">
-                    <Link href="/">
-                        <ApplicationLogo className="object-contain h-20 fill-current w-36" />
-                    </Link>
+                <div className={openMenu?'hidden':'hidden'}></div>
+                <Link href="/">
+                    <ApplicationLogo className="object-contain h-20 fill-current w-36" />
+                </Link>
+                <div className="flex items-center justify-between gap-14 text-start">
                     <div className={'absolute hidden flex-col items-center gap-0 md:flex md:flex-row text-start md:gap-14 md:relative w-screen md:w-auto bg-white md:bg-transparent left-0 top-16 md:top-auto'}>
                         <a href="#services" className="flex items-center justify-center w-full py-4 text-base font-semibold leading-6 text-center text-gray-900 border-b md:border-none md:py-0">
                             Services

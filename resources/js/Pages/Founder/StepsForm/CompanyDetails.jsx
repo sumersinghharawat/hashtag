@@ -5,21 +5,24 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import StepFormLayout from "@/Layouts/StepFormLayout";
 import CustomerDashboard from "@/Pages/CustomerDashboard";
-import { useForm } from "@inertiajs/react";
+import { router, useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function CompanyDetails({company_info, auth, step, listindusties}){
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function CompanyDetails({company_info, auth, step, listindusties, registration_completed_step}){
+    const { data, setData, post, put, processing, errors, reset } = useForm({
         company_industry: company_info.industry?company_info.industry:'',
         company_description: company_info.description?company_info.description:'',
+        company_id: company_info.id,
         // type_of_freezone: company_info.type_of_freezone?company_info.type_of_freezone:'',
     });
 
     const goBack = () => {
-        location.replace(route('founder.dashboard.companyname'));
+        router.get(route('founder.dashboard.companynameupdate',data.company_id));
     }
 
     useEffect(()=>{
+        localStorage.setItem('company_id', company_info.id);
+        console.log(step);
         setData('company_industry',company_info.industry?company_info.industry:'');
         // setData('type_of_freezone',company_info.type_of_freezone?company_info.type_of_freezone:(data.type_of_freezone?data.type_of_freezone:''));
     },[])
@@ -33,7 +36,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
             }
         }
 
-        post(route('founder.dashboard.companydetailsstore'));
+        put(route('founder.dashboard.companydetailsstore',{'id':data.company_id}));
     }
 
     const CheckIndustryName = (e) => {
@@ -52,7 +55,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties}
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
-            <StepFormLayout step={step} filledSteps={auth.user.formstep}>
+            <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={data.company_id}>
                 <h2 className="text-2xl font-extrabold">Company Details</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please enter three name choices for your company in order of preference.</p>
 

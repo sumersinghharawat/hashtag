@@ -107,35 +107,53 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function(){
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/founder',[FounderController::class,'index'])->name('founder.dashboard');
 
+    // Let's begin
     Route::get('/founder/letsbegin',[FounderController::class,'letsbegin'])->name('founder.dashboard.letsbegin');
     Route::post('/founder/letsbegin',[FounderController::class,'letsbeginstore'])->name('founder.dashboard.letsbeginstore');
 
+    // Company Details
     Route::get('/founder/companyname',[CompanyController::class,'companyname'])->name('founder.dashboard.companyname');
-    Route::post('/founder/companyname',[CompanyController::class,'companynamestore'])->name('founder.dashboard.companynamestore');
+    Route::get('/founder/companyname/{id}',[CompanyController::class,'companyname'])->name('founder.dashboard.companynameupdate');
+    Route::put('/founder/companyname/{id}',[CompanyController::class,'companynamestore'])->name('founder.dashboard.companynamestoreandupdate');
+    Route::post('/founder/companyname/{id}',[CompanyController::class,'companynamestore'])->name('founder.dashboard.companynamestore');
 
-    Route::get('/founder/companydetails',[CompanyController::class,'companydetails'])->name('founder.dashboard.companydetails');
-    Route::post('/founder/companydetails',[CompanyController::class,'companydetailsstore'])->name('founder.dashboard.companydetailsstore');
+    Route::get('/founder/companydetails/{id}',[CompanyController::class,'companydetails'])->name('founder.dashboard.companydetails');
+    Route::put('/founder/companydetails/{id}',[CompanyController::class,'companydetailsstore'])->name('founder.dashboard.companydetailsstore');
 
-    Route::get('/founder/foundersdetail',[FounderController::class,'foundersdetail'])->name('founder.dashboard.foundersdetail');
-    Route::post('/founder/founderstore',[FounderController::class,'founderstore'])->name('founder.dashboard.founderstore');
-    Route::get('/founder/deletefounder', [FounderController::class, 'founderdelete'])->name('founder.dasshboard.founderdelete');
-    Route::post('/founder/founderssplitstore',[FounderController::class,'founderssplitstore'])->name('founder.dashboard.founderssplitstore');
+    // Company Registration Delete
+    Route::delete('/founder/companydelete/{id}',[CompanyController::class,'deletecomapnyregistration'])->name('founder.dashboard.companydelete');
 
-    Route::get('/founder/foundersvisa',[FounderController::class,'foundersvisa'])->name('founder.dashboard.foundersvisa');
-    Route::post('/founder/foundersvisastore',[FounderController::class,'foundersvisastore'])->name('founder.dashboard.foundersvisastore');
+    // Founder Details
+    Route::get('/founder/foundersdetail/{id}',[FounderController::class,'foundersdetail'])->name('founder.dashboard.foundersdetail');
+    Route::post('/founder/founderstore/{id}',[FounderController::class,'founderstore'])->name('founder.dashboard.founderstore');
 
-    Route::get('/founder/summary',[FounderController::class,'summary'])->name('founder.dashboard.summary');
-    Route::get('/founder/paynow',[FounderController::class,'paynow'])->name('founder.dashboard.paynow');
+    Route::get('/founder/deletefounder/{id}/{founder_id}', [FounderController::class, 'founderdelete'])->name('founder.dasshboard.founderdelete');
+    Route::post('/founder/founderssplitstore/{id}',[FounderController::class,'founderssplitstore'])->name('founder.dashboard.founderssplitstore');
 
-    Route::get('/founder/thankyou',[FounderController::class,'thankyou'])->name('founder.dashboard.thankyou');
+    // Founder Visa Status
+    Route::get('/founder/foundersvisa/{id}',[FounderController::class,'foundersvisa'])->name('founder.dashboard.foundersvisa');
+    Route::post('/founder/foundersvisastore/{id}',[FounderController::class,'foundersvisastore'])->name('founder.dashboard.foundersvisastore');
+
+    Route::get('/founder/summary/{id}',[FounderController::class,'summary'])->name('founder.dashboard.summary');
+    Route::get('/founder/paynow/{id}',[FounderController::class,'paynow'])->name('founder.dashboard.paynow');
+
+    Route::get('/founder/thankyou/{id}',[FounderController::class,'thankyou'])->name('founder.dashboard.thankyou');
     Route::get('/founder/applications',[FounderController::class,'applications'])->name('founder.dashboard.applications');
 
     Route::get('/founder/dashboard',[FounderController::class,'founderviewdashboard'])->name('founder.dashboard.index');
 
+    // Phase 2
+    Route::get('/founder/review-registration/{id}',[CompanyController::class,'reviewregistration'])->name('founder.dashboard.review-registration');
+    Route::put('/founder/review-registration/{id}',[CompanyController::class,'reviewregistrationstore'])->name('founder.dashboard.review-registrationstore');
 
+    Route::get('/founder/general-document/{id}',[CompanyController::class,'generaldocument'])->name('founder.dashboard.general-document');
+    Route::get('/founder/shareholder-details/{id}',[CompanyController::class,'shareholderdetails'])->name('founder.dashboard.shareholder-details');
+    Route::get('/founder/final-payment/{id}',[CompanyController::class,'finalpayment'])->name('founder.dashboard.final-payment');
+    Route::post('/founder/upload-document/{id}',[CompanyController::class,'uploadDocument'])->name('founder.dashboard.upload-document');
 
+    // Final Review
+    Route::get('/founder/final-review/{id}',[CompanyController::class,'finalreview'])->name('founder.dashboard.final-review');
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

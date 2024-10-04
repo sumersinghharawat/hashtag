@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function FoundersList ({founderSplitList,updateSplit,updateManager}) {
+export default function FoundersList ({founderSplitList,updateSplit,updateManager,company_id}) {
 
 
     return (<><div className="py-4 rounded-lg">
@@ -48,7 +48,7 @@ export default function FoundersList ({founderSplitList,updateSplit,updateManage
                             </div>
                         </div>
                     </td>
-                    <td align="center">{index!=0?<Link href={route('founder.dasshboard.founderdelete',{'id':element.id})}><FontAwesomeIcon icon={faTrashCan} className="bg-transparent"/></Link>:<></>}</td>
+                    <td align="center">{index!=0?<Link href={route('founder.dasshboard.founderdelete',{'id':company_id,'founder_id':element.id})}><FontAwesomeIcon icon={faTrashCan} className="bg-transparent"/></Link>:<></>}</td>
             </tr>
     })}
 

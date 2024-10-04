@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Steps from "./Steps";
 
 
-export default function StepFormLayout({ props, children, step, filledSteps }) {
+export default function StepFormLayout({ props, children, step, filledSteps, company_id }) {
 
     const [formCompletion, setFormCompletion] = useState(0);
     const [formCompletionNumber, setFormCompletionNumber] = useState(0);
@@ -64,7 +64,7 @@ export default function StepFormLayout({ props, children, step, filledSteps }) {
                         <Progress value={formCompletion} className="w-full h-2 transition-all progressbar-form" ></Progress>
                     </div>
                     <div className="md:mt-2">
-                        <Steps filledSteps={filledSteps} step={step} />
+                        <Steps filledSteps={filledSteps} step={step} company_id={company_id}/>
                     </div>
                 </div>
             </div>

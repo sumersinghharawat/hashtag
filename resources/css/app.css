@@ -37,6 +37,11 @@ body{
     border-radius: 50px;
 }
 
+.custom-button{
+    padding: 16px 24px;
+    border-radius: 50px;
+}
+
 .primary-button__disable{
     background-color: #E0E0E0;
     color: #fff;

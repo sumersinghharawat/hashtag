@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('form_submissions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('user_id');
+            $table->string('company_id');
+            $table->string('details');
+            $table->integer('step');
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

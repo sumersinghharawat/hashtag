@@ -19,6 +19,15 @@ return new class extends Migration
             $table->string('last_name');
             $table->boolean('manager')->default(0);
             $table->boolean('visa_status')->nullable();
+            $table->enum('country_status', ['Outside', 'Inside', 'pending'])->nullable();
+            $table->enum('religion', ['Islam: Shia', 'Islam: Sunni', 'Other'])->nullable();
+            $table->enum('marital_status', ['pending', 'single', 'married', 'divorced'])->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('educational_qualification')->nullable();
+            $table->string('basic_salary')->nullable();
+            $table->string('transportation_allowance')->nullable();
+            $table->string('accommodation_allowance')->nullable();
+            $table->string('other_allowances')->nullable();
             $table->string('ownership_percentage')->default(0);
             $table->timestamps();
         });

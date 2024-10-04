@@ -5,32 +5,33 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from "@/Components/TextInput";
 import StepFormLayout from "@/Layouts/StepFormLayout";
 import CustomerDashboard from "@/Pages/CustomerDashboard";
-import { Link, useForm } from "@inertiajs/react";
+import { Link, router, useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function Summary({ auth, step, company_info, foundersList }) {
-    const { data, setData, post, processing, errors, reset } = useForm({});
+export default function Summary({ auth, step, company_info, foundersList , registration_completed_step}) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        company_id: company_info?.id
+    });
 
     const submit = (e) => {
         e.preventDefault();
-
-        location.replace(route("founder.dashboard.paynow"));
+        router.get(route('founder.dashboard.paynow',company_info.id));
     };
 
     const goBack = () => {
-        location.replace(route("founder.dashboard.foundersvisa"));
+        router.get(route('founder.dashboard.foundersvisa',company_info.id));
     };
 
     return (
         <CustomerDashboard auth={auth}>
-            <StepFormLayout step={step} filledSteps={auth.user.formstep}>
+            <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold">Summary</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please review all information about your company</p>
                 <div className="">
                     <div className="flex flex-col w-full h-full py-6 border-t">
                         <div className="flex items-center justify-between w-full">
                             <p className="font-bold">Company Name</p>
-                            <Link className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button" href="/founder/companyname">
+                            <Link className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button" href={"/founder/companyname/"+company_info?.id}>
                                 Edit
                             </Link>
                         </div>
@@ -45,7 +46,7 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                             <p className="font-bold">Company Details</p>
                             <Link
                                 className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button"
-                                href="/founder/companydetails"
+                                href={"/founder/companydetails/"+company_info?.id}
                             >
                                 Edit
                             </Link>
@@ -69,7 +70,7 @@ export default function Summary({ auth, step, company_info, foundersList }) {
                             <div className="flex justify-end w-3/6 h-full">
                                 <Link
                                     className="px-10 py-4 text-center text-black bg-transparent border border-gray-300 rounded-full secondary-button"
-                                    href="/founder/foundersdetail"
+                                    href={"/founder/foundersdetail/"+company_info?.id}
                                 >
                                     Edit
                                 </Link>

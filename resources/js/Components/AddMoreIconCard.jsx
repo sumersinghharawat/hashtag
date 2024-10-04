@@ -4,7 +4,7 @@ import addMore from '../Icons/add-more.svg';
 
 export const AddMoreIconCard = (props) => {
     return (
-        <div className="sticky top-0 flex flex-col justify-between w-auto h-full cursor-pointer md:justify-start md:flex-row md:bg-white md:p-10 rounded-3xl">
+        <div className="sticky top-0 flex flex-col justify-between w-auto h-full cursor-pointer md:justify-start md:flex-row md:bg-white md:p-10 rounded-3xl" onClick={props.clickEvent}>
             <div className="flex justify-center align-middle">
                 <div className="flex justify-center gap-2 m-8 align-middle">
                     <img src={addMore} style={{height:40,width:40}}/>

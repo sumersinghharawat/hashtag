@@ -9,11 +9,12 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
-export default function FoundersDetail({ company_info, auth, step, foundersList,totalSplits }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function FoundersDetail({ company_info, auth, step, foundersList,totalSplits, registration_completed_step }) {
+    const { data, setData, post, processing, errors, reset, delete:distroy } = useForm({
         first_name: '',
         last_name: '',
-        split: [],
+        founder_list: [],
+        company_id: company_info.id
     });
 
     const [totalSplit, setTotalSplit] = useState(0);
@@ -40,7 +41,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
     const submitFounders = (e) => {
         e.preventDefault();
 
-        post(route('founder.dashboard.founderstore'));
+        post(route('founder.dashboard.founderstore',{'id':company_info.id}));
 
         data.first_name = "";
         data.last_name = "";
@@ -49,13 +50,14 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
     const submit = (e) => {
         e.preventDefault();
 
-        data.split = founderSplitList;
+        data.founder_list = founderSplitList;
 
-        post(route('founder.dashboard.founderssplitstore'));
+        post(route('founder.dashboard.founderssplitstore',{'id':company_info.id}));
     }
 
     const goBack = () => {
-        router.replace(route('founder.dashboard.companydetails'));
+        // router.replace(route('founder.dashboard.companydetails'));
+        router.get(route('founder.dashboard.companydetails',data.company_id));
     }
 
     const updateSplit = (id, newValue) => {
@@ -99,7 +101,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
 
     return (
         <CustomerDashboard company_info={company_info} auth={auth}>
-            <StepFormLayout step={step} filledSteps={auth.user.formstep} >
+            <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold ">Founders & Ownership</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Enter the legal name of the founders, split the company between the founders and select managers</p>
 
@@ -155,7 +157,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                     </div>
                 </div>
                 <form onSubmit={submit}>
-                    <FoundersList founderSplitList={founderSplitList} updateSplit={updateSplit} updateManager={updateManager} />
+                    <FoundersList founderSplitList={founderSplitList} updateSplit={updateSplit} updateManager={updateManager} company_id={company_info.id}/>
                     <div className="flex items-center justify-start gap-2 mt-4">
                         <SecondaryButton className="justify-center text-center" disabled={processing} onClick={goBack}>
                             Back

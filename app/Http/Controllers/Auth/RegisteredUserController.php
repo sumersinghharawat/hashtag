@@ -107,13 +107,11 @@ class RegisteredUserController extends Controller
                 $newUser = User::create([
                     'name' => $user->name,
                     'first_name' => $user->user['given_name'],
-                    'last_name' => $user->user['family_name'],
+                    'last_name' => isset($user->user['family_name'])?$user->user['family_name']:'',
                     'email' => $user->email,
                     'google_id'=> $user->id,
                     'password' => encrypt('')
                 ]);
-
-                Company::create(['user_id'=>$newUser->id]);
 
                 $newUser->assignRole('founder');
                 Auth::login($newUser);

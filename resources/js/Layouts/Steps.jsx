@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { router } from '@inertiajs/react';
 import { setIsInitial } from '@material-tailwind/react/components/Tabs/TabsContext';
 import * as React from 'react';
-export default function Steps({filledSteps,step}) {
+export default function Steps({filledSteps,step, company_id}) {
 
     const StepsDetails = [
         {
@@ -45,22 +45,27 @@ export default function Steps({filledSteps,step}) {
     const ChangeStep = () => {
         switch (formStep) {
             case 1:
-                router.get(route('founder.dashboard.companyname'));
+                if(company_id){
+                    router.get(route('founder.dashboard.companynameupdate',company_id));
+                }else{
+                    router.get(route('founder.dashboard.companyname'));
+                }
+
                 break;
             case 2:
-                router.get(route('founder.dashboard.companydetails'));
+                router.get(route('founder.dashboard.companydetails',company_id));
                 break;
             case 3:
-                router.get(route('founder.dashboard.foundersdetail'));
+                router.get(route('founder.dashboard.foundersdetail',company_id));
                 break;
             case 4:
-                router.get(route('founder.dashboard.foundersvisa'));
+                router.get(route('founder.dashboard.foundersvisa',company_id));
                 break;
             case 5:
-                router.get(route('founder.dashboard.summary'));
+                router.get(route('founder.dashboard.summary',company_id));
                 break;
             case 6:
-                router.get(route('founder.dashboard.paynow'));
+                router.get(route('founder.dashboard.paynow',company_id));
                 break;
 
             default:
