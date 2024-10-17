@@ -29,30 +29,48 @@ export default function ViewSubmitedRequestList ({auth, companyrequests}) {
                                                     Application Status
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    View
+                                                    View / Assign
                                                 </th>
-                                                {/* <th scope="col" className="px-6 py-3">
-                                                    Edit
-                                                </th> */}
+                                                <th scope="col" className="px-6 py-3">
+                                                    Assigned Agent
+                                                </th>
+                                                <th scope="col" className="px-6 py-3">
+                                                    Download License
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         {companyrequests.length!=0?(companyrequests.map((element,index)=>{return <tr key={index} className="bg-white border-b">
                                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                                    {element.name!=null?element.name:'pending'}
+                                                    {element.company_name_1!=null?element.company_name_1:'pending'}
                                                 </th>
                                                 <td className="px-6 py-4">
                                                     {element.founders?element.founders.length:'Pending'}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="text-gray-500">{element.status==1?'Under Review':''}</span>
-                                                    <span className="text-yellow-500">{element.status==2?'In Progress':''}</span>
-                                                    <span className="text-green-500">{element.status==3?'Completed':''}</span>
+                                                    <span className="text-gray-500">{element.application_status}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <Link href={route('admin.dashboard.viewrequest',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">View</Link>
+                                                {element.assign_agent_details?
+                                                    <Link href={route('admin.dashboard.viewrequestinformation',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">View</Link>:
+                                                    <>
+                                                    <Link href={route('admin.dashboard.assignapplication',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">Assign to me</Link>
+                                                    </>
+                                                }
                                                 </td>
-                                            </tr>})):<tr><td colSpan={4} align="center">No Record</td></tr>}
+                                                <td className="px-6 py-4">
+                                                    {element.assign_agent_details?<p className="text-green-500">Assigned to {element.assign_agent_details.name}</p>:<p className="text-yellow-500">Pending</p>}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={"font-semibold "+
+                                                        ((element.application_status=='Rejected')?'text-red-400':'')+
+                                                        ((element.application_status=='Uncompleted')?'text-blue-400':'')+
+                                                        ((element.application_status=='In Progress')?'text-purple-400':'')+
+                                                        ((element.application_status=='Under Process')?'text-yellow-400':'')+
+                                                        ((element.application_status=='Completed')?'text-green-400':'')
+                                                        }>{element.application_status}</span>
+                                                </td>
+                                            </tr>})):<tr className="border-b"><td colSpan={5} align="center">No Record</td></tr>}
                                         </tbody>
                                     </table>
                                 </div>

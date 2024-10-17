@@ -3,11 +3,12 @@ import FounderAuthenticatedLayout from '@/Layouts/FounderAuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
 
-export default function FounderDashboard({ auth,children,step }) {
+export default function FounderDashboard({ auth,children,step,company_count }) {
     return (
         <FounderAuthenticatedLayout
             user={auth.user}
             header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Founder Dashboard</h2>}
+            company_count={company_count}
         >
             <Head title="Dashboard" />
 

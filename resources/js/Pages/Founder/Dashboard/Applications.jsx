@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard, faChevronRight, faClose, faMinus, faMinusSquare, faTrash, faUserGroup, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
 import { Link, router, useForm } from "@inertiajs/react";
 import { redirect } from "react-router-dom";
-export default function Applications({ auth, request, companies }) {
+export default function Applications({ auth, request, companies, company_count }) {
     const { data, setData, delete: destroy, processing, errors, reset } = useForm({
         id: ''
         // type_of_freezone: company_info.type_of_freezone?company_info.type_of_freezone:'',
@@ -58,7 +58,7 @@ export default function Applications({ auth, request, companies }) {
     }
 
     return (
-        <CustomerDashboard auth={auth}>
+        <CustomerDashboard auth={auth} company_count={company_count}>
             <div className="flex w-full gap-4 px-8 align-bottom">
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">My Applications</h2>
             </div>
@@ -81,7 +81,8 @@ export default function Applications({ auth, request, companies }) {
                                 <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faUserGroup} style={{ marginRight: 4 }} /> Visas: {company.visas}</li>
                             </ul>
                             <div className="grid w-full text-end">
-                                <span><b>Documents to Upload:</b> {company.step}/10</span>
+                                {company.document_count?<span><b>Documents to Upload:</b> {parseInt(company.uploaded_document_count)}/{company.document_count}</span>:<></>}
+                                {company.rejected_document_count?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
                             </div>
                         </div>
                         <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold text-green-600 -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full -bottom-4 left-1/2 btn-status">
@@ -89,7 +90,7 @@ export default function Applications({ auth, request, companies }) {
                                 {company.next_step} <FontAwesomeIcon icon={faChevronRight} style={{ height: 12, width: 12 }} />
                             </Link>
                         </div>
-                        <FontAwesomeIcon icon={faTrash} style={{ height: 12, width: 12 }} className="absolute text-red-600 right-2 top-2" onClick={() => deleteRegistrations(company.id)} />
+                        {/* <FontAwesomeIcon icon={faTrash} style={{ height: 12, width: 12 }} className="absolute text-red-600 right-2 top-2" onClick={() => deleteRegistrations(company.id)} /> */}
                     </ApplicationCard>
                 }
                 )}

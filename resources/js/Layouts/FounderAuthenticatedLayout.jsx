@@ -6,7 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import addmore from '../Icons/add-more.svg';
 
-export default function FounderAuthenticated({ user, header, children }) {
+export default function FounderAuthenticated({ user, header, children, company_count }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -23,15 +23,18 @@ export default function FounderAuthenticated({ user, header, children }) {
                         </div>
 
                         <div className="flex items-center justify-end w-full h-full gap-4">
-                            <div className='w-auto'>
+                            {company_count?<><div className='w-auto'>
                                 <NavLink href={route('founder.dashboard.index')} active={route().current('founder.dashboard.index')} className='focus:border-0 active:text-green-500'>Dashboard</NavLink>
                             </div>
                             <div className='w-auto'>
                                 <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'>My Applications</NavLink>
                             </div>
                             <div className='w-auto'>
-                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'><img src={addmore} style={{marginTop:4,height:16,width:16}} /></NavLink>
+                                <NavLink href={route('founder.dashboard.support')} active={route().current('founder.dashboard.support')} className='focus:border-0 active:text-green-500'>Support</NavLink>
                             </div>
+                            <div className='w-auto'>
+                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'><img src={addmore} style={{marginTop:4,height:16,width:16}} /></NavLink>
+                            </div></>:<></>}
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">

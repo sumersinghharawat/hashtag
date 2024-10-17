@@ -17,11 +17,13 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->boolean('manager')->default(0);
-            $table->boolean('visa_status')->nullable();
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->set('manager', ['Manager', 'Director', 'Secretary', 'No Manager'])->default('No Manager');
+            $table->integer('visa_status')->default(0);
             $table->enum('country_status', ['Outside', 'Inside', 'pending'])->nullable();
             $table->enum('religion', ['Islam: Shia', 'Islam: Sunni', 'Other'])->nullable();
-            $table->enum('marital_status', ['pending', 'single', 'married', 'divorced'])->nullable();
+            $table->enum('marital_status', ['Pending', 'Single', 'Married', 'Divorced'])->nullable();
             $table->string('job_title')->nullable();
             $table->string('educational_qualification')->nullable();
             $table->string('basic_salary')->nullable();

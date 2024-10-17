@@ -9,7 +9,7 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
-export default function FounderVisa({  auth, step, foundersList, registration_completed_step, company_info }) {
+export default function FounderVisa({  auth, step, foundersList, registration_completed_step, company_info, company_count }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -44,7 +44,7 @@ export default function FounderVisa({  auth, step, foundersList, registration_co
 
     const updateVisa = (id) => {
         var updatedFoundersList = founderSplitList.map(obj => {
-            var visaStatus = obj.visa_status ? 0 : 1;
+            var visaStatus = parseInt(obj.visa_status) ? 0 : 1;
             if (obj.id === id) {
                 obj = { ...obj, visa_status: visaStatus };
             }
@@ -58,7 +58,7 @@ export default function FounderVisa({  auth, step, foundersList, registration_co
     }
 
     return (
-        <CustomerDashboard auth={auth} >
+        <CustomerDashboard auth={auth} company_count={company_count}>
             <StepFormLayout step={step}  filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold">Visa</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Select the founders that require UAE Visa or Emirates ID</p>
@@ -80,7 +80,7 @@ export default function FounderVisa({  auth, step, foundersList, registration_co
                                                 id="manager"
                                                 name="manager"
                                                 onChange={(e) => updateVisa(element.id)}
-                                                checked={element.visa_status}
+                                                checked={parseInt(element.visa_status)}
                                                 type="checkbox"
                                                 className="w-5 h-5 text-green-400 border-gray-300 rounded focus:ring-green-400"
                                                 />

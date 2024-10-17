@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
-export default function LetsBegin({ auth }) {
+export default function LetsBegin({ auth, company_count }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: "",
         last_name: "",
@@ -74,7 +74,7 @@ export default function LetsBegin({ auth }) {
     country = Array.from(new Set(CountryList));
 
     return (
-        <CustomerDashboard auth={auth} step={0}>
+        <CustomerDashboard auth={auth} step={0} company_count={company_count}>
             <div className="w-full p-6">
                 <div className="p-5 mx-auto" style={{maxWidth:"440px"}}>
                     <h2 className="text-xl font-semibold leading-tight text-center text-gray-800">

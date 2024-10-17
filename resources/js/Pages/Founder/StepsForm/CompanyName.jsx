@@ -7,7 +7,7 @@ import CustomerDashboard from "@/Pages/CustomerDashboard";
 import { useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function CompanyName({company_info={}, auth, step, registration_completed_step}){
+export default function CompanyName({company_info={}, auth, step, registration_completed_step, company_count}){
     const { data, setData, post, put, processing, errors, reset } = useForm({
         company_id: company_info?company_info.id:'',
         company_name_1: company_info?company_info.company_name_1:'',
@@ -32,7 +32,7 @@ export default function CompanyName({company_info={}, auth, step, registration_c
     }
 
     return (
-        <CustomerDashboard auth={auth}>
+        <CustomerDashboard auth={auth} company_count={company_count}>
             <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={data.company_id?data.company_id:''}>
                 <h2 className="text-2xl font-extrabold ">Company Name</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please enter three name choices for your company in order of preference</p>

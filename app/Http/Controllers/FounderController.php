@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApplicationVarification;
 use App\Models\Company;
+use App\Models\Document;
+use App\Models\Education;
 use App\Models\FormSubmission;
 use App\Models\Founder;
+use App\Models\JobTitle;
 use App\Models\User;
 use App\Rules\UniqueNameCombination;
 use Illuminate\Http\Request;
@@ -23,61 +27,17 @@ class FounderController extends Controller
         //
         $user = Auth::user();
 
-        // $step = 0;
-
-        // if($user->formstep == -1){
-        //         return redirect('/founder/letsbegin');
-        // }
-
-        // $founder_info = Founder::where(['user_id'=>$user->id])->first();
-
-        // if($user->formstep == 0){
-        //     return redirect('/founder/companyname');
-        // }
-
-        // if($user->formstep == 1){
-        //     return redirect(route('founder.dashboard.companydetails'));
-        // }
-
-        // if($user->formstep == 2){
-        //     return redirect(route('founder.dashboard.foundersdetail'));
-        // }
-
-        // if($user->formstep == 3){
-        //     return redirect(route('founder.dashboard.foundersvisa'));
-        // }
-
-        // if($user->formstep == 4){
-        //     return redirect(route('founder.dashboard.summary'));
-        // }
-
-        // if($user->formstep == 5){
-        //     return redirect(route('founder.dashboard.paynow'));
-        // }
-
-        // if($user->formstep == 6){
-        //     return redirect(route('founder.dashboard.index'));
-        // }
-
-
-        // if($company->status == 0){
-        //     return redirect(route('founder.dashboard.thankyou'));
-        // }
-
-        // if($company->status == 1){
-        //     return redirect(route('founder.dashboard.index'));
-        // }
-
-
-        // $companyRegisterationCount = Company::where(['user_id'=>$user->id])->count();
-
         $companyRegistrationList = Company::where(['user_id'=>$user->id])->get();
 
-        if($user->country_of_residenace){
-            return Inertia::render('Founder/Dashboard/Dashboard',['user'=>$user, 'companyRegistrationList'=>$companyRegistrationList]);
-        }else{
-            return redirect(route('founder.dashboard.letsbegin'));
-        }
+
+            if(count($companyRegistrationList) >= 1){
+                return redirect(route('founder.dashboard.index'));
+                // return Inertia::render('Founder/Dashboard/Dashboard',['user'=>$user, 'companyRegistrationList'=>$companyRegistrationList]);
+            }else{
+                if($user->country_of_residenace == null){
+                    return redirect(route('founder.dashboard.letsbegin'));
+                }
+            }
     }
 
     /**
@@ -126,8 +86,14 @@ class FounderController extends Controller
 
         foreach($TotalForms as $TotalForm){
             $TotalForm['stakeholders'] = Founder::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id])->count();
-            $TotalForm['founders'] = Founder::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id,'manager'=>1])->count();
+            $TotalForm['founders'] = Founder::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id])
+                ->whereNotIn('manager', ['No Manager'])
+                ->count();
             $TotalForm['visas'] = Founder::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id, 'visa_status'=>1])->count();
+            $TotalForm['uploaded_document_count'] = Document::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id])->count();
+            $TotalForm['document_count'] = ($TotalForm['stakeholders']*4)+($TotalForm['visas']);
+
+            $TotalForm['rejected_document_count'] = ApplicationVarification::where(['company_id'=>$TotalForm->id, 'varification_status'=>'Cancel'])->count();
 
             $formStep = $this->CheckFormSteps($TotalForm->id);
 
@@ -135,10 +101,20 @@ class FounderController extends Controller
             $TotalForm['step'] = $formStep['step'];
             $TotalForm['next_step'] = $formStep['next_step'];
             $TotalForm['route'] = $formStep['route'];
-
         }
 
-        return Inertia::render('Founder/Dashboard/Applications',['auth' => ["user"=>$user],"companies"=>$TotalForms]);
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/Dashboard/Applications',['auth' => ["user"=>$user],"companies"=>$TotalForms, 'company_count'=>$companyRegistrationCount]);
+    }
+
+    public function support(){
+
+        $user = Auth::user();
+
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/Dashboard/Support',['auth' => ["user"=>$user], 'company_count'=>$companyRegistrationCount]);
     }
 
     function CheckFormSteps($company_id){
@@ -160,8 +136,6 @@ class FounderController extends Controller
 
         $founder = Founder::where(['company_id'=>$company_id, 'user_id'=>$user->id])->first();
 
-        // dd($founder->visa_status);
-
         if($founder){
 
             if($founder->visa_status == null){
@@ -171,17 +145,51 @@ class FounderController extends Controller
             }
 
 
-            if($founder->visa_status !== null && $company->payment_status === 'pending'){
+            if($founder->visa_status !== null && $company->first_payment_status === 'pending'){
                 $formStep['step'] = 5;
                 $formStep['next_step'] = 'Continue';
                 $formStep['route'] = 'founder.dashboard.summary';
             }
 
-            if($company->payment_status === 'success'){
+            if($company->first_payment_status === 'success'){
                 $formStep['step'] = 6;
                 $formStep['next_step'] = 'Continue';
                 $formStep['route'] = 'founder.dashboard.review-registration';
             }
+
+            if($company->first_payment_status === 'success'){
+                $formStep['step'] = 6;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.review-registration';
+            }
+
+            $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_id);
+
+            if($last_step == 7){
+                $formStep['step'] = $last_step;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.general-document';
+            }
+
+            $business_plan = Document::where(['document_type'=>'Business Plan', 'company_id'=>$company_id])->first();
+            if($business_plan){
+                $formStep['step'] = 9;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.shareholder-details';
+            }
+
+            if($last_step == 9){
+                $formStep['step'] = $last_step;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.final-payment';
+            }
+
+            if($last_step == 10){
+                $formStep['step'] = $last_step;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.final-review';
+            }
+
         }else{
 
             if(empty($founder->ownership_percentage) && !empty($company->industry)){
@@ -225,19 +233,20 @@ class FounderController extends Controller
         }
     }
 
+    // Delete founders from founder table by founder_id & company_id
+    public function founderdeletephase2(Request $request, $id, $founder_id){
+        if(Founder::where(['id'=>$founder_id, 'company_id'=>$id])->delete()){
+            return redirect(route('founder.dashboard.review-registration', ['id'=>$id]));
+        }
+    }
+
     public function letsbegin(){
 
         $user = Auth::user();
 
-        // $PendingFormCount= Company::where(['user_id'=>$user->id,'payment_status'=>'pending'])->count();
-        // $TotalFormsCount = Company::where(['user_id'=>$user->id])->count();
-        // $PendingForm = Company::where(['user_id'=>$user->id,'payment_status'=>'pending'])->first();
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
 
-        // if($user->country_of_residenace){
-
-        // }else{
-            return Inertia::render('Founder/LetsBegin',['auth' => ["user"=>$user]]);
-        // }
+        return Inertia::render('Founder/LetsBegin',['auth' => ["user"=>$user], 'company_count'=>$companyRegistrationCount]);
 
     }
 
@@ -259,30 +268,7 @@ class FounderController extends Controller
             'country_of_residenace' => $request->country_of_residenace
         ]);
 
-        return redirect(route('founder.dashboard'));
-
-
-        // $isfounderexistornot = Founder::where(['user_id'=>$user->id])->count();
-        // if($isfounderexistornot>0){
-        //     $founder_info = Founder::where(['user_id'=>$user->id])->update([
-        //         'first_name' => $request->first_name,
-        //         'last_name' => $request->last_name,
-        //     ]);
-        // }else{
-        //     $founder_info = Founder::create([
-        //         'user_id'=>$user->id,
-        //         'first_name' => $request->first_name,
-        //         'last_name' => $request->last_name,
-        //     ]);
-        // }
-        // $step = 0;
-
-        // if($user->formstep <= $step){
-        //     User::where(['id'=>$user->id])->update(["formstep"=>$step]);
-        // }
-
-
-        // return redirect('/founder');
+        return redirect(route('founder.dashboard.companyname'));
     }
 
     public function foundersdetail($id){
@@ -303,13 +289,9 @@ class FounderController extends Controller
             $totalSplits = $totalSplits + $founder->ownership_percentage;
         }
 
-        // $count = Company::where(['user_id'=>$user->id,'payment_status'=>'success'])->count();
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
 
-        // if($count){
-        //     return redirect(route('founder.dashboard.applications'));
-        // }else{
-            return Inertia::render('Founder/StepsForm/FoundersDetail',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'totalSplits'=>fn () => $totalSplits, 'registration_completed_step'=>$last_step, 'company_info'=>$company_info]);
-        // }
+        return Inertia::render('Founder/StepsForm/FoundersDetail',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'totalSplits'=>fn () => $totalSplits, 'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
 
     }
 
@@ -324,9 +306,9 @@ class FounderController extends Controller
 
         foreach ($founder_list as $founder_list_Key => $founder_list_value) {
             # code...
-            Founder::where(['id'=>$founder_list_value['id']])->update([
-                'manager'=>$founder_list_value['manager'],
-                'ownership_percentage'=>$founder_list_value['ownership_percentage'],
+            Founder::where(['id' => $founder_list_value['id']])->update([
+                'manager' => $founder_list_value['manager'],
+                'ownership_percentage' => $founder_list_value['ownership_percentage'],
             ]);
         }
 
@@ -337,9 +319,6 @@ class FounderController extends Controller
         }
 
         return redirect(route('founder.dashboard.foundersvisa', ['id'=>$id]));
-
-        // return redirect('/founder/foundersvisa');
-        // return redirect('/founder');
 
     }
 
@@ -355,11 +334,9 @@ class FounderController extends Controller
 
         $company_info = Company::where(['id'=>$id])->first();
 
-        // if($count){
-        //     return redirect(route('founder.dashboard.applications'));
-        // }else{
-            return Inertia::render('Founder/StepsForm/FounderVisa',['step'=>fn () => $step,'foundersList'=>fn () => $founders,  'registration_completed_step'=>$last_step, 'company_info'=>$company_info]);
-        // }
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/StepsForm/FounderVisa',['step'=>fn () => $step,'foundersList'=>fn () => $founders,  'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
 
     }
 
@@ -409,17 +386,15 @@ class FounderController extends Controller
 
         $last_step = (new CompanyController)->getCompletedLastStep($user->id, $id);
 
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
         if($step <= $last_step){
             $form = FormSubmission::where(['user_id'=>$user->id, 'company_id'=>$id, 'step'=>$step])->update(['details'=>'Company phase 1 updated by customer']);
         }else{
             $form = FormSubmission::create(['user_id'=>$user->id, 'company_id'=>$id, 'details'=>'Company phase 1 added by customer','step'=>$step]);
         }
 
-        // if($user->formstep <= $step){
-        //     User::where(['id'=>$user->id])->update(["formstep"=>$step]);
-        // }
-
-        return Inertia::render('Founder/StepsForm/Summary',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'company_info'=>fn () => $company_info, 'registration_completed_step'=>$last_step]);
+        return Inertia::render('Founder/StepsForm/Summary',['step'=>fn () => $step,'foundersList'=>fn () => $founders,'company_info'=>fn () => $company_info, 'registration_completed_step'=>$last_step, 'company_count'=>$companyRegistrationCount]);
     }
 
     public function paynow($id){
@@ -434,7 +409,9 @@ class FounderController extends Controller
 
         $founders = Founder::where(['user_id'=>$user->id, 'id'=>$id])->get();
 
-        return Inertia::render('Founder/StepsForm/PayNow',['step'=>fn () => $step,'foundersList'=>fn () => $founders, 'company_info'=> $company_info, 'registration_completed_step'=>$last_step]);
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/StepsForm/PayNow',['step'=>fn () => $step,'foundersList'=>fn () => $founders, 'company_info'=> $company_info, 'registration_completed_step'=>$last_step, 'company_count'=>$companyRegistrationCount]);
     }
 
     public function thankyou($id){
@@ -451,7 +428,7 @@ class FounderController extends Controller
             $form = FormSubmission::create(['user_id'=>$user->id, 'company_id'=>$id, 'details'=>'Company phase 1 added by customer','step'=>$step]);
         }
 
-        Company::where(['user_id'=>$user->id,'id'=>$id])->update(['payment_status'=>'success']);
+        Company::where(['user_id'=>$user->id,'id'=>$id])->update(['first_payment_status'=>'success']);
 
         Company::where(['user_id'=>$user->id,'id'=>$id])->update(['application_status'=>'In Progress']);
 
@@ -466,24 +443,10 @@ class FounderController extends Controller
         $user = Auth::user();
 
         $company_info = Company::where(['user_id'=>$user->id])->first();
+
         $company_info['founders'] = Founder::where(['user_id'=>$user->id])->get();
 
         return Inertia::render('Founder/ViewSubmitedRequest',['request'=>$company_info]);
-    }
-
-    public function adminviewsubmitedrequest($id){
-
-        $user = Auth::user();
-
-        $company_info = Company::where(['id'=>$id])->first();
-
-        $company_info['founders'] = Founder::where(['user_id'=>$company_info->user_id])->get();
-
-        // if($company_info['founders']){
-        //     $company_info['user'] = [User::where(['id'=>$company_info->user_id])->first()];
-        // }
-
-        return Inertia::render('Admin/ViewSubmitedRequest',['request'=>$company_info]);
     }
 
     public function adminviewsubmitedrequeststore(Request $request,$id){
@@ -500,19 +463,189 @@ class FounderController extends Controller
 
     public function founderviewdashboard(){
 
-        $step = 1;
-
         $user = Auth::user();
 
-        $company_info = Company::where(['user_id'=>$user->id, 'payment_status'=>'success'])->first();
+        $company_info = Company::where(['user_id'=>$user->id])->orderBy('id', 'desc')->first();
 
-        $last_step = 1;
+        $last_step = 0;
 
         if($company_info){
             $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
         }
 
-        return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info]);
+        if($user->country_of_residenace == null){
+            return redirect(route('founder.dashboard.letsbegin'));
+        }else{
+
+            $companyRegistration = Company::where(['user_id'=>$user->id])->orderBy('id', 'desc')->get();
+
+            if(count($companyRegistration) == 0){
+                return redirect(route('founder.dashboard.companyname'));
+            }
+
+            $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+            if($companyRegistrationCount > 1){
+
+                $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+
+                $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
+
+                return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+            }
+
+            if($companyRegistrationCount == 1){
+
+                $companyRegistration = Company::where(['user_id'=>$user->id])->get();
+
+                $last_step = (new CompanyController)->getCompletedLastStep($user->id, $companyRegistration[0]->id);
+
+                if($last_step == 1){
+                    return redirect(route('founder.dashboard.companydetails',$companyRegistration[0]->id));
+                }
+
+                if($last_step == 2){
+                    return redirect(route('founder.dashboard.foundersdetail',$companyRegistration[0]->id));
+                }
+
+                if($last_step == 3){
+                    return redirect(route('founder.dashboard.foundersvisa',$companyRegistration[0]->id));
+                }
+
+                if($last_step == 4){
+                    return redirect(route('founder.dashboard.summary',$companyRegistration[0]->id));
+                }
+
+                if($last_step == 5){
+                    return redirect(route('founder.dashboard.paynow',$companyRegistration[0]->id));
+                }
+            }
+
+        }
+
+    }
+
+    public function shareholderdetails($id){
+        $step = 9;
+
+        $user = Auth::user();
+
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $job_titles = JobTitle::get();
+
+        $education_qualification = Education::get();
+
+        $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
+
+        $founders = Founder::where(['user_id'=>$user->id, 'company_id'=>$id])->get();
+
+        foreach($founders as $founder){
+
+            $validPassportCopy = Document::where(['user_id'=>$user->id, 'company_id'=>$id, 'founder_id'=>$founder->id, 'document_type'=>'Valid Passport Copy'])->first();
+            $founder->documentValidPassportCopyFileName = $validPassportCopy?basename($validPassportCopy->document_file):null;
+            $founder->documentValidPassportCopyFileUrl = $validPassportCopy?asset($validPassportCopy->document_file):null;
+
+            $UAEVisaPage = Document::where(['user_id'=>$user->id, 'company_id'=>$id, 'founder_id'=>$founder->id, 'document_type'=>'UAE Visa Page'])->first();
+            $founder->documentUAEVisaPageFileName = $UAEVisaPage?basename($UAEVisaPage->document_file):null;
+            $founder->documentUAEVisaPageFileUrl = $UAEVisaPage?asset($UAEVisaPage->document_file):null;
+
+            $AddressProofCopy = Document::where(['user_id'=>$user->id, 'company_id'=>$id, 'founder_id'=>$founder->id, 'document_type'=>'Address Proof Copy'])->first();
+            $founder->documentAddressProofCopyFileName = $AddressProofCopy?basename($AddressProofCopy->document_file):null;
+            $founder->documentAddressProofCopyFileUrl = $AddressProofCopy?asset($AddressProofCopy->document_file):null;
+
+            $educationQualificational = Document::where(['user_id'=>$user->id, 'company_id'=>$id, 'founder_id'=>$founder->id, 'document_type'=>'Educational Qualification'])->first();
+            $founder->documentEducationalQualificationFileName = $educationQualificational?basename($educationQualificational->document_file):null;
+            $founder->documentEducationalQualificationFileUrl = $educationQualificational?asset($educationQualificational->document_file):null;
+
+        }
+
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/PhaseTwo/ShareholderDetails',['auth' => fn () => ["user"=>$user], 'foundersList'=> $founders,'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'job_titles'=>$job_titles, 'education_qualification'=>$education_qualification, 'company_count'=>$companyRegistrationCount]);
+    }
+
+    public function shareholderdetailsstore(Request $request, $id){
+
+        $request->validate([
+            'foundersList.*.manager' => 'required|string',
+            'foundersList.*.documentValidPassportCopyFileName' => 'required|string',
+            'foundersList.*.documentUAEVisaPageFileName' => 'required|string',
+            'foundersList.*.documentAddressProofCopyFileName' => 'required|string',
+            'foundersList.*.documentEducationalQualificationFileName' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.visa_status' => 'required|in:1,0,-1',
+            'foundersList.*.father_name' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.mother_name' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.country_status' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.religion' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.marital_status' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.job_title' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.educational_qualification' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.basic_salary' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.transportation_allowance' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.accommodation_allowance' => ['required_if:foundersList.*.visa_status,1'],
+            'foundersList.*.other_allowances' => ['required_if:foundersList.*.visa_status,1'],
+        ],
+        [
+            'required' => 'The :attribute field is required.',
+            'required_if' => "The :attribute field is required when Visa Status is Yes.",
+            'string' => 'The :attribute must be a valid string.',
+        ], [
+            'foundersList.*.father_name' => 'Father\'s Name',
+            'foundersList.*.mother_name' => 'Mother\'s Name',
+            'foundersList.*.documentValidPassportCopyFileName' => 'Valid Passport Copy',
+            'foundersList.*.documentUAEVisaPageFileName' => 'UAE Visa Page',
+            'foundersList.*.documentAddressProofCopyFileName' => 'Address Proof Copy',
+            'foundersList.*.documentEducationalQualificationFileName' => 'Educational Qualification',
+            'foundersList.*.country_status' => 'Country Status',
+            'foundersList.*.religion' => 'Religion',
+            'foundersList.*.marital_status' => 'Marital Status',
+            'foundersList.*.job_title' => 'Job Title',
+            'foundersList.*.educational_qualification' => 'Educational Qualification',
+            'foundersList.*.basic_salary' => 'Basic Salary',
+            'foundersList.*.transportation_allowance' => 'Transportation Allowance',
+            'foundersList.*.accommodation_allowance' => 'Accommodation Allowance',
+            'foundersList.*.other_allowances' => 'Other Allowances',
+        ]);
+
+        // dd($request->foundersList);
+
+        $founders = $request->foundersList;
+
+        foreach($founders as $founder){
+
+            Founder::where(['id' => $founder['id']])->update([
+                'manager' => $founder['manager'],
+                'visa_status' => $founder['visa_status'],
+                'father_name' => $founder['father_name']?$founder['father_name']:null,
+                'mother_name' => $founder['mother_name']?$founder['mother_name']:null,
+                'country_status' => $founder['country_status']?$founder['country_status']:null,
+                'religion' => $founder['religion']?$founder['religion']:null,
+                'marital_status' => $founder['marital_status']?$founder['marital_status']:null,
+                'job_title' => $founder['job_title']?$founder['job_title']:null,
+                'educational_qualification' => $founder['educational_qualification']?$founder['educational_qualification']:null,
+                'basic_salary' => $founder['basic_salary']?$founder['basic_salary']:null,
+                'transportation_allowance' => $founder['transportation_allowance']?$founder['transportation_allowance']:null,
+                'accommodation_allowance' => $founder['accommodation_allowance']?$founder['accommodation_allowance']:null,
+                'other_allowances' => $founder['other_allowances']?$founder['other_allowances']:null,
+            ]);
+        }
+
+        $step = 9;
+
+        $user = Auth::user();
+
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
+
+        if($step <= $last_step){
+            $form = FormSubmission::where(['user_id'=>$user->id, 'company_id'=>$id, 'step'=>$step])->update(['details'=>'Company shareholder details updated by customer']);
+        }else{
+            $form = FormSubmission::create(['user_id'=>$user->id, 'company_id'=>$id, 'details'=>'Company shareholder details added by customer','step'=>$step]);
+        }
+
+        return redirect(route('founder.dashboard.final-payment',$id));
     }
 
 }

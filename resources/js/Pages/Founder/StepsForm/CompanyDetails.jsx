@@ -8,7 +8,7 @@ import CustomerDashboard from "@/Pages/CustomerDashboard";
 import { router, useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function CompanyDetails({company_info, auth, step, listindusties, registration_completed_step}){
+export default function CompanyDetails({company_info, auth, step, listindusties, registration_completed_step, company_count}){
     const { data, setData, post, put, processing, errors, reset } = useForm({
         company_industry: company_info.industry?company_info.industry:'',
         company_description: company_info.description?company_info.description:'',
@@ -54,60 +54,58 @@ export default function CompanyDetails({company_info, auth, step, listindusties,
     }
 
     return (
-        <CustomerDashboard company_info={company_info} auth={auth}>
+        <CustomerDashboard company_info={company_info} auth={auth} company_count={company_count}>
             <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={data.company_id}>
                 <h2 className="text-2xl font-extrabold">Company Details</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please enter three name choices for your company in order of preference.</p>
 
                 <form onSubmit={submit}>
 
-                <div className="hidden mt-4">
-                    <InputLabel htmlFor="type_of_freezone" className="text-base " value="Select the Type of Freezone" />
-                    <div className="flex mt-4 mb-4">
-                        <div className="col-auto">
-                            <input
-                                type="radio"
-                                name="type_of_freezone"
-                                value="DMCC"
-                                id="dmcc"
-                                checked={data.type_of_freezone === "DMCC"}
-                                className="radio-btn"
-                                onChange={(e) => setData('type_of_freezone', e.target.value)}
-                            />
-                            <label className="radio-btn-input" htmlFor="dmcc">DMCC</label>
+                    <div className="hidden mt-4">
+                        <InputLabel htmlFor="type_of_freezone" className="text-base " value="Select the Type of Freezone" />
+                        <div className="flex mt-4 mb-4">
+                            <div className="col-auto">
+                                <input
+                                    type="radio"
+                                    name="type_of_freezone"
+                                    value="DMCC"
+                                    id="dmcc"
+                                    checked={data.type_of_freezone === "DMCC"}
+                                    className="radio-btn"
+                                    onChange={(e) => setData('type_of_freezone', e.target.value)}
+                                />
+                                <label className="radio-btn-input" htmlFor="dmcc">DMCC</label>
+                            </div>
+
+                            <div className="col-auto">
+                                <input
+                                    type="radio"
+                                    name="type_of_freezone"
+                                    value="IFZA"
+                                    id="ifza"
+                                    checked={data.type_of_freezone === "IFZA"}
+                                    className="radio-btn"
+                                    onChange={(e) => setData('type_of_freezone', e.target.value)}
+                                />
+                                <label className="radio-btn-input" htmlFor="ifza">IFZA</label>
+                            </div>
+
+                            <div className="col-auto">
+                                <input
+                                    type="radio"
+                                    name="type_of_freezone"
+                                    value="Not Sure"
+                                    id="notsure"
+                                    checked={data.type_of_freezone === "Not Sure"}
+                                    className="radio-btn"
+                                    onChange={(e) => setData('type_of_freezone', e.target.value)}
+                                />
+                                <label className="radio-btn-input" htmlFor="notsure">Not Sure</label>
+                            </div>
                         </div>
 
-                        <div className="col-auto">
-                            <input
-                                type="radio"
-                                name="type_of_freezone"
-                                value="IFZA"
-                                id="ifza"
-                                checked={data.type_of_freezone === "IFZA"}
-                                className="radio-btn"
-                                onChange={(e) => setData('type_of_freezone', e.target.value)}
-                            />
-                            <label className="radio-btn-input" htmlFor="ifza">IFZA</label>
-                        </div>
-
-                        <div className="col-auto">
-                            <input
-                                type="radio"
-                                name="type_of_freezone"
-                                value="Not Sure"
-                                id="notsure"
-                                checked={data.type_of_freezone === "Not Sure"}
-                                className="radio-btn"
-                                onChange={(e) => setData('type_of_freezone', e.target.value)}
-                            />
-                            <label className="radio-btn-input" htmlFor="notsure">Not Sure</label>
-                        </div>
+                        <InputError message={errors.type_of_freezone} className="mt-2" />
                     </div>
-
-                    <InputError message={errors.type_of_freezone} className="mt-2" />
-                </div>
-
-
                     <div>
                         <InputLabel htmlFor="industry" className="text-base" value="Company Industry" />
                         <select className="block w-full p-4 mt-1 bg-transparent border-gray-300 rounded"

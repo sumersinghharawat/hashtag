@@ -9,7 +9,7 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
-export default function FoundersDetail({ company_info, auth, step, foundersList,totalSplits, registration_completed_step }) {
+export default function FoundersDetail({ company_info, auth, step, foundersList,totalSplits, registration_completed_step, company_count }) {
     const { data, setData, post, processing, errors, reset, delete:distroy } = useForm({
         first_name: '',
         last_name: '',
@@ -30,33 +30,28 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
             }
             return obj;
         });
+
         var totalSplitsNumber = parseInt(totalSplits);
+
         setTotalSplit(totalSplitsNumber);
-
         setFounderSplitList(updatedFoundersList);
-
 
     }, [foundersList,totalSplits])
 
     const submitFounders = (e) => {
         e.preventDefault();
-
         post(route('founder.dashboard.founderstore',{'id':company_info.id}));
-
         data.first_name = "";
         data.last_name = "";
     }
 
     const submit = (e) => {
         e.preventDefault();
-
         data.founder_list = founderSplitList;
-
         post(route('founder.dashboard.founderssplitstore',{'id':company_info.id}));
     }
 
     const goBack = () => {
-        // router.replace(route('founder.dashboard.companydetails'));
         router.get(route('founder.dashboard.companydetails',data.company_id));
     }
 
@@ -69,7 +64,6 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
         var founderTotalSplit = 0;
         const updatedFoundersList = founderSplitList.map(obj => {
             if (obj.id === id) {
-
                 obj = { ...obj, ownership_percentage: parseInt(newValue) }
                 founderTotalSplit = parseInt(founderTotalSplit?founderTotalSplit:0) + parseInt((obj.ownership_percentage)?(obj.ownership_percentage):0);
                 return obj;
@@ -88,7 +82,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
 
         const updatedFoundersList = founderSplitList.map(obj => {
 
-            var managerStatus = obj.manager == 0 ? 1 : 0;
+            var managerStatus = obj.manager == 'No Manager' ? 'Manager' : 'No Manager';
             if (obj.id === id) {
                 obj = { ...obj, manager: managerStatus }
                 return obj;
@@ -100,7 +94,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
     }
 
     return (
-        <CustomerDashboard company_info={company_info} auth={auth}>
+        <CustomerDashboard company_info={company_info} auth={auth} company_count={company_count}>
             <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold ">Founders & Ownership</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Enter the legal name of the founders, split the company between the founders and select managers</p>
@@ -116,7 +110,6 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                             className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="first_name"
                             placeholder='First Name'
-                            isFocused={true}
                             onChange={(e) => setData('first_name', e.target.value)}
                         />
 
@@ -133,7 +126,6 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                             className="block w-full py-4 mt-1 bg-transparent"
                             autoComplete="last_name"
                             placeholder='Last Name'
-                            isFocused={false}
                             onChange={(e) => setData('last_name', e.target.value)}
                         />
 

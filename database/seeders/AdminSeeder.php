@@ -16,15 +16,32 @@ class AdminSeeder extends Seeder
     {
         //
 
-        $user = User::factory()->create([
-            'name' => 'superadmin',
-            'first_name' => 'superadmin',
-            'last_name' => '',
-            'email' => 'admin@admin.com',
-            'email_verified_at' => now(),
-            'password' => Hash::make('password'),
-        ]);
+        $user = User::updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'superadmin',
+                'first_name' => 'superadmin',
+                'last_name' => '',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ]
+        );
 
         $user->assignRole('superadmin');
+
+        $agent = User::updateOrCreate(
+            ['email' => 'agent@agent.com'],
+            [
+                'name' => 'agent',
+                'first_name' => 'agent',
+                'last_name' => '',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+            ]
+        );
+
+        $agent->assignRole('agent');
+
+        $agent->givePermissionTo(['edit applications', 'view applications']);
     }
 }

@@ -30,7 +30,6 @@ export default function Dashboard({ auth, children, dashboard }) {
                     <div className='flex flex-col flex-wrap w-full px-6 py-8 bg-white border rounded-lg shadow hover:bg-blue-300 hover:text-white hover:opacity-100'>
                         <span className='text-lg font-bold'>{dashboard.inprogress}</span>
                         <span className='opacity-50'>Application in progress</span>
-
                     </div>
                 </div>
             </div>}</main>

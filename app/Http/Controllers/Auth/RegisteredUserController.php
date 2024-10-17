@@ -114,6 +114,7 @@ class RegisteredUserController extends Controller
                 ]);
 
                 $newUser->assignRole('founder');
+
                 Auth::login($newUser);
                 // go to the dashboard
                 return redirect(RouteServiceProvider::FOUNDERHOME);

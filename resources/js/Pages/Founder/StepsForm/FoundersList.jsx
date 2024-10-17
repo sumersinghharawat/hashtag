@@ -30,7 +30,6 @@ export default function FoundersList ({founderSplitList,updateSplit,updateManage
                             className="w-16 py-4 bg-transparent md:w-20"
                             autoComplete="split"
                             placeholder='Split'
-                            isFocused={false}
                             onChange={(e) => {if(e.target.value<=100){ updateSplit(element.id, e.target.value)}}}
                         /><span className="p-3">%</span>
                     </td>
@@ -38,12 +37,13 @@ export default function FoundersList ({founderSplitList,updateSplit,updateManage
                         <div className="relative flex justify-center gap-x-3">
                             <div className="flex items-center h-6">
                                 <input
-                                id="manager"
-                                name="manager"
-                                onChange={(e) => updateManager(element.id)}
-                                checked={element.manager}
-                                type="checkbox"
-                                className="w-5 h-5 text-green-400 border-gray-300 rounded focus:ring-green-600"
+                                    id="manager"
+                                    name="manager"
+                                    onChange={(e) => updateManager(element.id)}
+                                    checked={element.manager=="No Manager"?false:true}
+                                    type="checkbox"
+                                    value="Manager"
+                                    className="w-5 h-5 text-green-400 border-gray-300 rounded focus:ring-green-600"
                                 />
                             </div>
                         </div>

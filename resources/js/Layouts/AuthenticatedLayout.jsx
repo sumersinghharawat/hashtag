@@ -28,13 +28,13 @@ export default function Authenticated({ user, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('admin.dashboard.viewrequests')} active={route().current('admin.dashboard.viewrequests')}>
-                                    Requests
+                                    Applications
                                 </NavLink>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('admin.dashboard.viewleads')} active={route().current('admin.dashboard.viewleads')}>
-                                    Leads
+                                <NavLink href={route('admin.dashboard.packagesofproduct')} active={route().current('admin.dashboard.packagesofproduct')}>
+                                    Packages
                                 </NavLink>
                             </div>
 
@@ -45,12 +45,6 @@ export default function Authenticated({ user, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('admin.dashboard.forms')} active={route().current('admin.dashboard.forms')}>
-                                    Forms
-                                </NavLink>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:hidden">
                                 <NavLink href={route('admin.dashboard.viewindustry')} active={route().current('admin.dashboard.viewindustry')}>
                                     Industries
                                 </NavLink>

@@ -8,7 +8,7 @@ import CustomerDashboard from "@/Pages/CustomerDashboard";
 import { Link, router, useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 
-export default function Summary({ auth, step, company_info, foundersList , registration_completed_step}) {
+export default function Summary({ auth, step, company_info, foundersList , registration_completed_step, company_count}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         company_id: company_info?.id
     });
@@ -23,7 +23,7 @@ export default function Summary({ auth, step, company_info, foundersList , regis
     };
 
     return (
-        <CustomerDashboard auth={auth}>
+        <CustomerDashboard auth={auth} company_count={company_count}>
             <StepFormLayout step={step} filledSteps={registration_completed_step} company_id={company_info.id}>
                 <h2 className="text-2xl font-extrabold">Summary</h2>
                 <p className="mt-4 mb-6 text-sm text-gray-500">Please review all information about your company</p>
@@ -107,7 +107,7 @@ export default function Summary({ auth, step, company_info, foundersList , regis
                                                                     id="manager"
                                                                     name="manager"
                                                                     disabled={true}
-                                                                    checked={element.manager}
+                                                                    checked={element.manager=="Manager"?true:false}
                                                                     type="checkbox"
                                                                     className="w-5 h-5 text-gray-400 border-gray-300 rounded focus:ring-gray-400"
                                                                 />
@@ -121,7 +121,7 @@ export default function Summary({ auth, step, company_info, foundersList , regis
                                                                     id="manager"
                                                                     name="manager"
                                                                     disabled={true}
-                                                                    checked={element.visa_status}
+                                                                    checked={parseInt(element.visa_status)}
                                                                     type="checkbox"
                                                                     className="w-5 h-5 text-gray-400 border-gray-300 rounded focus:ring-gray-400"
                                                                 />

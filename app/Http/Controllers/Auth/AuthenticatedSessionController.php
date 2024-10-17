@@ -35,23 +35,24 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
 
-
         $request->authenticate();
 
         $request->session()->regenerate();
 
         $user = Auth::user();
 
-        $roles = $user->getRoleNames()->toArray();
 
+        $user->assignRole('agent');
+
+        $user->givePermissionTo(['edit applications', 'view applications']);
+
+        $roles = $user->getRoleNames()->toArray();
 
         if(in_array('founder',$roles)){
             return redirect()->intended(RouteServiceProvider::FOUNDERHOME);
         }else{
             return redirect()->intended(RouteServiceProvider::HOME);
         }
-
-
 
     }
 
@@ -71,7 +72,7 @@ class AuthenticatedSessionController extends Controller
 
     public function getagentlist(){
 
-        $allagents = User::role('admin')->get();
+        $allagents = User::role('agent')->whereNotIn('id', [1])->with('permissions')->get();
 
         return Inertia::render('Admin/Agents/ViewAgents',['agents'=>$allagents]);
     }
@@ -93,18 +94,14 @@ class AuthenticatedSessionController extends Controller
     public function dashboard(){
         $dashboard = [];
         $user = Auth::user();
-        // DB::enableQueryLog();
 
-        $dashboard['paymentdue'] = Company::whereNull('payment_status')
-        ->orWhere('payment_status', 'pending')
+        $dashboard['paymentdue'] = Company::whereNull('second_payment_status')
+        ->orWhere('second_payment_status', 'Pending')
         ->count();
-        // $queries = DB::getQueryLog();
-        // dd($queries);
-        $dashboard['todayapplications'] = Company::whereNotIn('application_status', ['pending', null])->whereDate('created_at', today())->count();
-        $dashboard['underreview'] = Company::where('application_status','underreview')->count();
-        $dashboard['inprogress'] = Company::where('application_status','success')->count();
 
-        // dd($dashboard);
+        $dashboard['todayapplications'] = Company::whereNot('application_status','Pending')->whereDate('created_at', today())->count();
+        $dashboard['underreview'] = Company::where('application_status','Under Process')->count();
+        $dashboard['inprogress'] = Company::where('application_status','In Progress')->count();
 
         return Inertia::render('Dashboard',['auth'=> $user,'dashboard'=>$dashboard]);
     }

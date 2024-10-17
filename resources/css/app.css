@@ -30,6 +30,10 @@ body{
     color: var(--primary-button-bg);
 }
 
+.border-color-primary{
+    border-color: var(--primary-button-bg);
+}
+
 .primary-button{
     background-color: var(--primary-button-bg);
     color: var(--primary-button-color);

@@ -29,10 +29,7 @@ export default function ViewSubmitedRequestList ({auth, agents}) {
                                                     Agent Name
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    Founders
-                                                </th>
-                                                <th scope="col" className="px-6 py-3">
-                                                    Assign Requests
+                                                    Permission
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
                                                     View
@@ -43,20 +40,27 @@ export default function ViewSubmitedRequestList ({auth, agents}) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {agents.map((agent,index)=>{return <tr key={index} className="bg-white border-b">
+                                        {agents.map((agent,index)=>{
+                                            return <tr key={index} className="bg-white border-b">
                                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                     {agent.name}
                                                 </th>
                                                 <td className="px-6 py-4">
-                                                    {agent.first_name}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    Assign Requests
+                                                {agents.map((agentpermissions,agentpermissionsindex)=>{
+                                                    return <>
+                                                    {agentpermissions.permissions.map((permission,permissionindex)=>{
+                                                        return <>
+                                                            {(permissionindex==0)?permission.name:','+permission.name}
+                                                        </>
+                                                    })}
+                                                    </>
+                                                })}
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <Link href={route('admin.dashboard.editagent',{'id':agent.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">Edit</Link>
                                                 </td>
-                                            </tr>})}
+                                            </tr>}
+                                        )}
                                         </tbody>
                                     </table>
                                 </div>

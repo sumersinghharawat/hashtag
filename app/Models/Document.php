@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'company_id',
+        'founder_id',
+        'document_type',
+        'document_file',
+        'document_status',
+    ];
+
+
 }

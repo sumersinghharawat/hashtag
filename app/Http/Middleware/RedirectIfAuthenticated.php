@@ -25,9 +25,8 @@ class RedirectIfAuthenticated
 
                 $roles = $user->getRoleNames()->toArray();
 
-
-                if(in_array('customer',$roles)){
-                    return redirect(RouteServiceProvider::CUSTOMERHOME);
+                if(in_array('founder',$roles)){
+                    return redirect(RouteServiceProvider::FOUNDERHOME);;
                 }else{
                     return redirect(RouteServiceProvider::HOME);
                 }
