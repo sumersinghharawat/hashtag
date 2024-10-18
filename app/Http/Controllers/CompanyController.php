@@ -262,7 +262,11 @@ class CompanyController extends Controller
         foreach($completedSteps as $completedStep){
             $stepList[] = $completedStep->step;
         }
-        return $last_step = max($stepList);
+        if($stepList){
+            return $last_step = max($stepList);
+        }else{
+            return 1;
+        }
     }
 
     public function deletecomapnyregistration(Request $request, $id){
@@ -483,7 +487,7 @@ class CompanyController extends Controller
         Company::where(['user_id'=>$user->id,'id'=>$id])->update([
             'package'=>$request->selectedPackage,
             'second_payment_status'=>'success',
-            'application_status'=>'Under Process'
+            'application_status'=>'Under Review'
         ]);
 
         if($step <= $last_step){
@@ -629,16 +633,46 @@ class CompanyController extends Controller
 
         $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
 
-        $rejectedFields = ApplicationVarification::where(['user_id'=>$user->id, 'company_id'=>$id, 'varification_status'=>'Cancel'])
-        ->with(['founder'=>function($query){
-            $query->select('id','first_name','last_name','manager','ownership_percentage','visa_status');
-        },'company'=>function($query){
-            $query->select('id','company_name_1','company_name_2','company_name_3','industry','description','package');
-        },'document'=>function($query){
-            $query->whereIn('document_type', ApplicationVarification::get('application_form_field_name'));
-        }])->get();
+        $rejectedFields = ApplicationVarification::where(['user_id'=>$user->id, 'company_id'=>$id, 'varification_status'=>'Cancel'])->get();
 
-        return Inertia::render('Founder/PhaseTwo/UnderReview',['auth' => fn () => ["user"=>$user], 'foundersList'=>fn () => $founders,'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info,  'company_count'=>$companyRegistrationCount, 'rejectedFields'=>$rejectedFields]);
+        $founder_rejected_fields = [];
+        $company_rejected_fields = [];
+        $index = 0;
+        $rejectedField_founder_id = 0;
+        foreach($rejectedFields as $rejectedField){
+            if($rejectedField->founder_id){
+                $document = Document::where(['company_id'=>$id, 'founder_id'=>$rejectedField->founder_id, 'document_type'=>$rejectedField->application_form_field_name])->first();
+                $rejectedField->document = $document?$document:null;
+                $founder_rejected_fields[$rejectedField->founder_id]['rejected_fields'][] = $rejectedField;
+                $founder_rejected_fields[$rejectedField->founder_id]['founder_details'] = Founder::where(['id'=>$rejectedField->founder_id])->first();
+            }else{
+                $document = Document::where(['company_id'=>$id, 'founder_id'=>0, 'document_type'=>$rejectedField->application_form_field_name])->first();
+                $rejectedField->document = $document?$document:null;
+                $company_rejected_fields[] = $rejectedField;
+            }
+        }
+
+        $rejectedFields = array_merge(['company_rejected_fields'=>$company_rejected_fields], ['founder_rejected_fields'=>array_values($founder_rejected_fields)]);
+
+        $listIndustiesData = Industry::select(['name'])->get();
+
+        $listIndusties[] = ["name" => "Select Industry"];
+
+        foreach($listIndustiesData as $listIndusty){
+            $listIndusties[] = ["name"=> $listIndusty->name];
+        }
+
+
+
+        // ->with(['founder'=>function($query){
+        //     $query->select('id','first_name','last_name','manager','ownership_percentage','visa_status');
+        // },'company'=>function($query){
+        //     $query->select('id','company_name_1','company_name_2','company_name_3','industry','description','package');
+        // },'document'=>function($query){
+        //     $query->whereIn('document_type', ApplicationVarification::get('application_form_field_name'));
+        // }])->get();
+
+        return Inertia::render('Founder/PhaseTwo/UnderReview',['auth' => fn () => ["user"=>$user], 'foundersList'=>fn () => $founders,'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info,  'company_count'=>$companyRegistrationCount, 'rejectedFields'=>$rejectedFields, 'listindusties'=>$listIndusties]);
 
     }
 

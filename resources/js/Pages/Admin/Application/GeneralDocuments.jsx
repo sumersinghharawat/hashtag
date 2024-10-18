@@ -92,12 +92,12 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(businessPlan.agent_id)) ?<>
-                                                        {businessPlan.status === 'Pending' ?
+                                                        {businessPlan.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{businessPlan.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(businessPlan.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
                                                             </>
                                                     :
-                                                    <>{businessPlan.status === 'Pending'?
+                                                    <>{businessPlan.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',businessPlan.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',businessPlan.id)}>Cancel</button>
@@ -119,12 +119,12 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(otherDocument.agent_id)) ?<>
-                                                        {otherDocument.status === 'Pending' ?
+                                                        {otherDocument.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{otherDocument.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(otherDocument.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
                                                             </>
                                                     :
-                                                    <>{otherDocument.status === 'Pending'?
+                                                    <>{otherDocument.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',otherDocument.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',otherDocument.id)}>Cancel</button>

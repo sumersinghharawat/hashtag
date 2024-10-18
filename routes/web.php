@@ -98,6 +98,7 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function(){
     Route::get('/admin/editagent/{id}',[AuthenticatedSessionController::class,'editagent'])->name('admin.dashboard.editagent');
     Route::post('/admin/editagent/{id}',[RegisteredUserController::class,'agenteditstore'])->name('admin.dashboard.agenteditstore');
 
+    // Agent Registration
     Route::post('/admin/agentregister',[RegisteredUserController::class,'agentregister'])->name('admin.dashboard.agentregister');
 
     // Packages
@@ -253,6 +254,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
 
     // Final Review
     Route::get('/founder/final-review/{id}',[CompanyController::class,'finalreview'])->name('founder.dashboard.final-review');
+    Route::post('/founder/updaterejecteddetails/{id}',[ApplicationVarificationController::class,'updaterejecteddetails'])->name('founder.dashboard.updaterejecteddetails');
 });
 
 Route::middleware('auth')->group(function () {

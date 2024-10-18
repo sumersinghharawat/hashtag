@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApplicationVarification;
 use App\Models\Document;
 use App\Models\FormSubmission;
 use Illuminate\Http\Request;
@@ -113,9 +114,25 @@ class DocumentController extends Controller
                     'company_id'=>$id,
                     'founder_id'=> $request->founder_id,
                     'document_file'=>$url,
-                    'document_status'=>'Under Review'
+                    'document_status'=>'Pending'
                 ]
             );
+
+            $applicationVarification = ApplicationVarification::where([
+                'founder_id' => $request->founder_id?$request->founder_id:null,
+                'company_id' => $id,
+                'application_form_field_name' => $request->document_type
+            ])->first();
+
+            if(!empty($applicationVarification)){
+                ApplicationVarification::where([
+                    'founder_id' => $request->founder_id?$request->founder_id:null,
+                    'company_id' => $id,
+                    'application_form_field_name' => $request->document_type
+                ])->update([
+                    'varification_status' => $fileDetails->document_status,
+                ]);
+            }
         }
 
         return redirect(url()->previous());

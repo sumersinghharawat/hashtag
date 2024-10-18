@@ -7,7 +7,7 @@ import { router } from '@inertiajs/react';
 import underreviewimage from '../../../Icons/under-progress.svg';
 import { RejectedFields } from './RejectedFields';
 
-export default function UnderReview({auth, company_info, step, registration_completed_step, foundersList, company_count, rejectedFields }){
+export default function UnderReview({auth, company_info, step, registration_completed_step, foundersList, company_count, rejectedFields, listindusties }){
 
     const handleSaveAndContinue = () => {
         router.get(route('founder.dashboard.shareholder-details', company_info.id));
@@ -16,7 +16,7 @@ export default function UnderReview({auth, company_info, step, registration_comp
     return (
         <CustomerDashboard auth={auth} company_count={company_count}>
             <Phase2FormDetails registration_completed_step={registration_completed_step} step={step} name={auth.user.name}>
-                {rejectedFields.length != 0?<RejectedFields rejectedFields={rejectedFields} auth={auth} company_info={company_info}/>:
+                {(rejectedFields.company_rejected_fields.length != 0 && rejectedFields.founder_rejected_fields.length != 0)?<RejectedFields rejectedFields={rejectedFields} auth={auth} company_info={company_info} listindusties={listindusties} errors={{}} foundersList={foundersList}/>:
                 <div className='flex flex-col flex-wrap items-center justify-center h-full'>
                     <img src={underreviewimage} className='w-2/3 h-full'/>
                     <h2 className="pt-8 pb-6 text-2xl font-extrabold">Company Formation in Progress</h2>

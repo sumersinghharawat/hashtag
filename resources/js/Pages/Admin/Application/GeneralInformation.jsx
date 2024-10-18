@@ -20,6 +20,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
     });
 
     const [open, setOpen] = useState(false);
+    const [application_fields, setApplication_fields] = useState(company_info?.application_fields);
 
     const [Company1, setCompany1] = useState({});
     const [Company2, setCompany2] = useState({});
@@ -29,9 +30,8 @@ export default function GeneralInformation({ auth, company_info, children }) {
 
     useEffect(() => {
 
-        if (company_info) {
-            const applicationFields = company_info?.application_fields || [];
-            applicationFields.forEach((field) => {
+        if (application_fields) {
+            application_fields.forEach((field) => {
                 const { application_form_field_name, application_form_field_value, id, varification_status, agent_id, description } = field;
                 switch (application_form_field_name) {
                     case 'company_name_1':
@@ -54,7 +54,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                 }
             });
         }
-    }, [company_info])
+    }, [])
 
     const openModal = (status, application_form_field_id) => {
         data.status = status;
@@ -80,6 +80,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
 
     return (
         <Dashboard auth={auth.user}>
+            {console.log(company_info?.application_fields)}
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-4">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -100,16 +101,21 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                     {(auth.user.id !== parseInt(Company1.agent_id)) ?<>
-                                                        {Company1.status === 'Pending' ?
+                                                        {Company1.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company1.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>}
                                                             </>
                                                     :
-                                                    <>{Company1.status === 'Pending'?
+                                                    <>{Company1.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company1.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company1.id)}>Reject</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>}
+                                                    </>:
+                                                    <>
+                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>
+                                                    {Company1.status === 'Cancel' ?<button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Reject</button>:<></>}
+                                                    </>
+                                                    }
                                                     </>}
                                                 </div>
                                             </div>
@@ -123,16 +129,20 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Company2.agent_id)) ?<>
-                                                        {Company2.status === 'Pending' ?
+                                                        {Company2.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company2.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>}
                                                             </>
                                                     :
-                                                    <>{Company2.status === 'Pending'?
+                                                    <>{Company2.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company2.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Reject</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>}
+                                                    </>:
+                                                    <>
+                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>
+                                                    </>
+                                                    }
                                                     </>}
                                                 </div>
                                             </div>
@@ -146,12 +156,12 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Company3.agent_id)) ?<>
-                                                        {Company3.status === 'Pending' ?
+                                                        {Company3.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company3.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company3.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
                                                             </>
                                                     :
-                                                    <>{Company3.status === 'Pending'?
+                                                    <>{Company3.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company3.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company3.id)}>Reject</button>
@@ -169,12 +179,12 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Industry.agent_id)) ?<>
-                                                        {Industry.status === 'Pending' ?
+                                                        {Industry.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Industry.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Industry.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
                                                             </>
                                                     :
-                                                    <>{Industry.status === 'Pending'?
+                                                    <>{Industry.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Industry.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Industry.id)}>Reject</button>
@@ -192,12 +202,12 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Description.agent_id)) ?<>
-                                                        {Description.status === 'Pending' ?
+                                                        {Description.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Description.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Description.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
                                                             </>
                                                     :
-                                                    <>{Description.status === 'Pending'?
+                                                    <>{Description.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Description.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Description.id)}>Reject</button>

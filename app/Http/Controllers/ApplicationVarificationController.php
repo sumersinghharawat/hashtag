@@ -149,4 +149,77 @@ class ApplicationVarificationController extends Controller
 
         return redirect(url()->previous());
     }
+
+    public function updaterejecteddetails(Request $request, $id){
+        //
+        // dd($request->all());
+
+        $company_info = Company::where(['id'=>$id])->update([
+            'company_name_1' => $request->company_name_1,
+            'company_name_2' => $request->company_name_2,
+            'company_name_3' => $request->company_name_3,
+            'industry' => $request->company_industry,
+            'description' => $request->company_description,
+        ]);
+
+        $founders = $request->foundersList;
+
+        $company_fields = ApplicationVarification::where(['company_id'=>$id])->get();
+
+        foreach ($company_fields as $key => $value) {
+
+            if(!empty($value->founder_id)){
+                Document::where(['document_type'=>$value->application_form_field_name, 'company_id'=>$id, 'founder_id'=>$value->founder_id])->update([
+                    'document_status' => 'Under Review',
+                ]);
+
+                $singlefounder = [];
+
+                // dd($value->founder_id);
+
+                foreach($founders as $founder){
+                    if($founder['id'] == $value->founder_id){
+                        $singlefounder = $founder;
+                    }
+                }
+
+                Founder::where(['id'=>$value->founder_id])->update(
+                    [
+                        'manager' => $singlefounder['manager'],
+                        'visa_status' => $singlefounder['visa_status'],
+                    ]
+                );
+
+                ApplicationVarification::where(['id'=>$value->id, 'application_form_field_name' => $value->application_form_field_name])->update([
+                    'application_form_field_value' => $singlefounder[$value->application_form_field_name],
+                    'varification_status' => 'Under Review',
+                ]);
+
+            }else{
+
+                Document::where(['document_type'=>$value->application_form_field_name, 'company_id'=>$id])->update([
+                    'document_status' => 'Under Review',
+                ]);
+
+                if($value->application_form_field_name == 'company_')
+                ApplicationVarification::where(['id'=>$value->id, 'application_form_field_name' => $value->application_form_field_name])->update([
+                    'application_form_field_value' => $singlefounder[$request->],
+                    'varification_status' => 'Under Review',
+                ]);
+            }
+
+
+        }
+
+
+
+        // ApplicationVarification::where(['id'=>$id])->update([
+        //     'agent_id' => $request->agent_id,
+        //     'description' => $request->description,
+        //     'varification_status' => 'Reject',
+        // ]);
+
+
+        return redirect(url()->previous());
+    }
 }
