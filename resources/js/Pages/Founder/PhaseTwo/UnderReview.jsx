@@ -15,8 +15,9 @@ export default function UnderReview({auth, company_info, step, registration_comp
 
     return (
         <CustomerDashboard auth={auth} company_count={company_count}>
+            {JSON.stringify(registration_completed_step)}
             <Phase2FormDetails registration_completed_step={registration_completed_step} step={step} name={auth.user.name}>
-                {(rejectedFields.company_rejected_fields.length != 0 && rejectedFields.founder_rejected_fields.length != 0)?<RejectedFields rejectedFields={rejectedFields} auth={auth} company_info={company_info} listindusties={listindusties} errors={{}} foundersList={foundersList}/>:
+                {(rejectedFields.company_rejected_fields.length != 0 || rejectedFields.founder_rejected_fields.length != 0)?<RejectedFields rejectedFields={rejectedFields} auth={auth} company_info={company_info} listindusties={listindusties} errors={{}} foundersList={foundersList}/>:
                 <div className='flex flex-col flex-wrap items-center justify-center h-full'>
                     <img src={underreviewimage} className='w-2/3 h-full'/>
                     <h2 className="pt-8 pb-6 text-2xl font-extrabold">Company Formation in Progress</h2>

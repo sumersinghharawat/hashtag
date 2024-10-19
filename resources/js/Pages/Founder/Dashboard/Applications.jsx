@@ -82,7 +82,7 @@ export default function Applications({ auth, request, companies, company_count }
                             </ul>
                             <div className="grid w-full text-end">
                                 {company.document_count?<span><b>Documents to Upload:</b> {parseInt(company.uploaded_document_count)}/{company.document_count}</span>:<></>}
-                                {company.rejected_document_count?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
+                                {parseInt(company.rejected_document_count)?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
                             </div>
                         </div>
                         <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold text-green-600 -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full -bottom-4 left-1/2 btn-status">

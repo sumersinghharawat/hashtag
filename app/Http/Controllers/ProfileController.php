@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Company;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,7 +20,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = Auth::user();
+
+        $user->getRoleNames()->toArray();
+
         return Inertia::render('Profile/Edit', [
+            'profileUser' => $user,
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);
@@ -59,5 +66,25 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+
+    /**
+     * Display the user's profile form.
+     */
+    public function editFounder(Request $request): Response
+    {
+        $user = Auth::user();
+
+        $user->getRoleNames()->toArray();
+
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/Dashboard/FounderEdit', [
+            'profileUser' => $user,
+            'company_count'=>$companyRegistrationCount,
+            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'status' => session('status'),
+        ]);
     }
 }

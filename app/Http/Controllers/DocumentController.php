@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApplicationVarification;
+use App\Models\Company;
 use App\Models\Document;
 use App\Models\FormSubmission;
 use Illuminate\Http\Request;
@@ -101,20 +102,24 @@ class DocumentController extends Controller
             $path = Storage::putFileAs($directory, $file, $fileName);
             $url = Storage::url($path);
 
+            $user_id = Company::where([
+                'id'=>$id,
+            ])->first()->user_id;
+
             $fileDetails = Document::updateOrCreate(
                 [
                     'document_type'=>$request->document_type,
-                    'user_id'=>$user->id,
+                    'user_id'=>$user_id,
                     'company_id'=>$id,
                     'founder_id'=> $request->founder_id
                 ],
                 [
                     'document_type'=>$request->document_type,
-                    'user_id'=>$user->id,
+                    'user_id'=>$user_id,
                     'company_id'=>$id,
                     'founder_id'=> $request->founder_id,
                     'document_file'=>$url,
-                    'document_status'=>'Pending'
+                    'document_status'=>'Under Review',
                 ]
             );
 

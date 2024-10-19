@@ -10,7 +10,7 @@ export default function FounderAuthenticated({ user, header, children, company_c
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen mt-8">
+        <div className="min-h-screen pt-4">
             <nav className="container w-auto mx-4 bg-white md:mx-auto rounded-3xl">
                 <div className="px-4 mx-auto sm:px-6 lg:px-4">
                     <div className="flex justify-between h-16">
@@ -65,7 +65,7 @@ export default function FounderAuthenticated({ user, header, children, company_c
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        {/* <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link> */}
+                                        <Dropdown.Link href={route('founder.dashboard.editprofile')}>Profile</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>

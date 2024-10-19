@@ -21,6 +21,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
+use ZipArchive;
 
 class CompanyController extends Controller
 {
@@ -205,7 +206,7 @@ class CompanyController extends Controller
 
         $user = Auth::user();
 
-        $companies = Company::where('application_status','Under Process')->get();
+        $companies = Company::all();
 
         foreach($companies as $index => $company){
             $founders = Founder::where(['user_id'=>$company->user_id, 'company_id'=>$company->id])->get();
@@ -214,7 +215,7 @@ class CompanyController extends Controller
             $agent_id = 0;
             $agent_id = ApplicationVarification::where(['company_id'=>$company->id])->select('agent_id')->first();
 
-            if($agent_id->agent_id != null){
+            if(isset($agent_id->agent_id)){
                 $company['assign_agent_details'] = User::where(['id'=>$agent_id->agent_id])->first();
             }else{
                 $company['assign_agent_details'] = null;
@@ -222,7 +223,6 @@ class CompanyController extends Controller
         }
 
         return Inertia::render('Admin/ViewSubmitedRequestList',['auth'=>$user,'companyrequests'=>$companies]);
-
     }
 
     public function viewleads(){
@@ -508,18 +508,18 @@ class CompanyController extends Controller
                 'application_form_field_name'=>'manager',
             ],[
                 'application_form_field_value'=>$founder->manager,
-                'varification_status'=>'pending',
+                'varification_status'=>'Under Review',
             ]);
 
-            ApplicationVarification::updateOrCreate([
-                'user_id'=>$user->id,
-                'company_id'=>$id,
-                'founder_id'=>$founder->id,
-                'application_form_field_name'=>'ownership_percentage',
-            ],[
-                'application_form_field_value'=>$founder->ownership_percentage,
-                'varification_status'=>'pending',
-            ]);
+            // ApplicationVarification::updateOrCreate([
+            //     'user_id'=>$user->id,
+            //     'company_id'=>$id,
+            //     'founder_id'=>$founder->id,
+            //     'application_form_field_name'=>'ownership_percentage',
+            // ],[
+            //     'application_form_field_value'=>$founder->ownership_percentage,
+            //     'varification_status'=>'pending',
+            // ]);
 
             ApplicationVarification::updateOrCreate([
                 'user_id'=>$user->id,
@@ -528,7 +528,7 @@ class CompanyController extends Controller
                 'application_form_field_name'=>'visa_status',
             ],[
                 'application_form_field_value'=>$founder->visa_status,
-                'varification_status'=>'pending',
+                'varification_status'=>'Under Review',
             ]);
         }
 
@@ -541,7 +541,7 @@ class CompanyController extends Controller
                     'application_form_field_name'=>$document->document_type,
                 ],[
                     'application_form_field_value'=>$document->document_file,
-                    'varification_status'=>'pending',
+                    'varification_status'=>'Under Review',
                 ]);
             }else{
                 ApplicationVarification::updateOrCreate([
@@ -551,7 +551,7 @@ class CompanyController extends Controller
                     'application_form_field_name'=>$document->document_type,
                 ],[
                     'application_form_field_value'=>$document->document_file,
-                    'varification_status'=>'pending',
+                    'varification_status'=>'Under Review',
                 ]);
             }
         }
@@ -563,7 +563,7 @@ class CompanyController extends Controller
             'application_form_field_name'=>'company_name_1',
         ],[
             'application_form_field_value'=>$company->company_name_1,
-            'varification_status'=>'pending',
+            'varification_status'=>'Under Review',
         ]);
 
         ApplicationVarification::updateOrCreate([
@@ -573,7 +573,7 @@ class CompanyController extends Controller
             'application_form_field_name'=>'company_name_2',
         ],[
             'application_form_field_value'=>$company->company_name_2,
-            'varification_status'=>'pending',
+            'varification_status'=>'Under Review',
         ]);
 
         ApplicationVarification::updateOrCreate([
@@ -583,7 +583,7 @@ class CompanyController extends Controller
             'application_form_field_name'=>'company_name_3',
         ],[
             'application_form_field_value'=>$company->company_name_3,
-            'varification_status'=>'pending',
+            'varification_status'=>'Under Review',
         ]);
 
         ApplicationVarification::updateOrCreate([
@@ -593,7 +593,7 @@ class CompanyController extends Controller
             'application_form_field_name'=>'industry',
         ],[
             'application_form_field_value'=>$company->industry,
-            'varification_status'=>'pending',
+            'varification_status'=>'Under Review',
         ]);
 
         ApplicationVarification::updateOrCreate([
@@ -603,17 +603,7 @@ class CompanyController extends Controller
             'application_form_field_name'=>'description',
         ],[
             'application_form_field_value'=>$company->description,
-            'varification_status'=>'pending',
-        ]);
-
-        ApplicationVarification::updateOrCreate([
-            'user_id'=>$user->id,
-            'company_id'=>$id,
-            'founder_id'=>null,
-            'application_form_field_name'=>'package',
-        ],[
-            'application_form_field_value'=>$company->package,
-            'varification_status'=>'pending',
+            'varification_status'=>'Under Review',
         ]);
 
         return redirect(route('founder.dashboard.final-review',$id));
@@ -633,7 +623,7 @@ class CompanyController extends Controller
 
         $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
 
-        $rejectedFields = ApplicationVarification::where(['user_id'=>$user->id, 'company_id'=>$id, 'varification_status'=>'Cancel'])->get();
+        $rejectedFields = ApplicationVarification::where(['user_id'=>$user->id, 'company_id'=>$id, 'varification_status'=>'Rejected'])->get();
 
         $founder_rejected_fields = [];
         $company_rejected_fields = [];
@@ -682,4 +672,74 @@ class CompanyController extends Controller
         $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
     }
 
+    public function downloadtradelicense($id){
+
+        $step = 12;
+
+        $user = Auth::user();
+
+        $company = Company::where(['id'=>$id])->first();
+
+        $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company->id);
+
+        $document = Document::where(['user_id'=>$user->id, 'company_id'=>$company->id, 'founder_id'=>0, 'document_type'=>'Trade License'])->first();
+
+        return Inertia::render('Founder/PhaseTwo/DownloadLicense',['auth' => fn () => ["user"=>$user],'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company]);
+    }
+
+    public function downloadalldocuments($id){
+
+        $user = Auth::user();
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $documents = Document::where(['company_id'=>$company_info->id])->whereNotIn('document_type',['Business Plan', 'Other Document', 'Valid Passport Copy', 'UAE Visa Page', 'Address Proof Copy', 'Educational Qualification'])->get();
+
+        try {
+            $zipFolder = storage_path('app/public/company-documents/company-id-'.$company_info->id);
+
+            if (!file_exists($zipFolder)) {
+                mkdir($zipFolder, 0777, true);
+            }
+
+            $zipFile = $zipFolder . '/documents.zip';
+
+            if (!file_exists($zipFile)) {
+                touch($zipFile);
+            }
+
+            $zip = new ZipArchive;
+
+            if ($zip->open($zipFile, ZipArchive::CREATE) !== TRUE) {
+                return response()->json(['error' => 'Unable to create zip file'], 500);
+            }
+
+
+            foreach ($documents as $document) {
+
+                // dd(storage_path('/app/public/document/'.'company-id-'.$company_info->id.'/'.$document->document_file));
+
+                $documentFilePath = storage_path('app/public/document/company-id-'.$company_info->id.'/'.basename($document->document_file));
+
+                if (file_exists($documentFilePath)) {
+                    $fileName = basename($document->document_file);
+                    $zip->addFile($documentFilePath, $fileName);
+                }
+            }
+
+            // $zip->close();
+            // dd($zipFile);
+            if (file_exists($zipFile)) {
+
+                $downloadableZip = asset('storage/company-documents/company-id-'.$company_info->id.'/documents.zip');
+
+                return Inertia::location($downloadableZip, 200, [], ['Content-Type'=>'application/zip', 'Content-Disposition'=>'inline; filename="documents.zip"']);
+            } else {
+                return response()->json(['error file' => 'The file "'.$zipFile.'" does not exist'], 500);
+            }
+        } catch (\Exception $e) {
+            // Handle the error here
+            return response()->json(['try catch error' => $e->getMessage()], 500);
+        }
+
+    }
 }

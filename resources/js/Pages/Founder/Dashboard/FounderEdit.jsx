@@ -1,13 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import DeleteUserForm from './Partials/DeleteUserForm';
-import UpdatePasswordForm from './Partials/UpdatePasswordForm';
-import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm';
 import { Head } from '@inertiajs/react';
+import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm';
+import FounderAuthenticated from '@/Layouts/FounderAuthenticatedLayout';
 
-export default function Edit({ auth, mustVerifyEmail, status, profileUser=null }) {
+export default function FounderEdit({ auth, mustVerifyEmail, status, profileUser=null, company_count }) {
     return (
-        <AuthenticatedLayout
+        <FounderAuthenticated
             user={auth.user}
+            company_count={company_count}
             header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Profile</h2>}
         >
             <Head title="Profile" />
@@ -25,12 +26,8 @@ export default function Edit({ auth, mustVerifyEmail, status, profileUser=null }
                     <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
                         <UpdatePasswordForm className="max-w-xl" profileUser={profileUser}/>
                     </div>
-
-                    {profileUser.roles[0] === 'admin' && <div className="p-4 bg-white shadow sm:p-8 sm:rounded-lg">
-                         <DeleteUserForm className="max-w-xl" />
-                    </div>}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </FounderAuthenticated>
     );
 }

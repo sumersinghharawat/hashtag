@@ -77,7 +77,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
                                     <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">Personal details and application.</p>
                                 </div>
-                                <ApplicationLayout company_id={company_info?.id}>
+                                <ApplicationLayout company_id={company_info?.id} rejected_fields_count={company_info?.rejected_fields_count}>
                                     <div className="flex flex-col w-full">
                                         <div key={businessPlan.id} className="flex items-center border-b border-gray-200">
                                             <div className="flex flex-col w-full">
@@ -87,7 +87,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                         View Document
                                                     </a>
                                                 </div>
-                                                {businessPlan.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {businessPlan.description} </p>: ''}
+                                                {businessPlan.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {businessPlan.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -100,7 +100,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                     <>{businessPlan.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',businessPlan.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',businessPlan.id)}>Cancel</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',businessPlan.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(businessPlan.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
                                                     </>}
                                                 </div>
@@ -114,7 +114,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                         View Document
                                                     </a>
                                                 </div>
-                                                {otherDocument.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {otherDocument.description} </p>: ''}
+                                                {otherDocument.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {otherDocument.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -127,7 +127,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                     <>{otherDocument.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',otherDocument.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',otherDocument.id)}>Cancel</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',otherDocument.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(otherDocument.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
                                                     </>}
                                                 </div>
@@ -149,7 +149,7 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                     <p className="mt-1 text-sm text-gray-600">
                         {data.status=="Verified"?"Please confirm that you want to approve this request.":"Please enter your reason to reject this request."}
                     </p>
-                    {data.status=="Cancel"?<div className="mt-6">
+                    {data.status=="Rejected"?<div className="mt-6">
                         <InputLabel htmlFor="password" value="Password" className="sr-only" />
 
                         <TextareaInput
@@ -170,9 +170,9 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                     <div className="flex justify-end mt-6">
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Confirm
-                        </DangerButton>
+                        <button className={"ms-3 py-4 px-6 rounded-full text-white "+(data.status=='Rejected'?'bg-red-600':'bg-secondary')} disabled={processing}>
+                            {data.status}
+                        </button>
                     </div>
                 </form>
             </Modal>

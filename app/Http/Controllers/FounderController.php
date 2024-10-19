@@ -93,7 +93,7 @@ class FounderController extends Controller
             $TotalForm['uploaded_document_count'] = Document::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id])->count();
             $TotalForm['document_count'] = ($TotalForm['stakeholders']*4)+($TotalForm['visas']);
 
-            $TotalForm['rejected_document_count'] = ApplicationVarification::where(['company_id'=>$TotalForm->id, 'varification_status'=>'Cancel'])->count();
+            $TotalForm['rejected_document_count'] = ApplicationVarification::where(['company_id'=>$TotalForm->id, 'varification_status'=>'Rejected'])->count();
 
             $formStep = $this->CheckFormSteps($TotalForm->id);
 
@@ -188,6 +188,12 @@ class FounderController extends Controller
                 $formStep['step'] = $last_step;
                 $formStep['next_step'] = 'Continue';
                 $formStep['route'] = 'founder.dashboard.final-review';
+            }
+
+            if($last_step == 11){
+                $formStep['step'] = $last_step;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.download-trade-license';
             }
 
         }else{

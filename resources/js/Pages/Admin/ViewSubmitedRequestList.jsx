@@ -48,7 +48,13 @@ export default function ViewSubmitedRequestList ({auth, companyrequests}) {
                                                     {element.founders?element.founders.length:'Pending'}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="text-gray-500">{element.application_status}</span>
+                                                    <span className={"font-semibold "+
+                                                        ((element.application_status=='Rejected')?'text-red-400':'')+
+                                                        ((element.application_status=='Uncompleted')?'text-blue-400':'')+
+                                                        ((element.application_status=='In Progress')?'text-purple-400':'')+
+                                                        ((element.application_status=='Under Process')?'text-yellow-400':'')+
+                                                        ((element.application_status=='Completed')?'text-green-400':'')
+                                                        }>{element.application_status}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                 {element.assign_agent_details?
@@ -62,13 +68,7 @@ export default function ViewSubmitedRequestList ({auth, companyrequests}) {
                                                     {element.assign_agent_details?<p className="text-green-500">Assigned to {element.assign_agent_details.name}</p>:<p className="text-yellow-500">Pending</p>}
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className={"font-semibold "+
-                                                        ((element.application_status=='Rejected')?'text-red-400':'')+
-                                                        ((element.application_status=='Uncompleted')?'text-blue-400':'')+
-                                                        ((element.application_status=='In Progress')?'text-purple-400':'')+
-                                                        ((element.application_status=='Under Process')?'text-yellow-400':'')+
-                                                        ((element.application_status=='Completed')?'text-green-400':'')
-                                                        }>{element.application_status}</span>
+                                                    <span className={"font-semibold "+(element.application_status=='Completed'?'text-green-400':'text-red-400')}>{element.application_status=='Completed'?'Available':'Not Available'}</span>
                                                 </td>
                                             </tr>})):<tr className="border-b"><td colSpan={5} align="center">No Record</td></tr>}
                                         </tbody>

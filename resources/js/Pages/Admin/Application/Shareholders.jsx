@@ -11,6 +11,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import DangerButton from "@/Components/DangerButton";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 export default function Shareholders({ auth, company_info, children }) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
@@ -53,6 +54,7 @@ export default function Shareholders({ auth, company_info, children }) {
         e.preventDefault();
         setData('description', e.target.value);
         put(route('admin.dashboard.viewrequestupdate', { id: company_info.id }), {
+            preserveScroll: false,
             onSuccess: () => {
                 closeModal();
             }
@@ -71,7 +73,7 @@ export default function Shareholders({ auth, company_info, children }) {
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
                                     <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">Personal details and application.</p>
                                 </div>
-                                <ApplicationLayout company_id={company_info?.id}>
+                                <ApplicationLayout company_id={company_info?.id} rejected_fields_count={company_info?.rejected_fields_count}>
                                     <div className="flex flex-col w-full">
                                         {Object.keys(shareholders).map((key, index) => {
                                             return <div key={key}>
@@ -86,31 +88,31 @@ export default function Shareholders({ auth, company_info, children }) {
                                                         <div className="flex flex-col w-full">
                                                             {shareholder.name == 'manager' ?
                                                                 <><p className="font-semibold text-md">Shareholder Role</p><p className="text-md">{shareholder.value}</p>
-                                                                {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                  </> :
                                                                 (shareholder.name == 'ownership_percentage' ?
                                                                     <><p className="font-semibold text-md">Shareholder Own</p><p className="text-md">{shareholder.value}%</p>
-                                                                    {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                    {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                     </> :
                                                                     (shareholder.name == 'Valid Passport Copy' ?
                                                                         <><p className="font-semibold text-md">Valid Passport Copy</p><p className="text-md">{shareholder.value ? <a href={shareholder.value} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a> : 'No'}</p>
-                                                                        {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                        {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                         </> :
                                                                         (shareholder.name == 'UAE Visa Page' ?
                                                                             <><p className="font-semibold text-md">UAE Visa Page</p><p className="text-md">{shareholder.value ? <a href={shareholder.value} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a> : 'No'}</p>
-                                                                            {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                            {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                             </> :
                                                                             (shareholder.name == 'Address Proof Copy' ?
                                                                                 <><p className="font-semibold text-md">Address Proof Copy</p><p className="text-md">{shareholder.value ? <a href={shareholder.value} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a> : 'No'}</p>
-                                                                                {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                                {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                                 </> :
                                                                                 (shareholder.name == 'visa_status' ?
                                                                                     <><p className="font-semibold text-md">Visa Status</p><p className="text-md">{shareholder.value ==1? 'Yes' : 'No'}</p>
-                                                                                    {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                                    {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                                     </> :
                                                                                     (shareholder.name == 'Educational Qualification' ?
                                                                                         <><p className="font-semibold text-md">Educational Qualification</p><p className="text-md">{shareholder.value ? <a href={shareholder.value} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a> : 'No'}</p>
-                                                                                        {shareholder.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
+                                                                                        {shareholder.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {shareholder.description} </p>: ''}
                                                                                         </> :
                                                                                         <><p className="font-semibold text-md">{shareholder.name}</p><p className="text-md">{shareholder.value}</p></>
                                                                                     ))
@@ -121,15 +123,15 @@ export default function Shareholders({ auth, company_info, children }) {
                                                         <div className="w-1/2">
                                                             <div className="flex justify-end gap-2">
                                                             {(auth.user.id !== parseInt(shareholder.agent_id)) ?<>
-                                                        {shareholder.status === 'Pending' ?
+                                                        {shareholder.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{shareholder.status}</p>
                                                             :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                             </>
                                                     :
-                                                    <>{shareholder.status === 'Pending'?
+                                                    <>{shareholder.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',shareholder.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',shareholder.id)}>Cancel</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',shareholder.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                     </>}
                                                             </div>
@@ -154,7 +156,7 @@ export default function Shareholders({ auth, company_info, children }) {
                     <p className="mt-1 text-sm text-gray-600">
                         {data.status == "Verified" ? "Please confirm that you want to approve this request." : "Please enter your reason to reject this request."}
                     </p>
-                    {data.status == "Cancel" ? <div className="mt-6">
+                    {data.status == "Rejected" ? <div className="mt-6">
                         <InputLabel htmlFor="password" value="Password" className="sr-only" />
 
                         <TextareaInput
@@ -175,9 +177,9 @@ export default function Shareholders({ auth, company_info, children }) {
                     <div className="flex justify-end mt-6">
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Confirm
-                        </DangerButton>
+                        <button className={"ms-3 py-4 px-6 rounded-full text-white "+(data.status=='Rejected'?'bg-red-600':'bg-secondary')} disabled={processing}>
+                            {data.status}
+                        </button>
                     </div>
                 </form>
             </Modal>

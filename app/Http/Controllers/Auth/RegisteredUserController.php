@@ -95,6 +95,7 @@ class RegisteredUserController extends Controller
             }else{
                 $count = User::where('email', $user->email)->count();
                 if($count>0){
+                    $finduser->assignRole('founder');
                     $updateuserid = User::where('email', $user->email)->update(['google_id'=> $user->id]);
                     // if($updateuserid){
                     $finduser = User::where('google_id', $user->id)->first();

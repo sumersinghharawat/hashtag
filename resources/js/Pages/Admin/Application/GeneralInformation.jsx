@@ -20,7 +20,6 @@ export default function GeneralInformation({ auth, company_info, children }) {
     });
 
     const [open, setOpen] = useState(false);
-    const [application_fields, setApplication_fields] = useState(company_info?.application_fields);
 
     const [Company1, setCompany1] = useState({});
     const [Company2, setCompany2] = useState({});
@@ -29,9 +28,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
     const [Description, setDescription] = useState({});
 
     useEffect(() => {
-
-        if (application_fields) {
-            application_fields.forEach((field) => {
+            company_info?.application_fields.forEach((field) => {
                 const { application_form_field_name, application_form_field_value, id, varification_status, agent_id, description } = field;
                 switch (application_form_field_name) {
                     case 'company_name_1':
@@ -53,8 +50,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                         break;
                 }
             });
-        }
-    }, [])
+    }, [company_info])
 
     const openModal = (status, application_form_field_id) => {
         data.status = status;
@@ -80,7 +76,6 @@ export default function GeneralInformation({ auth, company_info, children }) {
 
     return (
         <Dashboard auth={auth.user}>
-            {console.log(company_info?.application_fields)}
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-4">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -90,13 +85,13 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                     <h3 className="text-base font-semibold leading-7 text-gray-900">Applicant Information</h3>
                                     <p className="max-w-2xl mt-1 text-sm leading-6 text-gray-500">Personal details and application.</p>
                                 </div>
-                                <ApplicationLayout company_id={company_info?.id}>
+                                <ApplicationLayout company_id={company_info?.id}  rejected_fields_count={company_info?.rejected_fields_count}>
                                     <div className="flex flex-col w-full">
                                         <div key={Company1.id} className="flex items-center border-b border-gray-200">
                                             <div className="flex flex-col w-full">
                                                 <div className="w-full font-semibold">Company Name 1</div>
                                                 <div className="w-full">{Company1.value}</div>
-                                                {Company1.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company1.description} </p>: ''}
+                                                {Company1.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company1.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -109,11 +104,11 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                     <>{Company1.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company1.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company1.id)}>Reject</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company1.id)}>Rejected</button>
                                                     </>:
                                                     <>
                                                     <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>
-                                                    {Company1.status === 'Cancel' ?<button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Reject</button>:<></>}
+                                                    {/* {Company1.status === 'Cancel' ?<button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Rejected</button>:<></>} */}
                                                     </>
                                                     }
                                                     </>}
@@ -124,7 +119,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="flex flex-col w-full">
                                                 <div className="w-full font-semibold">Company Name 2</div>
                                                 <div className="w-full">{Company2.value}</div>
-                                                {Company2.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company2.description} </p>: ''}
+                                                {Company2.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company2.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -137,7 +132,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                     <>{Company2.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company2.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Reject</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company2.id)}>Rejected</button>
                                                     </>:
                                                     <>
                                                     <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>
@@ -151,7 +146,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="flex flex-col w-full">
                                                 <div className="w-full font-semibold">Company Name 3</div>
                                                 <div className="w-full">{Company3.value}</div>
-                                                {Company3.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company3.description} </p>: ''}
+                                                {Company3.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Company3.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -164,7 +159,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                     <>{Company3.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company3.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company3.id)}>Reject</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company3.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company3.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
                                                     </>}
                                                 </div>
@@ -174,7 +169,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="flex flex-col w-full">
                                                 <div className="w-full font-semibold">Industry</div>
                                                 <div className="w-full">{Industry.value}</div>
-                                                {Industry.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Industry.description} </p>: ''}
+                                                {Industry.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Industry.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -187,7 +182,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                     <>{Industry.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Industry.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Industry.id)}>Reject</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Industry.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Industry.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
                                                     </>}
                                                 </div>
@@ -197,7 +192,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                             <div className="flex flex-col w-full">
                                                 <div className="w-full font-semibold">Description</div>
                                                 <div className="w-full">{Description.value}</div>
-                                                {Description.status === 'Cancel'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Description.description} </p>: ''}
+                                                {Description.status === 'Rejected'?<p className="w-full text-yellow-500"><FontAwesomeIcon icon={faInfo} className="w-2 h-2 p-1 text-sm text-white bg-yellow-500 rounded-full" /> {Description.description} </p>: ''}
                                             </div>
                                             <div className="w-1/2">
                                                 <div className="flex justify-end gap-2">
@@ -210,7 +205,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                     <>{Description.status === 'Under Review'?
                                                     <>
                                                         <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Description.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Description.id)}>Reject</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Description.id)}>Rejected</button>
                                                     </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Description.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
                                                     </>}
                                                 </div>
@@ -230,9 +225,9 @@ export default function GeneralInformation({ auth, company_info, children }) {
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        {data.status=="Verified"?"Please confirm that you want to approve this request.":"Please enter your reason to reject this request."}
+                        {data.status=="Verified"?"Please confirm that you want to approve this request.":"Please enter your reason to Rejected this request."}
                     </p>
-                    {data.status=="Cancel"?<div className="mt-6">
+                    {data.status=="Rejected"?<div className="mt-6">
                         <InputLabel htmlFor="password" value="Password" className="sr-only" />
 
                         <TextareaInput
@@ -253,9 +248,9 @@ export default function GeneralInformation({ auth, company_info, children }) {
                     <div className="flex justify-end mt-6">
                         <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Confirm
-                        </DangerButton>
+                        <button className={"ms-3 py-4 px-6 rounded-full text-white "+(data.status=='Rejected'?'bg-red-600':'bg-secondary')} disabled={processing}>
+                            {data.status}
+                        </button>
                     </div>
                 </form>
             </Modal>

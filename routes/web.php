@@ -142,16 +142,15 @@ Route::middleware(['auth', 'verified', 'role:agent'])->group(function(){
 
     Route::get('/admin/viewleads',[CompanyController::class,'viewleads'])->name('admin.dashboard.viewleads');
 
+    // Application Verification Routes
     Route::get('/admin/viewrequest/{id}/general-information',[ApplicationVarificationController::class,'adminviewsubmitedrequest'])->name('admin.dashboard.viewrequestinformation');
-
     Route::get('/admin/viewrequest/{id}/general-document',[ApplicationVarificationController::class,'adminviewsubmitedrequestdocument'])->name('admin.dashboard.viewrequestdocument');
-
     Route::get('/admin/viewrequest/{id}/shareholder-details',[ApplicationVarificationController::class,'adminviewsubmitedrequestshareholder'])->name('admin.dashboard.viewrequestshareholder');
+    Route::get('/admin/viewrequest/{id}/upload-document-view',[ApplicationVarificationController::class,'adminuploaddocumentview'])->name('admin.dashboard.adminuploaddocumentview');
+    Route::put('/admin/viewrequest/{id}/upload-document-view',[ApplicationVarificationController::class,'adminuploaddocumentstore'])->name('admin.dashboard.adminuploaddocumentstore');
 
     Route::put('/admin/viewrequest/{id}',[ApplicationVarificationController::class,'adminviewsubmitedrequestupdate'])->name('admin.dashboard.viewrequestupdate');
-
     Route::post('/admin/viewrequest/{id}',[FounderController::class,'adminviewsubmitedrequeststore'])->name('admin.dashboard.viewrequeststore');
-
     Route::get('/admin/assignapplication/{id}',[ApplicationVarificationController::class,'adminassignapplicationtoagent'])->name('admin.dashboard.assignapplication');
 
     // View Agents
@@ -159,7 +158,6 @@ Route::middleware(['auth', 'verified', 'role:agent'])->group(function(){
     // Route::get('/admin/addagents',[AuthenticatedSessionController::class,'addagent'])->name('admin.dashboard.addagents');
     // Route::get('/admin/editagent/{id}',[AuthenticatedSessionController::class,'editagent'])->name('admin.dashboard.editagent');
     // Route::post('/admin/editagent/{id}',[RegisteredUserController::class,'agenteditstore'])->name('admin.dashboard.agenteditstore');
-
     // Route::post('/admin/agentregister',[RegisteredUserController::class,'agentregister'])->name('admin.dashboard.agentregister');
 
     // Packages
@@ -195,6 +193,7 @@ Route::middleware(['auth', 'verified', 'role:agent'])->group(function(){
 // Founder Dashboard Routes
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/founder',[FounderController::class,'index'])->name('founder.dashboard');
+    Route::get('/founder-profile',[ProfileController::class,'editFounder'])->name('founder.dashboard.editprofile');
 
     // Let's begin
     Route::get('/founder/letsbegin',[FounderController::class,'letsbegin'])->name('founder.dashboard.letsbegin');
@@ -255,6 +254,12 @@ Route::middleware(['auth', 'verified'])->group(function (){
     // Final Review
     Route::get('/founder/final-review/{id}',[CompanyController::class,'finalreview'])->name('founder.dashboard.final-review');
     Route::post('/founder/updaterejecteddetails/{id}',[ApplicationVarificationController::class,'updaterejecteddetails'])->name('founder.dashboard.updaterejecteddetails');
+
+    // Download Trade License
+    Route::get('/founder/download-trade-license/{id}',[CompanyController::class,'downloadtradelicense'])->name('founder.dashboard.download-trade-license');
+
+    // Download All Documents
+    Route::get('/founder/download-all-documents/{id}',[CompanyController::class,'downloadalldocuments'])->name('founder.dashboard.download-all-documents');
 });
 
 Route::middleware('auth')->group(function () {
