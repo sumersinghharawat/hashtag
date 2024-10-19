@@ -1,0 +1,1 @@
+import{j as a}from"./app-Dua9E37O.js";function s({type:o="button",className:n="",disabled:t,children:r,...u}){return a.jsx("button",{...u,type:o,className:`px-10 py-4 text-black bg-gray-200 rounded-full secondary-button ${t&&"opacity-25"} `+n,disabled:t,children:r})}export{s as S};

@@ -2,6 +2,7 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import TextareaInput from "@/Components/TextareaInput";
 import TextInput from "@/Components/TextInput";
 import StepFormLayout from "@/Layouts/StepFormLayout";
 import CustomerDashboard from "@/Pages/CustomerDashboard";
@@ -138,7 +139,7 @@ export default function CompanyDetails({company_info, auth, step, listindusties,
                     <div className="mt-4">
                         <InputLabel htmlFor="company_description" className="text-base" value="Company description" />
 
-                        <TextInput
+                        <TextareaInput
                             id="company_description"
                             name="company_description"
                             value={data.company_description}

@@ -33,13 +33,16 @@ export default function Dashboard({ auth, request, company_info, step, registrat
         if(step==11){
             router.get(route('founder.dashboard.final-review',id));
         }
+        if(step==12){
+            router.get(route('founder.dashboard.download-trade-license',id));
+        }
     }
 
     return (
         <CustomerDashboard auth={auth} company_count={company_count}>
             <div className="flex w-full gap-4 px-8 align-bottom">
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">Welcome {auth.user.name}</h2>
-                <p className="flex h-full mt-1 text-sm align-botto"><b>Documents to Upload:</b>  {registration_completed_step?registration_completed_step:0}/10</p>
+                <p className="flex h-full mt-1 text-sm align-botto"><b>Steps:</b>  {registration_completed_step?registration_completed_step:0}/12</p>
             </div>
             <div className="relative grid justify-between w-full h-full grid-flow-row grid-cols-2 gap-16 p-8">
                 {company_info?
@@ -49,7 +52,7 @@ export default function Dashboard({ auth, request, company_info, step, registrat
                             <div className="flex mt-1 text-lg font-semibold text-black align-middle">{company_info.company_name_1}</div>
                             <div className="flex -mt-1 text-black align-middle text-md">{company_info.industry}</div>
                             <div className="block w-full mt-1 text-gray-800 break-words">{company_info.description}</div>
-                            <button className="w-3/5 mt-6 primary-button" onClick={()=>handleContinueApplication(company_info.id)}>Continue</button>
+                            <button className="w-3/4 mt-6 primary-button" onClick={()=>handleContinueApplication(company_info.id)}>{registration_completed_step==12?"Download License":"Continue Application"}</button>
                         </div>
                         <div className="flex w-1/2 gap-2">
                             <div>

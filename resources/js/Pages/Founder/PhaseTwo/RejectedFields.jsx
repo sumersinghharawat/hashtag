@@ -14,7 +14,7 @@ import TextareaInput from '@/Components/TextareaInput';
 export const RejectedFields = ({ rejectedFields, auth, company_info, listindusties, foundersList }) => {
 
 
-    const [activeFounderEdit, setActiveFounderEdit] = React.useState(0);
+    const [activeFounderEdit, setActiveFounderEdit] = React.useState(1);
     const [founderSplitList, setFounderSplitList] = React.useState(foundersList);
 
     const {data, setData, post, put, processing, errors} = useForm({

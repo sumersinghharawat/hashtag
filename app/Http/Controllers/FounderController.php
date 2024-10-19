@@ -90,7 +90,8 @@ class FounderController extends Controller
                 ->whereNotIn('manager', ['No Manager'])
                 ->count();
             $TotalForm['visas'] = Founder::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id, 'visa_status'=>1])->count();
-            $TotalForm['uploaded_document_count'] = Document::where(['user_id'=>$user->id, 'company_id'=>$TotalForm->id])->count();
+            $TotalForm['uploaded_document_count'] = Document::where(['company_id'=>$TotalForm->id])->whereIn('document_type',['Business Plan', 'Other Document', 'Valid Passport Copy', 'UAE Visa Page', 'Address Proof Copy', 'Educational Qualification'])->count();
+
             $TotalForm['document_count'] = ($TotalForm['stakeholders']*4)+($TotalForm['visas']);
 
             $TotalForm['rejected_document_count'] = ApplicationVarification::where(['company_id'=>$TotalForm->id, 'varification_status'=>'Rejected'])->count();
@@ -151,6 +152,13 @@ class FounderController extends Controller
                 $formStep['route'] = 'founder.dashboard.summary';
             }
 
+
+            if($company->first_payment_status === 'pending'){
+                $formStep['step'] = 6;
+                $formStep['next_step'] = 'Continue';
+                $formStep['route'] = 'founder.dashboard.paynow';
+            }
+
             if($company->first_payment_status === 'success'){
                 $formStep['step'] = 6;
                 $formStep['next_step'] = 'Continue';
@@ -165,34 +173,34 @@ class FounderController extends Controller
 
             $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_id);
 
-            if($last_step == 7){
+            if($last_step == 7 && $company->first_payment_status === 'success'){
                 $formStep['step'] = $last_step;
-                $formStep['next_step'] = 'Continue';
+                $formStep['next_step'] = 'Upload Documents';
                 $formStep['route'] = 'founder.dashboard.general-document';
             }
 
             $business_plan = Document::where(['document_type'=>'Business Plan', 'company_id'=>$company_id])->first();
-            if($business_plan){
+            if($business_plan && $company->first_payment_status === 'success'){
                 $formStep['step'] = 9;
-                $formStep['next_step'] = 'Continue';
+                $formStep['next_step'] = 'Upload Documents';
                 $formStep['route'] = 'founder.dashboard.shareholder-details';
             }
 
-            if($last_step == 9){
+            if($last_step == 9 && $company->first_payment_status === 'success'){
                 $formStep['step'] = $last_step;
-                $formStep['next_step'] = 'Continue';
+                $formStep['next_step'] = 'Upload Documents';
                 $formStep['route'] = 'founder.dashboard.final-payment';
             }
 
-            if($last_step == 10){
+            if($last_step == 10 && $company->first_payment_status === 'success'){
                 $formStep['step'] = $last_step;
-                $formStep['next_step'] = 'Continue';
+                $formStep['next_step'] = 'Upload Documents';
                 $formStep['route'] = 'founder.dashboard.final-review';
             }
 
-            if($last_step == 11){
+            if($last_step == 11 && $company->first_payment_status === 'success'){
                 $formStep['step'] = $last_step;
-                $formStep['next_step'] = 'Continue';
+                $formStep['next_step'] = 'Download License';
                 $formStep['route'] = 'founder.dashboard.download-trade-license';
             }
 
@@ -497,7 +505,29 @@ class FounderController extends Controller
 
                 $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
 
-                return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+                    // dd("wow");
+
+                    if($last_step >= 6){
+
+                        $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+
+                        $last_step = $last_step + 1;
+
+                        return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+
+                    }else{
+
+                        // print_r("wow");
+
+                        $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+
+                        $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
+
+
+
+                        return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+
+                    }
             }
 
             if($companyRegistrationCount == 1){
@@ -525,6 +555,32 @@ class FounderController extends Controller
                 if($last_step == 5){
                     return redirect(route('founder.dashboard.paynow',$companyRegistration[0]->id));
                 }
+
+
+                if($companyRegistrationCount == 1 && $last_step == 11){
+
+                    $company_info = Company::where(['user_id'=>$user->id, 'application_status'=>'Completed'])->first();
+
+                    $last_step = $last_step + 1;
+
+                    return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+                }
+
+
+
+                if($companyRegistrationCount == 1 && $last_step >= 6){
+
+                    $company_info = Company::where(['user_id'=>$user->id, 'id'=> $company_info->id, 'application_status'=>'success'])->first();
+                    // $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+
+                    $last_step = $last_step + 1;
+
+                    return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
+                }
+
+                // if($last_step == 6){
+                    // return redirect(route('founder.dashboard.index',$companyRegistration[0]->id));
+                // }
             }
 
         }

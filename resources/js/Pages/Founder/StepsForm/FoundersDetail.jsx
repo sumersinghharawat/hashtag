@@ -111,6 +111,7 @@ export default function FoundersDetail({ company_info, auth, step, foundersList,
                             autoComplete="first_name"
                             placeholder='First Name'
                             onChange={(e) => setData('first_name', e.target.value)}
+                            focus={true}
                         />
 
                         <InputError message={errors.first_name} className="mt-2" />

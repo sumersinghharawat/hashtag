@@ -183,7 +183,7 @@ class CompanyController extends Controller
 
         $request->validate([
             'company_industry' => 'required|string|max:255',
-            'company_description' => 'required|string|min:20|max:255',
+            'company_description' => 'required|string|min:20|max:1000',
         ]);
 
         $company_id = Company::where(['user_id'=>$user->id])->update([
@@ -326,7 +326,7 @@ class CompanyController extends Controller
             'company_name_2' => 'required|string|max:255',
             'company_name_3' => 'required|string|max:255',
             'company_industry' => 'required|string|max:255',
-            'company_description' => 'required|string|min:20|max:255',
+            'company_description' => 'required|string|min:20|max:1000',
         ]);
 
         Company::where(['user_id'=>$user->id, 'id'=>$company_info->id])->update([
@@ -336,7 +336,7 @@ class CompanyController extends Controller
         ]);
 
         // Update Company Details
-        Company::where(['user_id'=>$user->id])->update([
+        Company::where(['user_id'=>$user->id, 'id'=>$id])->update([
             'industry' => $request->company_industry,
             'description' => $request->company_description,
         ]);
@@ -347,7 +347,7 @@ class CompanyController extends Controller
         foreach ($founder_list as $founder_list_Key => $founder_list_value) {
             Founder::where(['id'=>$founder_list_value['id']])->update([
                 'first_name'=>$founder_list_value['first_name'],
-                'last_name'=>$founder_list_value['last_name'],
+                'last_name'=>$founder_list_value['last_name']?$founder_list_value['last_name']:'',
                 'manager'=>$founder_list_value['manager'],
                 'ownership_percentage'=>$founder_list_value['ownership_percentage'],
                 'visa_status'=>$founder_list_value['visa_status']?$founder_list_value['visa_status']:0,
@@ -487,7 +487,7 @@ class CompanyController extends Controller
         Company::where(['user_id'=>$user->id,'id'=>$id])->update([
             'package'=>$request->selectedPackage,
             'second_payment_status'=>'success',
-            'application_status'=>'Under Review'
+            'application_status'=>'Under Process'
         ]);
 
         if($step <= $last_step){
@@ -619,6 +619,10 @@ class CompanyController extends Controller
 
         $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
 
+        if($company_info->application_status != 'Completed'){
+            $last_step = 11;
+        }
+
         $founders = Founder::where(['user_id'=>$user->id, 'company_id'=>$id])->get();
 
         $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
@@ -652,16 +656,6 @@ class CompanyController extends Controller
             $listIndusties[] = ["name"=> $listIndusty->name];
         }
 
-
-
-        // ->with(['founder'=>function($query){
-        //     $query->select('id','first_name','last_name','manager','ownership_percentage','visa_status');
-        // },'company'=>function($query){
-        //     $query->select('id','company_name_1','company_name_2','company_name_3','industry','description','package');
-        // },'document'=>function($query){
-        //     $query->whereIn('document_type', ApplicationVarification::get('application_form_field_name'));
-        // }])->get();
-
         return Inertia::render('Founder/PhaseTwo/UnderReview',['auth' => fn () => ["user"=>$user], 'foundersList'=>fn () => $founders,'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info,  'company_count'=>$companyRegistrationCount, 'rejectedFields'=>$rejectedFields, 'listindusties'=>$listIndusties]);
 
     }
@@ -684,7 +678,9 @@ class CompanyController extends Controller
 
         $document = Document::where(['user_id'=>$user->id, 'company_id'=>$company->id, 'founder_id'=>0, 'document_type'=>'Trade License'])->first();
 
-        return Inertia::render('Founder/PhaseTwo/DownloadLicense',['auth' => fn () => ["user"=>$user],'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company]);
+        $companyRegistrationCount = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->count();
+
+        return Inertia::render('Founder/PhaseTwo/DownloadLicense',['auth' => fn () => ["user"=>$user],'step'=>$step,'registration_completed_step'=>$last_step, 'company_info'=>$company, 'company_count'=>$companyRegistrationCount]);
     }
 
     public function downloadalldocuments($id){
@@ -703,9 +699,11 @@ class CompanyController extends Controller
 
             $zipFile = $zipFolder . '/documents.zip';
 
-            if (!file_exists($zipFile)) {
-                touch($zipFile);
+            if (file_exists($zipFile)) {
+                unlink($zipFile);
             }
+
+            file_put_contents($zipFile, '');
 
             $zip = new ZipArchive;
 

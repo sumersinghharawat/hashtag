@@ -66,30 +66,30 @@ export default function Applications({ auth, request, companies, company_count }
                 <AddMoreIconCard title={"Form New Company"} clickEvent={() => handleNewApplication()} />
                 {companies.map((company, index) => {
                     return <ApplicationCard key={index}>
-                        <div className="grid w-full grid-cols-2">
-                            <div className="w-full">
-                                <span className="text-lg font-semibold">{company.company_name_1 ? company.company_name_1 : "Name is Pending"}</span>
+                        <Link href={route(company.route, { 'id': company.id })}>
+                            <div className="grid w-full grid-cols-2">
+                                <div className="w-full">
+                                    <span className="text-lg font-semibold">{company.company_name_1 ? company.company_name_1 : "Name is Pending"}</span>
+                                </div>
+                                <div className="flex justify-end w-full">
+                                    <span className={handleStatusClass(company.application_status)}>{company.application_status}</span>
+                                </div>
                             </div>
-                            <div className="flex justify-end w-full">
-                                <span className={handleStatusClass(company.application_status)}>{company.application_status}</span>
+                            <div className="grid items-end justify-between w-full grid-cols-2">
+                                <ul className="decoration-none">
+                                    <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faAddressCard} style={{ marginRight: 4 }} /> Stakeholders: {company.stakeholders}</li>
+                                    <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faUserGroup} style={{ marginRight: 4 }} /> Founders: {company.founders}</li>
+                                    <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faUserGroup} style={{ marginRight: 4 }} /> Visas: {company.visas}</li>
+                                </ul>
+                                <div className="grid w-full text-end">
+                                    {company.document_count?<span><b>Documents Uploaded:</b> {parseInt(company.uploaded_document_count)}/{company.document_count}</span>:<></>}
+                                    {parseInt(company.rejected_document_count)?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
+                                </div>
                             </div>
-                        </div>
-                        <div className="grid items-end justify-between w-full grid-cols-2">
-                            <ul className="decoration-none">
-                                <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faAddressCard} style={{ marginRight: 4 }} /> Stakeholders: {company.stakeholders}</li>
-                                <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faUserGroup} style={{ marginRight: 4 }} /> Founders: {company.founders}</li>
-                                <li style={{ marginBottom: 8 }}><FontAwesomeIcon icon={faUserGroup} style={{ marginRight: 4 }} /> Visas: {company.visas}</li>
-                            </ul>
-                            <div className="grid w-full text-end">
-                                {company.document_count?<span><b>Documents to Upload:</b> {parseInt(company.uploaded_document_count)}/{company.document_count}</span>:<></>}
-                                {parseInt(company.rejected_document_count)?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
-                            </div>
-                        </div>
-                        <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold text-green-600 -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full -bottom-4 left-1/2 btn-status">
-                            <Link href={route(company.route, { 'id': company.id })}>
+                            <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold text-green-600 -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full -bottom-4 left-1/2 btn-status">
                                 {company.next_step} <FontAwesomeIcon icon={faChevronRight} style={{ height: 12, width: 12 }} />
-                            </Link>
-                        </div>
+                            </div>
+                        </Link>
                         {/* <FontAwesomeIcon icon={faTrash} style={{ height: 12, width: 12 }} className="absolute text-red-600 right-2 top-2" onClick={() => deleteRegistrations(company.id)} /> */}
                     </ApplicationCard>
                 }

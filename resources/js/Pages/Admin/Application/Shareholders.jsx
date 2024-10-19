@@ -125,14 +125,14 @@ export default function Shareholders({ auth, company_info, children }) {
                                                             {(auth.user.id !== parseInt(shareholder.agent_id)) ?<>
                                                         {shareholder.status === 'Under Review' ?
                                                             <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{shareholder.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                             </>
                                                     :
                                                     <>{shareholder.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',shareholder.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Confirmed',shareholder.id)}>Confirm</button>
                                                         <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',shareholder.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                     </>}
                                                             </div>
                                                         </div>
@@ -154,7 +154,7 @@ export default function Shareholders({ auth, company_info, children }) {
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        {data.status == "Verified" ? "Please confirm that you want to approve this request." : "Please enter your reason to reject this request."}
+                        {data.status == "Confirmed" ? "Please confirm that you want to approve this request." : "Please enter your reason to reject this request."}
                     </p>
                     {data.status == "Rejected" ? <div className="mt-6">
                         <InputLabel htmlFor="password" value="Password" className="sr-only" />

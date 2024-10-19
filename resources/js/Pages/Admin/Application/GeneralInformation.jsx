@@ -97,18 +97,18 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                     {(auth.user.id !== parseInt(Company1.agent_id)) ?<>
                                                         {Company1.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company1.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{Company1.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company1.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>}
                                                             </>
                                                     :
                                                     <>{Company1.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company1.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company1.id)}>Rejected</button>
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',Company1.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',Company1.id)}>Rejected</button>
                                                     </>:
                                                     <>
-                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company1.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>
-                                                    {/* {Company1.status === 'Cancel' ?<button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Cancel',Company2.id)}>Rejected</button>:<></>} */}
+                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company1.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company1.status}</p>
+                                                    {/* {Company1.status === 'Cancel' ?<button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Cancel',Company2.id)}>Rejected</button>:<></>} */}
                                                     </>
                                                     }
                                                     </>}
@@ -125,17 +125,17 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Company2.agent_id)) ?<>
                                                         {Company2.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company2.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{Company2.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company2.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>}
                                                             </>
                                                     :
                                                     <>{Company2.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company2.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company2.id)}>Rejected</button>
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',Company2.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',Company2.id)}>Rejected</button>
                                                     </>:
                                                     <>
-                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company2.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>
+                                                    <p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company2.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company2.status}</p>
                                                     </>
                                                     }
                                                     </>}
@@ -152,15 +152,15 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Company3.agent_id)) ?<>
                                                         {Company3.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Company3.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company3.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{Company3.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company3.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
                                                             </>
                                                     :
                                                     <>{Company3.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Company3.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Company3.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Company3.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',Company3.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',Company3.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Company3.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Company3.status}</p>}
                                                     </>}
                                                 </div>
                                             </div>
@@ -175,15 +175,15 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Industry.agent_id)) ?<>
                                                         {Industry.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Industry.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Industry.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{Industry.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Industry.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
                                                             </>
                                                     :
                                                     <>{Industry.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Industry.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Industry.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Industry.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',Industry.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',Industry.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Industry.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Industry.status}</p>}
                                                     </>}
                                                 </div>
                                             </div>
@@ -198,15 +198,15 @@ export default function GeneralInformation({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(Description.agent_id)) ?<>
                                                         {Description.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{Description.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Description.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{Description.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Description.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
                                                             </>
                                                     :
                                                     <>{Description.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Verified',Description.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',Description.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(Description.status === 'Verified' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',Description.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',Description.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(Description.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{Description.status}</p>}
                                                     </>}
                                                 </div>
                                             </div>
@@ -225,7 +225,7 @@ export default function GeneralInformation({ auth, company_info, children }) {
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        {data.status=="Verified"?"Please confirm that you want to approve this request.":"Please enter your reason to Rejected this request."}
+                        {data.status=="Confirmed"?"Please confirm that you want to approve this request.":"Please enter your reason to Rejected this request."}
                     </p>
                     {data.status=="Rejected"?<div className="mt-6">
                         <InputLabel htmlFor="password" value="Password" className="sr-only" />

@@ -77,7 +77,7 @@ class AuthenticatedSessionController extends Controller
         return Inertia::render('Admin/Agents/ViewAgents',['agents'=>$allagents]);
     }
 
-    public function addagent(){
+    public function addagent(Request $request){
 
         $user = Auth::user();
 

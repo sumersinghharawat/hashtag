@@ -1,0 +1,1 @@
+import{j as o}from"./app-Dua9E37O.js";import{ApplicationHeader as s}from"./ApplicationHeader-CjB_Va0g.js";const e=({children:r,company_id:t,rejected_fields_count:i})=>o.jsxs("div",{className:"w-full",children:[o.jsx(s,{company_id:t,rejected_fields_count:i}),r]});export{e as ApplicationLayout};

@@ -81,7 +81,7 @@ class ApplicationVarificationController extends Controller
         $request->validate([
             'application_form_field_id' => 'required|integer|exists:application_varifications,id',
             'description' => 'nullable|string',
-            'status' => 'required|in:Rejected,Verified',
+            'status' => 'required|in:Rejected,Confirmed',
         ]);
 
         ApplicationVarification::where(['id'=>$request->application_form_field_id])->update([
@@ -94,11 +94,11 @@ class ApplicationVarificationController extends Controller
 
         if(!empty($update_application_form_field->founder_id)){
             Document::where(['document_type'=>$update_application_form_field->application_form_field_name, 'company_id'=>$id, 'founder_id'=>$update_application_form_field->founder_id])->update([
-                'document_status' => $request->status=='Rejected'?'Cancel':'Verified',
+                'document_status' => $request->status=='Rejected'?'Cancel':'Confirmed',
             ]);
         }else{
             Document::where(['document_type'=>$update_application_form_field->application_form_field_name, 'company_id'=>$id])->update([
-                'document_status' => $request->status=='Rejected'?'Cancel':'Verified',
+                'document_status' => $request->status=='Rejected'?'Cancel':'Confirmed',
             ]);
         }
 
@@ -160,9 +160,12 @@ class ApplicationVarificationController extends Controller
         //
         $user = Auth::user();
 
-        ApplicationVarification::where(['company_id'=>$id])->update([
+
+        $assigned = ApplicationVarification::where(['company_id'=>$id])->update([
             'agent_id' => $user->id,
         ]);
+
+        // dd($id);
 
         return redirect(url()->previous());
     }

@@ -1,0 +1,1 @@
+import{j as u}from"./app-Dua9E37O.js";function m({className:r="",disabled:t,children:o,...n}){return u.jsx("button",{...n,className:`w-full primary-button ${t&&"primary-button__disable"} `+r,disabled:t,children:o})}export{m as P};

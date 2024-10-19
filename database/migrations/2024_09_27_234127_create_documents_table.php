@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('founder_id')->nullable();
             $table->string('document_type');
             $table->longText('document_file')->nullable();
-            $table->enum('document_status', ['Cancel', 'Pending', 'Under Review', 'Verified'])->default('pending');
+            $table->enum('document_status', ['Cancel', 'Pending', 'Under Review', 'Confirmed'])->default('pending');
             $table->timestamps();
         });
     }

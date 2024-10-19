@@ -142,7 +142,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $user->assignRole('admin');
+        $user->assignRole('agent');
 
         return redirect(route('admin.dashboard.viewagents'));
     }

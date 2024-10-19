@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('application_form_field_name');
             $table->longText('application_form_field_value');
             $table->longText('description')->nullable();
-            $table->enum('varification_status', ['Rejected', 'Pending', 'Under Review', 'Verified'])->default('pending');
+            $table->enum('varification_status', ['Rejected', 'Pending', 'Under Review', 'Confirmed'])->default('pending');
             $table->timestamps();
         });
     }

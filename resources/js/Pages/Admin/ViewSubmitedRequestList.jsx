@@ -58,9 +58,16 @@ export default function ViewSubmitedRequestList ({auth, companyrequests}) {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                 {element.assign_agent_details?
-                                                    <Link href={route('admin.dashboard.viewrequestinformation',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">View</Link>:
+                                                    <Link href={route('admin.dashboard.viewrequestinformation',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">View</Link>:
                                                     <>
-                                                    <Link href={route('admin.dashboard.assignapplication',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">Assign to me</Link>
+                                                    {element.application_status === 'Under Process' || element.application_status=='Completed'?
+                                                        <Link href={route('admin.dashboard.assignapplication',{'id':element.id})} className="inline-flex items-center px-4 py-3 text-xs font-semibold tracking-widest text-gray-700 uppercase transition duration-150 ease-in-out bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25">Assign to me</Link>
+                                                    :
+                                                    <span className={"font-semibold "+
+                                                        ((element.application_status=='Rejected')?'text-red-400':'')+
+                                                        ((element.application_status=='Uncompleted')?'text-blue-400':'')+
+                                                        ((element.application_status=='In Progress')?'text-purple-400':'')
+                                                        }>Not Ready yet</span>}
                                                     </>
                                                 }
                                                 </td>

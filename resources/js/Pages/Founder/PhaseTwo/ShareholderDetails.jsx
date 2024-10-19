@@ -51,7 +51,7 @@ export default function ShareholderDetails({auth, company_info, step, registrati
     },[foundersList])
 
 
-    const [activeFounderEdit, setActiveFounderEdit] = React.useState(0);
+    const [activeFounderEdit, setActiveFounderEdit] = React.useState(1);
 
     const handleSaveAndContinue = () => {
 
