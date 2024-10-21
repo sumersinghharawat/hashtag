@@ -449,7 +449,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent })
                     </div>
                 </div>
             </div>
-            <div className="h-full pt-0 pb-60 md:py-40 footer-bg" style={{background:"url("+footerImage+")"}}>
+            <div className="h-full pt-0 bg-bottom pb-60 md:py-40 footer-bg" style={{backgroundImage:"url("+footerImage+")"}}>
                 <div className="container flex flex-col items-center justify-center py-4 mx-auto">
                     <ApplicationLogo className="object-contain h-20 fill-current w-46" />
                     <p>
