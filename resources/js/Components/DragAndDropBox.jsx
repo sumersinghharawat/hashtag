@@ -57,6 +57,7 @@ export const DragAndDropBox = ({ company_info, document_type, uploaded_document_
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             handleFileUpload(e);
+            e.target.value = null;
         }
     };
 
@@ -100,7 +101,7 @@ export const DragAndDropBox = ({ company_info, document_type, uploaded_document_
         } finally {
             console.log(data);
             setUploading(false);
-            setProgressTimer(0); // Reset progress after upload
+            setProgressTimer(0);
             updatedocument();
         }
     };
@@ -110,8 +111,6 @@ export const DragAndDropBox = ({ company_info, document_type, uploaded_document_
     }
 
     // Delete
-
-
     const confirmDocumentDeletion = (e) => {
         setConfirmingDocumentDeletion(true);
     };

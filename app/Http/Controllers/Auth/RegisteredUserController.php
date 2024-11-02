@@ -122,7 +122,8 @@ class RegisteredUserController extends Controller
             }
             //catch exceptions
         } catch (Exception $e) {
-            dd($e);
+            // dd($e);
+            return redirect(RouteServiceProvider::HOME);
         }
     }
 

@@ -124,15 +124,15 @@ export default function Shareholders({ auth, company_info, children }) {
                                                             <div className="flex justify-end gap-2">
                                                             {(auth.user.id !== parseInt(shareholder.agent_id)) ?<>
                                                         {shareholder.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{shareholder.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{shareholder.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                             </>
                                                     :
                                                     <>{shareholder.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Confirmed',shareholder.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',shareholder.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',shareholder.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',shareholder.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(shareholder.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{shareholder.status}</p>}
                                                     </>}
                                                             </div>
                                                         </div>

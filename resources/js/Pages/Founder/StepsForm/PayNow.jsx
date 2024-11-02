@@ -9,7 +9,7 @@ import { router, useForm } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import FoundersList from "./FoundersList";
 
-export default function PayNow({ company_info, auth, step, registration_completed_step }) {
+export default function PayNow({ company_info, auth, step, registration_completed_step, company_count }) {
     const { data, setData, post, processing, errors, reset } = useForm({
     });
 
@@ -22,7 +22,7 @@ export default function PayNow({ company_info, auth, step, registration_complete
         router.get(route('founder.dashboard.summary',company_info.id));
     }
     return (
-        <CustomerDashboard company_info={company_info} auth={auth}>
+        <CustomerDashboard company_info={company_info} auth={auth} company_count={company_count}>
             <StepFormLayout step={step}  filledSteps={registration_completed_step}>
                 <h2 className="text-2xl font-extrabold">Pay</h2>
                 <p className="pb-6 mt-4 mb-6 text-sm text-gray-500 border-b">Pay the service and incorpX your company formation journey</p>

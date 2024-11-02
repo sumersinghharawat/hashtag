@@ -11,6 +11,7 @@ use App\Http\Controllers\FormSubmissionController;
 use App\Http\Controllers\IndustryController;
 use App\Http\Controllers\PackagesController;
 use App\Http\Controllers\VariantController;
+use App\Models\Packages;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -32,16 +33,20 @@ use Inertia\Inertia;
 Route::get('/', function () {
 
     $user = Auth::user();
+
+
+    $emailsent = false;
+
+    if(Session::has('message')){
+        $message = Session::get('message');
+        $emailsent = true;
+    }
+
+    $packages = Packages::with('variants')->get();
+
     if($user){
 
         $roles = $user->getRoleNames()->toArray();
-
-        $emailsent = false;
-
-        if(Session::has('message')){
-            $message = Session::get('message');
-            $emailsent = true;
-        }
 
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -50,8 +55,10 @@ Route::get('/', function () {
             'phpVersion' => PHP_VERSION,
             'auth'=> ['user'=>$user],
             'roles' => $roles,
-            'emailSent' => $emailsent
+            'emailSent' => $emailsent,
+            'packages' => $packages
         ]);
+
     }else{
 
         return Inertia::render('Welcome', [
@@ -60,7 +67,9 @@ Route::get('/', function () {
             'laravelVersion' => Application::VERSION,
             'phpVersion' => PHP_VERSION,
             'auth'=> ['user'=>$user],
-            'roles' => ''
+            'roles' => '',
+            'emailSent' => $emailsent,
+            'packages' => $packages
         ]);
 
     }
@@ -70,6 +79,7 @@ Route::get('/', function () {
 Route::get('auth/google', [RegisteredUserController::class, 'redirectToGoogle'])->name('google.auth');
 Route::get('auth/google/callback', [RegisteredUserController::class, 'handleGoogleCallback']);
 
+// Form Submission
 Route::post('formsubmission', [FormSubmissionController::class, 'store'])->name("formsubmission");
 
 

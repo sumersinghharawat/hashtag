@@ -50,19 +50,16 @@ class FormSubmissionController extends Controller
             'messages' => $request->message,
         ];
 
-        $formid = FormSubmission::create([
-            'title'=>'consultatant'
-        ]);
-
-
-        $formInputsInsert = new FormSubmissionInputController;
-
-        $formInputsInsert->create($formid->id, $data);
+        // $formid = FormSubmission::create([
+        //     'title'=>'consultatant'
+        // ]);
+        // $formInputsInsert = new FormSubmissionInputController;
+        // $formInputsInsert->create($formid->id, $data);
 
         // Send an email
         try {
             //code...
-            Mail::to($data['email'])->send(new FormSubmissionConsultation($data));
+            Mail::to($data['email'])->queue(new FormSubmissionConsultation($data));
 
             return redirect('/')->with('message', 'Thank you for filling out the form! We will be in touch with you shortly to provide free consultancy on setting up your business in the UAE.');
 

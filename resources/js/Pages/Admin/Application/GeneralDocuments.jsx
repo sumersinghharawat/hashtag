@@ -93,15 +93,15 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(businessPlan.agent_id)) ?<>
                                                         {businessPlan.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{businessPlan.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(businessPlan.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{businessPlan.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(businessPlan.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
                                                             </>
                                                     :
                                                     <>{businessPlan.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Confirmed',businessPlan.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',businessPlan.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(businessPlan.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',businessPlan.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',businessPlan.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(businessPlan.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{businessPlan.status}</p>}
                                                     </>}
                                                 </div>
                                             </div>
@@ -120,15 +120,15 @@ export default function GeneralDocuments({ auth, company_info, children }) {
                                                 <div className="flex justify-end gap-2">
                                                 {(auth.user.id !== parseInt(otherDocument.agent_id)) ?<>
                                                         {otherDocument.status === 'Under Review' ?
-                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-lg bg-yellow-500"}>{otherDocument.status}</p>
-                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(otherDocument.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
+                                                            <p className={"px-4 py-2 m-2 text-green-100 rounded-full bg-yellow-500"}>{otherDocument.status}</p>
+                                                            :<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(otherDocument.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
                                                             </>
                                                     :
                                                     <>{otherDocument.status === 'Under Review'?
                                                     <>
-                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-lg" onClick={() => openModal('Confirmed',otherDocument.id)}>Confirm</button>
-                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-lg" onClick={() => openModal('Rejected',otherDocument.id)}>Rejected</button>
-                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-lg"+(otherDocument.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
+                                                        <button className="px-4 py-2 m-2 text-green-100 bg-green-600 rounded-full" onClick={() => openModal('Confirmed',otherDocument.id)}>Confirm</button>
+                                                        <button className="px-4 py-2 m-2 text-red-100 bg-red-600 rounded-full" onClick={() => openModal('Rejected',otherDocument.id)}>Rejected</button>
+                                                    </>:<p className={"px-4 py-2 m-2 text-green-100 rounded-full"+(otherDocument.status === 'Confirmed' ? " bg-green-600" : " bg-red-600")}>{otherDocument.status}</p>}
                                                     </>}
                                                 </div>
                                             </div>

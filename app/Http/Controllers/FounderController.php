@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NotificationEmailTemplate;
 use App\Models\ApplicationVarification;
 use App\Models\Company;
 use App\Models\Document;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Rules\UniqueNameCombination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
@@ -100,7 +102,17 @@ class FounderController extends Controller
 
             $TotalForm['id'] = $TotalForm->id;
             $TotalForm['step'] = $formStep['step'];
-            $TotalForm['next_step'] = $formStep['next_step'];
+
+            if($TotalForm['document_count'] != $TotalForm['uploaded_document_count']){
+                $TotalForm['next_step'] = $formStep['next_step'];
+            }else{
+                if($TotalForm['rejected_document_count'] != 0){
+                    $TotalForm['next_step'] = "Update Rejected Details";
+                }else{
+                    $TotalForm['next_step'] = "Continue";
+                }
+            }
+
             $TotalForm['route'] = $formStep['route'];
         }
 
@@ -448,6 +460,29 @@ class FounderController extends Controller
 
         $founders = Founder::where(['user_id'=>$user->id,'id'=>$id])->get();
 
+        $admin = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->users->first();
+
+        $data = [
+            'subject' => 'Thank you for paying the service charge for company registration!',
+            'view' => 'emails.founders.finalpaymentsuccessful',
+            'email' => $user->email,
+            'name' => $user->first_name,
+            'support_description' => 'If you have any questions, contact us at <a href="'.$admin->email.'">'.$admin->email.'</a>.',
+            'title' => 'Payment Received for Company Registration!',
+            'subtitle' => 'Thank you for your payment!',
+            'description' => "Dear ".$user->first_name.", <br>
+            We are excited to inform you that we have received your payment for the service charge and your application has been successfully submitted for review. Our team will evaluate it, and we’ll be in touch soon with the next steps. <br>
+            You can view your application and its current status by clicking the button below.",
+            'button_text' => 'View Your Application',
+            'link' => route('founder.dashboard.index', ['id' => $id]),
+            'footer' => '&copy; 2024 Incorpx. All rights reserved.',
+        ];
+
+
+        $view = view('emails.founders.finalpaymentsuccessful', $data)->render();
+
+        Mail::to($data['email'])->queue(new NotificationEmailTemplate($data, $view));
+
         return Inertia::render('Founder/StepsForm/ThankYou',['foundersList'=>$founders]);
     }
 
@@ -505,8 +540,6 @@ class FounderController extends Controller
 
                 $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
 
-                    // dd("wow");
-
                     if($last_step >= 6){
 
                         $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
@@ -517,7 +550,6 @@ class FounderController extends Controller
 
                     }else{
 
-                        // print_r("wow");
 
                         $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
 
@@ -570,17 +602,22 @@ class FounderController extends Controller
 
                 if($companyRegistrationCount == 1 && $last_step >= 6){
 
-                    $company_info = Company::where(['user_id'=>$user->id, 'id'=> $company_info->id, 'application_status'=>'success'])->first();
-                    // $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+                    $company_count = Company::where(['user_id'=>$user->id, 'id'=> $company_info->id, 'application_status'=>'success'])->count();
+
+                    if($company_count >= 1){
+                        $company_info = Company::where(['user_id'=>$user->id, 'id'=> $company_info->id, 'application_status'=>'success'])->first();
+                    }else{
+                        $company_info = Company::where(['user_id'=>$user->id, 'first_payment_status'=>'success'])->orderBy('id', 'desc')->first();
+                    }
 
                     $last_step = $last_step + 1;
 
                     return Inertia::render('Founder/Dashboard/Dashboard',['auth' => fn () => ["user"=>$user],'step'=>$last_step,'registration_completed_step'=>$last_step, 'company_info'=>$company_info, 'company_count'=>$companyRegistrationCount]);
                 }
 
-                // if($last_step == 6){
-                    // return redirect(route('founder.dashboard.index',$companyRegistration[0]->id));
-                // }
+                if($last_step == 6){
+                    return redirect(route('founder.dashboard.index',$companyRegistration[0]->id));
+                }
             }
 
         }

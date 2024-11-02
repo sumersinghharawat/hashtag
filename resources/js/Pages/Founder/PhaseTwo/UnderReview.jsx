@@ -15,7 +15,6 @@ export default function UnderReview({auth, company_info, step, registration_comp
 
     return (
         <CustomerDashboard auth={auth} company_count={company_count}>
-            {JSON.stringify(registration_completed_step)}
             <Phase2FormDetails registration_completed_step={registration_completed_step} step={step} name={auth.user.name}>
                 {(rejectedFields.company_rejected_fields.length != 0 || rejectedFields.founder_rejected_fields.length != 0)?<RejectedFields rejectedFields={rejectedFields} auth={auth} company_info={company_info} listindusties={listindusties} errors={{}} foundersList={foundersList}/>:
                 <div className='flex flex-col flex-wrap items-center justify-center h-full'>

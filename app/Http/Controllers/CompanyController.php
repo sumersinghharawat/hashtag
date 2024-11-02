@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Http\Controllers\CustomerController;
+use App\Mail\NotificationEmailTemplate;
 use App\Models\ApplicationVarification;
 use App\Models\Document;
 use App\Models\Education;
@@ -18,6 +19,7 @@ use Illuminate\Console\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
@@ -484,6 +486,29 @@ class CompanyController extends Controller
 
         $last_step = (new CompanyController)->getCompletedLastStep($user->id, $company_info->id);
 
+        $admin = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->users->first();
+
+        $data = [
+            'subject' => 'Thank you for applying company registration!',
+            'view' => 'emails.founders.finalpaymentsuccessful',
+            'email' => $user->email,
+            'name' => $user->first_name,
+            'support_description' => 'If you have any questions, contact us at <a href="'.$admin->email.'">'.$admin->email.'</a>.',
+            'title' => 'Your Application Has Been Received!',
+            'subtitle' => 'Thank you for applying!',
+            'description' => "Dear ".$user->first_name.", <br>
+            We are excited to inform you that your application has been successfully submitted for review. Our team will evaluate it, and we’ll be in touch soon with the next steps. <br>
+            You can view your application and its current status by clicking the button below.",
+            'button_text' => 'View Your Application',
+            'link' => route('founder.dashboard.final-review', ['id' => $id]),
+            'footer' => '&copy; 2024 Incorpx. All rights reserved.',
+        ];
+
+
+        $view = view('emails.founders.finalpaymentsuccessful', $data)->render();
+
+        Mail::to($data['email'])->queue(new NotificationEmailTemplate($data, $view));
+
         Company::where(['user_id'=>$user->id,'id'=>$id])->update([
             'package'=>$request->selectedPackage,
             'second_payment_status'=>'success',
@@ -684,14 +709,13 @@ class CompanyController extends Controller
     }
 
     public function downloadalldocuments($id){
-
         $user = Auth::user();
         $company_info = Company::where(['id'=>$id])->first();
 
         $documents = Document::where(['company_id'=>$company_info->id])->whereNotIn('document_type',['Business Plan', 'Other Document', 'Valid Passport Copy', 'UAE Visa Page', 'Address Proof Copy', 'Educational Qualification'])->get();
 
         try {
-            $zipFolder = storage_path('app/public/company-documents/company-id-'.$company_info->id);
+            $zipFolder = public_path('company-documents/company-id-'.$company_info->id);
 
             if (!file_exists($zipFolder)) {
                 mkdir($zipFolder, 0777, true);
@@ -711,12 +735,8 @@ class CompanyController extends Controller
                 return response()->json(['error' => 'Unable to create zip file'], 500);
             }
 
-
             foreach ($documents as $document) {
-
-                // dd(storage_path('/app/public/document/'.'company-id-'.$company_info->id.'/'.$document->document_file));
-
-                $documentFilePath = storage_path('app/public/document/company-id-'.$company_info->id.'/'.basename($document->document_file));
+                $documentFilePath = public_path('document/company-id-'.$company_info->id.'/'.basename($document->document_file));
 
                 if (file_exists($documentFilePath)) {
                     $fileName = basename($document->document_file);
@@ -724,18 +744,16 @@ class CompanyController extends Controller
                 }
             }
 
-            // $zip->close();
-            // dd($zipFile);
-            if (file_exists($zipFile)) {
+            $zip->close();
 
-                $downloadableZip = asset('storage/company-documents/company-id-'.$company_info->id.'/documents.zip');
+            if (file_exists($zipFile)) {
+                $downloadableZip = asset('company-documents/company-id-'.$company_info->id.'/documents.zip');
 
                 return Inertia::location($downloadableZip, 200, [], ['Content-Type'=>'application/zip', 'Content-Disposition'=>'inline; filename="documents.zip"']);
             } else {
                 return response()->json(['error file' => 'The file "'.$zipFile.'" does not exist'], 500);
             }
         } catch (\Exception $e) {
-            // Handle the error here
             return response()->json(['try catch error' => $e->getMessage()], 500);
         }
 

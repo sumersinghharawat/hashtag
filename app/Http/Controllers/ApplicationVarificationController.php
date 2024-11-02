@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FounderNotificationEmailTemplate;
+use App\Mail\NotificationEmailTemplate;
 use App\Models\ApplicationVarification;
 use App\Models\Company;
 use App\Models\Document;
 use App\Models\FormSubmission;
 use App\Models\Founder;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class ApplicationVarificationController extends Controller
@@ -102,6 +106,12 @@ class ApplicationVarificationController extends Controller
             ]);
         }
 
+        if($request->status == 'Rejected'){
+            $field_name = $update_application_form_field->application_form_field_name;
+            $user_id = $update_application_form_field->user_id;
+            $this->sendEmailforRejectionsToFounder($id, $user_id, $field_name, $request->description);
+        }
+
         return redirect(url()->previous());
 
     }
@@ -158,14 +168,35 @@ class ApplicationVarificationController extends Controller
 
     public function adminassignapplicationtoagent(Request $request, $id){
         //
-        $user = Auth::user();
+        $agent = Auth::user();
 
 
         $assigned = ApplicationVarification::where(['company_id'=>$id])->update([
-            'agent_id' => $user->id,
+            'agent_id' => $agent->id,
         ]);
 
-        // dd($id);
+
+        $admin = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->users->first();
+
+        $data = [
+            'subject' => 'Update: A New Company Registration Has Been Assigned to You!',
+            'view' => 'emails.founders.finalpaymentsuccessful',
+            'email' => $agent->email, // Email sent to the agent
+            'name' => $agent->first_name, // Personalize with agent's name
+            'support_description' => 'If you have any questions, contact us at <a href="'.$admin->email.'">'.$admin->email.'</a>.',
+            'title' => 'New Application Assigned to You!',
+            'subtitle' => 'You’ve been assigned a new application!',
+            'description' => "Dear ".$agent->first_name.", <br>
+            We are pleased to inform you that a new company registration application has been assigned to you for review. Please log in to the dashboard and review the application to proceed with the next steps. <br>
+            Click the button below to view the application details.",
+            'button_text' => 'View Application',
+            'link' => route('admin.dashboard.viewrequestinformation', ['id' => $id]), // Assuming $id refers to the application
+            'footer' => '&copy; 2024 Incorpx. All rights reserved.',
+        ];
+
+        $view = view('emails.founders.finalpaymentsuccessful', $data)->render();
+
+        Mail::to($data['email'])->queue(new NotificationEmailTemplate($data, $view));
 
         return redirect(url()->previous());
     }
@@ -344,6 +375,55 @@ class ApplicationVarificationController extends Controller
             'details' => 'Application Updated by Admin and upload license'
         ]);
 
+        $this->sendEmailforApplicationCompletedToFounder($id, $company_info->user_id);
+
         return redirect(url()->previous());
+    }
+
+    public function sendEmailforRejectionsToFounder($id, $user_id, $field_name, $description){
+
+        $user = User::where(['id'=>$user_id])->first();
+
+        $admin = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->users->first();
+
+        $data = [
+            'subject' => 'Application Rejected - Please Update the Following Documents',
+            'view' => 'emails.founders.finalpaymentsuccessful',
+            'email' => $user->email,
+            'name' => $user->first_name,
+            'support_description' => 'If you have any questions, contact us at <a href="'.$admin->email.'">'.$admin->email.'</a> or call us at 04 123 4567.',
+            'title' => 'Update Required for Your Application',
+            'subtitle' => 'Please update the following documents',
+            'description' => "Dear ".$user->first_name.", <br>
+            We have received your application, but we need some updates from you. Please update the following documents: ".$field_name." <br>
+            Reason for rejection: ".$description." <br>
+            You can view your application and its current status by clicking the button below.",
+            'button_text' => 'Update Now',
+            'link' => route('founder.dashboard.final-review', ['id' => $id]),
+            'footer' => '&copy; 2024 Incorpx. All rights reserved.',
+        ];
+
+        Mail::to($data['email'])->queue(new NotificationEmailTemplate($data));
+    }
+
+
+    public function sendEmailforApplicationCompletedToFounder($id, $user_id){
+        $user = User::where(['id'=>$user_id])->first();
+        $admin = \Spatie\Permission\Models\Role::where('name', 'superadmin')->first()->users->first();
+        $data = [
+            'subject' => 'Application Completed Successfully',
+            'view' => 'emails.founders.finalpaymentsuccessful',
+            'email' => $user->email,
+            'name' => $user->first_name,
+            'support_description' => 'If you have any questions, contact us at <a href="'.$admin->email.'">'.$admin->email.'</a> or call us at 04 123 4567.',
+            'title' => 'Application Completed Successfully',
+            'subtitle' => 'Your Company License is Ready',
+            'description' => "Dear ".$user->first_name.", <br>
+            Congratulations! Your company license is now ready. You can download your license by clicking the button below.",
+            'button_text' => 'Download License',
+            'link' => route('founder.dashboard.download-all-documents', ['id' => $id]),
+            'footer' => '&copy; 2024 Incorpx. All rights reserved.',
+        ];
+        Mail::to($data['email'])->queue(new NotificationEmailTemplate($data));
     }
 }

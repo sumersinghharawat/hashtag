@@ -78,66 +78,74 @@ class DocumentController extends Controller
 
         $user = Auth::user();
 
-        if ($request->hasFile('document_file') && $request->file('document_file')->isValid()) {// Get the uploaded file from the request
+        if ($request->hasFile('document_file') && $request->file('document_file')->isValid()) {
 
-            $file = $request->file('document_file');  // This will be an instance of UploadedFile
-            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME); // Get the original file name without extension
-            $extension = $file->getClientOriginalExtension(); // Get the file extension
+            $file = $request->file('document_file');
+            $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
 
-            // Define the base directory where the file will be stored
-            $directory = 'public/document/company-id-'.$id;
+            $directory = 'document/company-id-'.$id;
 
-            // Set the initial file name
             $fileName = $name . '.' . $extension;
 
-            // Check if the file exists in the storage
             $counter = 1;
-            while (Storage::exists($directory . '/' . $fileName)) {
-                // If the file exists, append `-1`, `-2`, etc. to the file name
+            while (file_exists(public_path($directory . '/' . $fileName))) {
                 $fileName = $name . '-' . $counter . '.' . $extension;
                 $counter++;
             }
 
-            // Save the file to the specified directory with the final file name
-            $path = Storage::putFileAs($directory, $file, $fileName);
-            $url = Storage::url($path);
+            $file->move(public_path($directory), $fileName);
+            $url = asset($directory . '/' . $fileName);
 
-            $user_id = Company::where([
-                'id'=>$id,
-            ])->first()->user_id;
+            $user_id = Company::where('id', $id)->value('user_id');
 
             $fileDetails = Document::updateOrCreate(
                 [
-                    'document_type'=>$request->document_type,
-                    'user_id'=>$user_id,
-                    'company_id'=>$id,
-                    'founder_id'=> $request->founder_id
+                    'document_type' => $request->document_type,
+                    'user_id' => $user_id,
+                    'company_id' => $id,
+                    'founder_id' => $request->founder_id?$request->founder_id:0
                 ],
                 [
-                    'document_type'=>$request->document_type,
-                    'user_id'=>$user_id,
-                    'company_id'=>$id,
-                    'founder_id'=> $request->founder_id,
-                    'document_file'=>$url,
-                    'document_status'=>'Under Review',
+                    'document_file' => $url,
+                    'document_status' => 'Under Review',
                 ]
             );
 
-            $applicationVarification = ApplicationVarification::where([
-                'founder_id' => $request->founder_id?$request->founder_id:null,
-                'company_id' => $id,
-                'application_form_field_name' => $request->document_type
-            ])->first();
-
-            if(!empty($applicationVarification)){
-                ApplicationVarification::where([
-                    'founder_id' => $request->founder_id?$request->founder_id:null,
+            if($request->founder_id){
+                $applicationVarification = ApplicationVarification::where([
+                    'founder_id' => $request->founder_id,
                     'company_id' => $id,
                     'application_form_field_name' => $request->document_type
-                ])->update([
-                    'varification_status' => $fileDetails->document_status,
-                ]);
+                ])->first();
+
+                if($applicationVarification){
+                    ApplicationVarification::where([
+                        'founder_id' => $request->founder_id,
+                        'company_id' => $id,
+                        'application_form_field_name' => $request->document_type
+                    ])->update([
+                        'varification_status' => 'Under Review',
+                        'application_form_field_value' => $url
+                    ]);
+                }
+            }else{
+                $applicationVarification = ApplicationVarification::where([
+                    'company_id' => $id,
+                    'application_form_field_name' => $request->document_type
+                ])->first();
+
+                if($applicationVarification){
+                    ApplicationVarification::where([
+                        'company_id' => $id,
+                        'application_form_field_name' => $request->document_type
+                    ])->update([
+                        'varification_status' => 'Under Review',
+                        'application_form_field_value' => $url
+                    ]);
+                }
             }
+
         }
 
         return redirect(url()->previous());
