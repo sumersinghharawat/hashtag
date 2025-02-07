@@ -1,5 +1,5 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { faArrowAltCircleLeft, faArrowRight, faBagShopping, faBank, faBars, faBold, faBolt, faBucket, faBuilding, faBuildingShield, faBuildingUn, faBuildingWheat, faBusinessTime, faChevronRight, faCube, faGreaterThan, faMinus, faPlus, faThunderstorm, faTruckArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faArrowRight, faBagShopping, faBank, faBars, faBold, faBolt, faBucket, faBuilding, faBuildingShield, faBuildingUn, faBuildingWheat, faBusinessTime, faChevronRight, faCube, faGreaterThan, faMinus, faPlus, faThunderstorm, faTruckArrowRight, faUser, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, Head } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
@@ -35,7 +35,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
     const [packagesCount, setPackagesCount] = useState(0);
     const [serviceCount, setServiceCount] = useState(0);
     const [openAccordion, setOpenAccordion] = useState(0);
-    const [openMenu, setOpenMenu] = useState(true);
+    const [openMenu, setOpenMenu] = useState(false);
 
     const changePackage = (packageNumber) => {
         setPackagesCount(packageNumber);
@@ -110,37 +110,33 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
 
     return (
-        <div className="bg-[#00100D]">
+        <div className="bg-[#00100D] overflow-hidden">
             {popUp ? <PopUpForm showPopUp={showPopUp} emailSent={emailSent} /> : <></>}
             <Head title="Welcome" />
             {/* <div className="flex flex-col items-center justify-center h-24 gap-2 align-middle bg-black bg-center md:gap-8 md:h-14 md:flex-row">
                 <p className='text-white'>Have questions about company formation?</p> <button onClick={showPopUp} className='px-10 py-2 text-white bg-black border-2 border-white rounded-full'>Free consultation<FontAwesomeIcon style={{ fontSize: "12px" }} className='ml-3' icon={faChevronRight} /></button>
             </div> */}
-            <div className="relative flex items-center justify-between h-full px-2 mx-auto lg:container">
-                <div className={openMenu ? 'hidden' : 'hidden'}></div>
+            <div className="fixed z-50 flex items-start justify-start w-full h-24 px-2 mx-auto text-left bg-black lg:items-center lg:justify-between lg:bg-transparent lg:relative lg:container ">
                 <Link href="/">
                     <ApplicationLogo className="object-contain h-20 fill-current w-36" />
                 </Link>
-                <div className="flex items-center justify-between gap-14 text-start">
-                    <div className={'absolute hidden flex-col items-center gap-0 md:flex md:flex-row text-start md:gap-14 md:relative w-screen md:w-auto bg-white md:bg-transparent left-0 top-16 md:top-auto'}>
-                        <a href="#services" className="flex items-center justify-center w-full py-4 text-base leading-6 text-center text-white border-b md:border-none md:py-0">
+                <div className="flex items-center justify-end w-full gap-14 text-start">
+                    <div className={'absolute hidden flex-col items-center gap-0 md:flex md:flex-row text-start md:gap-6 md:relative w-screen md:w-auto bg-white md:bg-transparent left-0 top-16 md:top-auto mr-10'}>
+                        <a href="#services" className="flex items-center justify-center w-full py-4 text-[16px] font-medium leading-4 text-center text-white border-b md:border-none md:py-0">
                             Services
                         </a>
-                        <a href="#process" className="flex items-center justify-center w-full py-4 text-base leading-6 text-center text-white border-b md:border-none md:py-0">
+                        <a href="#process" className="flex items-center justify-center w-full py-4 text-[16px] font-medium leading-4 text-center text-white border-b md:border-none md:py-0">
                             Process
                         </a>
-                        <a href="#pricing" className="flex items-center justify-center w-full py-4 text-base leading-6 text-center text-white border-b md:border-none md:py-0">
+                        <a href="#pricing" className="flex items-center justify-center w-full py-4 text-[16px] font-medium leading-4 text-center text-white border-b md:border-none md:py-0">
                             Pricing
                         </a>
-                        <a href="#faqs" className="flex items-center justify-center w-full py-4 text-base leading-6 text-center text-white border-b md:border-none md:py-0">
-                            FAQs
-                        </a>
-                        <a href="#testimonial" className="flex items-center justify-center w-full py-4 text-base leading-6 text-center text-white border-b md:border-none md:py-0">
+                        <a href="#testimonial" className="flex items-center justify-center w-full py-4 text-[16px] font-medium leading-4 text-center text-white border-b md:border-none md:py-0">
                             Testimonials
                         </a>
                     </div>
-                </div>
-                <div className="px-0 md:p-6 text-end">
+                {/* </div>
+                <div className="px-0 md:p-6 text-end"> */}
                     {auth.user ? (
                         <>{(role == "founder") ?
                             <Link
@@ -151,7 +147,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                             </Link>
                             : <Link
                                 href={route('dashboard')}
-                                className="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                                className="font-semibold text-gray-600 transition-all duration-500 hover:text-black hover:bg-2hite"
                             >
                                 Dashboard
                             </Link>}</>
@@ -159,7 +155,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                         <div className='flex items-center gap-8'>
                             <Link
                                 href={route('login')}
-                                className="hidden px-6 py-2 text-white border border-white rounded-3xl hover:text-gray-90 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500 md:flex"
+                                className="hidden px-6 py-2 text-white border border-white text-[16px] font-medium rounded-3xl hover:text-black hover:bg-white transition-all duration-200 md:flex"
                             >
                                 Sign in
                             </Link>
@@ -173,37 +169,70 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                         </div>
                     )}
                 </div>
-                <FontAwesomeIcon icon={faBars} className='text-3xl md:hidden' onClick={() => { setOpenMenu(!openMenu) }} />
+                <div className={openMenu ? 'flex w-full text-right justify-end h-20 items-center transition duration-1000 ease-in-out' : 'hidden'}>
+                    <FontAwesomeIcon onClick={() => setOpenMenu(!openMenu)} className="text-3xl text-white transition-all duration-1000 ease-in-out md:hidden" icon={faXmark} />
+                    <div className={openMenu ? 'fixed right-0 z-40 flex flex-col items-start w-full h-screen gap-2 bg-white top-20 bg-opacity-55 transition-all duration-1000 ease-in-out' : 'absolute left-full z-40 flex flex-col items-start w-full h-screen gap-2 bg-white top-20 bg-opacity-55 transition-all duration-1000 ease-in-out'}>
+                        <div className='absolute right-0 z-40 flex flex-col items-start w-11/12 h-screen gap-2 p-12 bg-white'>
+                            <a href="#services" className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0">
+                                Services
+                            </a>
+                            <a href="#process" className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0">
+                                Process
+                            </a>
+                            <a href="#pricing" className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0">
+                                Pricing
+                            </a>
+                            <a href="#testimonial" className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0">
+                                Testimonials
+                            </a>
+                            <Link
+                                href={route('login')}
+                                className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0"
+                            >
+                                Sign in
+                            </Link>
+                            <Link
+                                href={route('register')}
+                                className="flex items-center justify-start w-full py-4 text-[16px] font-medium leading-4 text-start text-black border-b md:border-none md:py-0"
+                            >
+                                Start your business
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+                <div className={openMenu ? 'hidden' : 'flex w-full text-right justify-end h-20 items-center lg:hidden'}>
+                    <FontAwesomeIcon icon={faBars} className='text-3xl text-white md:hidden' onClick={() => { setOpenMenu(!openMenu) }} />
+                </div>
             </div>
 
 
-            <div className='flex flex-col items-center w-full h-full px-4 py-20 mx-auto md:flex-row lg:container hero-section'>
-                <div className="flex flex-col justify-between w-full gap-24 md:mr-0 md:w-6/12 sm:m-0" data-aos="fade-right" data-aos-delay="500">
-                    <div className='flex flex-col items-start gap-4'>
-                        <h2 className="mb-4 text-white heading-1">Form a Legal</h2>
-                        <h2 className="mb-8 text-white heading-2">Entity in UAE.</h2>
+            <div className='flex flex-col items-center w-full h-full px-4 py-20 pt-40 mx-auto lg:pt-20 md:flex-row lg:container hero-section'>
+                <div className="flex flex-col justify-between w-full gap-1 lg:gap-10 md:mr-0 md:w-6/12 sm:m-0" data-aos="fade-right" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                    <div className='flex flex-col items-start gap-0 lg:gap-4'>
+                        <h2 className="text-white text-5xl lg:text-[54px] font-light font-mornope">Form a Legal</h2>
+                        <h2 className=" lg:mb-10 text-white text-5xl lg:text-[54px] font-semibold font-mornope">Entity in UAE.</h2>
                         <Link
                             href={route('register')}
-                            className="w-auto px-6 py-2 text-center text-white border border-white rounded-full"
+                            className="w-auto px-6 py-2 my-4 text-xl font-medium text-center text-white transition-all duration-200 border border-white rounded-full lg:mb-24 font-mornope hover:bg-white hover:text-black"
                         >
                             Get Started
                         </Link>
                     </div>
-                    <p className="w-1/3 mb-8 text-white font-base">
+                    <p className="w-full text-base font-normal text-white lg:mb-8 lg:w-5/12 font-mornope">
                         Complete your registration from anywhere, with user-friendly forms and straightforward steps.
                     </p>
 
                 </div>
                 <div className="w-1/12"></div>
-                <div className="flex w-full h-full md:w-5/12" data-aos="fade-left" data-aos-delay="500">
-                    <div className="relative flex flex-col w-full gap-8 mt-16">
+                <div className="flex w-full h-full md:w-5/12" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                    <div className="relative flex flex-col w-full gap-4 mt-16 lg:gap-8">
                         <div className="flex items-center gap-2 px-2 py-1 text-lg rounded-full max-w-max" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
-                            <img src={herosectionImages} className="object-contain h-9" alt="incorpX" />
-                            <span className="font-bold">5k+</span> <span>Happy Entrepreneurs</span>
+                            <img src={herosectionImages} className="object-contain h-5 lg:h-9" alt="incorpX" />
+                            <span className="text-xl font-bold font-mornope">5k+</span> <span className="text-xl font-medium font-mornope">Happy Entrepreneurs</span>
                         </div>
-                        <h2 className=" heading-3">Business Registration</h2>
-                        <h2 className=" heading-4">Made Easier.</h2>
-                        <div className="flex items-center justify-end gap-2 mt-10">
+                        <h2 className="font-extrabold text-4xl lg:text-[42px] font-mornope text-white mt-4 lg:mt-9 lg:leading-[71.03px]">Business Registration</h2>
+                        <h2 className="font-light text-6xl lg:text-[81.24px] font-mornope text-white lg:leading-[91.24px] ml-[-5px]">Made Easier.</h2>
+                        <div className="flex items-center justify-end gap-2">
                             <span className="text-2xl text-white manrope">FAQ</span>
                             <div className="flex items-center justify-center w-16 h-16 rounded-full" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
                                 <FontAwesomeIcon icon={faArrowRight} className='text-3xl -rotate-45'/>
@@ -213,35 +242,35 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 </div>
             </div>
 
-            <div className="relative flex flex-col items-center justify-between px-4 py-12 mx-auto md:p-0 " id="services" data-aos="fade-up" data-aos-delay="500">
-                <div className="mx-auto text-center" style={{ maxWidth: "900px" }}>
-                    <div className="flex flex-col items-center justify-center p-6 service-set service-set-1">
+            <div className="relative flex flex-col items-center justify-between mx-auto md:p-0 " id="services">
+                <div className="mx-auto text-center lg:max-w-[900px] p-12">
+                    <div className="flex flex-col items-center justify-center p-6 -mt-52 service-set service-set-1">
                         <img src={rightTickCheck} className="object-contain w-1/3 h-full" alt="incorpX" />
-                        <h3 className="text-3xl ">Your Company License is Ready!</h3>
+                        <h3 className="text-xl">Your Company License is Ready!</h3>
                     </div>
-                    <div className="p-10 text-left service-set service-set-2">
+                    <div className="px-10 py-4 text-left -mt-52 service-set service-set-2">
                         <p>95% To Complete</p>
                         <div className="relative mt-2 progress">
-                            <div className="w-full h-6 bg-gray-200 rounded-full progress-bar"></div>
-                            <div className="absolute top-0 h-6 bg-green-400 rounded-full w-9 possible-progress-bar"></div>
+                            <div className="w-full h-4 bg-gray-200 rounded-full progress-bar"></div>
+                            <div className="absolute top-0 h-4 bg-[#7EBC51] rounded-full w-9 possible-progress-bar"></div>
                         </div>
                         <img src={StepIcons} className="object-contain w-full h-full mt-4" alt="incorpX" />
                     </div>
-                    <div className="px-10 py-24 text-left service-set service-set-3">
-                        <h3 className="mb-4 text-3xl font-bold inter-font">Company Name</h3>
-                        <p className="mb-4 font-normal inter-font">Please enter three name choices for your company in order of preference</p>
+                    <div className="px-10 text-left -mt-52 lg:py-8 service-set service-set-3">
+                        <h3 className="text-sm font-bold lg:mb-4 lg:text-3xl inter-font">Company Name</h3>
+                        <p className="text-sm font-normal lg:mb-4 inter-font">Please enter three name choices for your company in order of preference</p>
                         <div className="flex flex-col gap-4">
-                            <label>Name Your Company</label>
-                            <input type="text" readOnly={true} className="px-6 py-5 mb-4 text-white bg-transparent border border-gray-300" placeholder="Company Name" value="Hertz L.L.C" />
-                            <input type="text" readOnly={true} className="px-6 py-5 mb-4 text-white bg-transparent border border-gray-300" placeholder="Company Name" value="Hertz Real Estate L.L.C"/>
-                            <input type="text" readOnly={true} className="px-6 py-5 mb-4 text-white bg-transparent border border-gray-300" placeholder="Company Name" value="Hashtag L.L.C"/>
+                            <label className="text-sm">Name Your Company</label>
+                            <input type="text" readOnly={true} className="mb-4 text-sm text-white bg-transparent border border-gray-300 lg:px-2 lg:py-2" placeholder="Company Name" value="Hertz L.L.C" />
+                            <input type="text" readOnly={true} className="mb-4 text-sm text-white bg-transparent border border-gray-300 lg:px-2 lg:py-2" placeholder="Company Name" value="Hertz Real Estate L.L.C"/>
+                            <input type="text" readOnly={true} className="mb-4 text-sm text-white bg-transparent border border-gray-300 lg:px-2 lg:py-2" placeholder="Company Name" value="Hashtag L.L.C"/>
                         </div>
                     </div>
                 </div>
-                <div class="ellipse-animation-bg">
-                    <div class="ellipse-layer layer-1"></div>
-                    <div class="ellipse-layer layer-2"></div>
-                    <div class="ellipse-layer layer-3"></div>
+                <div className="ellipse-animation-bg">
+                    <div className="ellipse-layer layer-1"></div>
+                    {/* <div className="ellipse-layer layer-2"></div> */}
+                    {/* <div className="ellipse-layer layer-3"></div> */}
                 </div>
 
             </div>
@@ -267,59 +296,59 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
             </div> */}
 
             <div className=" bg-primary">
-                <div className="container flex flex-col items-center justify-between h-full px-4 mx-auto py-14">
-                    <div className="flex flex-col gap-8 pt-16 md:flex-row">
-                        <div className="w-full p-8 md:w-6/12" data-aos="fade-right" data-aos-delay="500">
-                            <h3 className="pb-4 text-[64px] leading-[87.42px]">Global Access to</h3>
-                            <h3 className="pb-4 text-[64px] font-bold leading-[87.42px]">UAE Legal Entity</h3>
-                            <h3 className="pb-4 text-[64px] leading-[87.42px]">Formation.</h3>
+                <div className="container flex flex-col items-center justify-between h-full px-4 mx-auto py-14 lg:p-0">
+                    <div className="flex flex-col lg:p-0 lg:gap-8 md:flex-row">
+                        <div className="w-full lg:p-8 md:w-6/12" data-aos="fade-right" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                            <h3 className="pb-4 text-4xl lg:text-[52px] lg:leading-[64px] font-normal font-mornope">Global Access to</h3>
+                            <h3 className="pb-4 text-4xl lg:text-[52px] font-bold lg:leading-[64px] font-mornope">UAE Legal Entity</h3>
+                            <h3 className="pb-4 text-4xl lg:text-[52px] lg:leading-[64px] font-normal font-mornope">Formation.</h3>
                         </div>
-                        <div className="w-full p-8 md:w-2/12"></div>
-                        <div className="w-full p-8 md:w-4/12" data-aos="fade-left" data-aos-delay="500">
-                            <p className="py-4 font-normal text-[20px]">Starting a business in the UAE has never been simpler or more accessible. Whether you're in Europe, Asia, the Americas, or anywhere else, we empower you to form your legal entity in the UAE remotely and efficiently, with full transparency and expert support throughout the entire process.</p>
+                        <div className="w-full lg:p-8 md:w-1/12"></div>
+                        <div className="w-full lg:p-8 lg:ml-24 md:w-5/12" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                            <p className="lg:py-4 font-light text-[16px] font-mornope">Starting a business in the UAE has never been simpler or more accessible. Whether you're in Europe, Asia, the Americas, or anywhere else, we empower you to form your legal entity in the UAE remotely and efficiently, with full transparency and expert support throughout the entire process.</p>
                         </div>
                     </div>
 
                     <div className="relative flex flex-col gap-8 pt-16 md:flex-row">
                         <div className="w-full p-8 md:w-5/12">
-                            <div className=""  data-aos="fade-right" data-aos-delay="500">
-                                <div className="h-60 overflow-hidden bg-white rounded-[20px] px-4 flex justify-center absolute w-3/5 top-1/4">
+                            <div className=""  data-aos="fade-right" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                                <div className="h-28 lg:h-60 overflow-hidden bg-white rounded-[20px] ml-0 px-4 flex justify-center absolute w-2/5 lg:w-3/5 top-[15%] shadow-inset-white">
                                     <img src={stepSlider} className="w-full animation-scroller-image" />
                                 </div>
-                                <img src={burjKhalifa} className="ml-[35%] image-burjkhalifa" />
+                                <img src={burjKhalifa} className="w-full ml-8 lg:ml-[35%] image-burjkhalifa" />
                             </div>
                         </div>
-                        <div className="w-full p-8 md:w-1/12"></div>
-                        <div className="w-full p-8 md:w-6/12" data-aos="fade-left" data-aos-delay="500">
-                            <h2 className="pb-4 text-[64px] leading-[87.42px]">Effortless Online Entity Formation</h2>
-                            <p className="py-4 font-normal text-[20px]">We simplify the entire process, ensuring that you can form your business entirely online.</p>
-                            <div className="flex flex-col gap-4 p-8">
-                                <div className="flex flex-row gap-4">
-                                    <div className="flex flex-row items-center w-1/2 gap-4">
-                                        <div className="h-28 w-32 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
-                                            <img src={approval} className="w-16 h-16" />
+                        <div className="hidden w-full p-8 md:w-2/12 lg:block"></div>
+                        <div className="w-full p-8 md:w-5/12" data-aos="fade-left" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                            <h2 className="pb-4 text-[42px] leading-[46px] font-mornope">Effortless Online Entity Formation</h2>
+                            <p className="py-4 font-normal text-[20px] font-mornope">We simplify the entire process, ensuring that you can form your business entirely online.</p>
+                            <div className="flex flex-col gap-4 py-8">
+                                <div className="flex flex-row flex-wrap gap-4 lg:flex-nowrap">
+                                    <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
+                                        <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
+                                            <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-8/12 font-medium">Full Document Handling</p>
+                                        <p className="text-[16px] w-7/12 font-medium font-manrope">Full Document Handling</p>
                                     </div>
-                                    <div className="flex flex-row items-center w-1/2 gap-4">
-                                        <div className="h-28 w-32 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
-                                            <img src={approval} className="w-16 h-16" />
+                                    <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
+                                        <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
+                                            <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-8/12 font-medium">Bank Account Setup Consult</p>
+                                        <p className="text-[16px] w-7/12 font-medium font-manrope">Bank Account Setup Consult</p>
                                     </div>
                                 </div>
-                                <div className="flex flex-row gap-4">
-                                    <div className="flex flex-row items-center w-1/2 gap-4">
-                                        <div className="h-28 w-32 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
-                                            <img src={approval} className="w-16 h-16" />
+                                <div className="flex flex-row flex-wrap gap-4 lg:flex-nowrap">
+                                    <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
+                                        <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
+                                            <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-8/12 font-medium">Visa and Emirates ID</p>
+                                        <p className="text-[16px] w-7/12 font-medium font-manrope">Visa and Emirates ID</p>
                                     </div>
-                                    <div className="flex flex-row items-center w-1/2 gap-4 jus">
-                                        <div className="h-28 w-32 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
-                                            <img src={approval} className="w-16 h-16" />
+                                    <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
+                                        <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
+                                            <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-8/12 font-medium">Tax Compliance</p>
+                                        <p className="text-[16px] w-7/12 font-medium font-manrope">Tax Compliance</p>
                                     </div>
                                 </div>
                             </div>
@@ -331,20 +360,20 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <FastEasyProcess />
 
-            <div className="py-24 bg-primary">
-                <div className="overflow-hidden container relative flex flex-col items-center justify-between h-full p-24 bg-white md:mx-auto md:flex-row rounded-[25px]" id='pricing'>
-                    <div className="z-10 w-full mb-8 md:w-6/12">
-                        <h3 className="pb-8 text-[64px] font-manrope"><span className="font-bold">Transparent pricing tailored</span> to your business</h3>
-                        <p className="font-manrope">Whether you want to start your business in UAE or keep it compliant with local laws - you can do it all with IncorpX.</p>
+            <div className="p-6 lg:pb-24 bg-primary">
+                <div className="overflow-hidden container relative w-full flex flex-col items-center justify-between h-full py-12 px-4 lg:p-24 bg-white md:mx-auto md:flex-row rounded-[25px]" id='pricing'>
+                    <div className="z-10 w-full mb-8 md:w-6/12" data-aos="fade-top" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
+                        <h3 className="pb-8 text-4xl lg:text-[52px] lg:leading-[64.2px] font-manrope"><span className="font-bold">Transparent pricing tailored</span> to your business</h3>
+                        <p className="text-xl font-manrope">Whether you want to start your business in UAE or keep it compliant with local laws - you can do it all with IncorpX.</p>
                     </div>
-                    <div className="z-10 w-full mb-8 md:w-2/12"></div>
-                    <div className="z-10 w-full mb-8 md:w-4/12">
+                    <div className="z-10 w-full lg:mb-8 md:w-2/12"></div>
+                    <div className="z-10 w-full mb-8 md:w-4/12" data-aos="fade-top" data-aos-delay="500" data-aos-duration="1000" transition="ease-in-out">
                         <div className="flex flex-col gap-4 bg-white rounded-[20px] p-8 shadow-box">
                             <div className="flex flex-row items-center w-full gap-4 font-bold">
                                 Incorporating your company in UAE
                             </div>
-                            <div className="flex flex-row items-center w-full gap-4 text-[#686868] mb-16">
-                                <ul>
+                            <div className="flex flex-row items-center w-full gap-4 text-[#686868] mb-8 ml-4">
+                                <ul className="list-disc list-inside">
                                     <li>Expert consultation</li>
                                     <li>Formation filings</li>
                                     <li>Formation documents</li>
@@ -353,13 +382,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                                 </ul>
                             </div>
                             <div className="border-[0.5px] border-[#C9C9C9]"></div>
-                            <p className=" text-[#686868] mt-16">This is one time fee. Your formation fee will vary depending on the freezone you form in.</p>
+                            <p className=" text-[#686868] mt-8">This is one time fee. Your formation fee will vary depending on the freezone you form in.</p>
                         </div>
                     </div>
-                    <div class="absolute -bottom-3/4 w-full h-full">
-                        <div class="ellipse-layer layer-4"></div>
-                        <div class="ellipse-layer layer-5"></div>
-                        <div class="ellipse-layer layer-6"></div>
+                    <div className="absolute w-full h-full -bottom-3/4">
+                        <div className="ellipse-layer layer-4"></div>
+                        <div className="ellipse-layer layer-5"></div>
+                        <div className="ellipse-layer layer-6"></div>
                     </div>
                 </div>
             </div>
@@ -449,7 +478,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <div className="h-full py-12 overflow-hidden bg-white md:py-36" id="testimonial">
                 <div className="container flex flex-col items-center justify-between h-full mx-auto">
-                    <h3 className="w-1/3 pb-16 text-6xl font-normal text-center text-manrope">See what client say about incorpX</h3>
+                    <h3 className="w-full pb-16 text-4xl font-normal text-center lg:w-1/3 lg:text-5xl text-manrope">See what client say about incorpX</h3>
                 </div>
                 <div className='w-full'>
                     <Testimonial />
@@ -458,24 +487,24 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <div className="relative overflow-hidden ">
 
-                <div class="absolute top-1/4 left-0 w-screen z-0">
-                    <div class="ellipse-layer layer-7"></div>
+                <div className="absolute left-0 z-0 w-screen top-1/4">
+                    <div className="ellipse-layer layer-7"></div>
                 </div>
 
-                <div className="h-full py-12 md:py-36" id="process">
+                <div className="h-full py-12 md:py-8" id="process">
                     <div className="container relative z-10 flex flex-col items-center justify-between h-full mx-auto">
-                        <h2 className="pb-16 text-[90px] font-normal text-center text-manrope">Register your entity in UAE</h2>
-                        <div className="flex ">
+                        <h2 className="pb-16 px-8 text-4xl lg:text-[72px] font-normal text-center text-manrope">Register your entity in UAE</h2>
+                        <Link href="/register" className="flex ">
                             <div className="flex items-center gap-2 px-24 text-lg rounded-full max-w-max" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
                                 <span>Get Started</span>
                             </div>
                             <div className="flex items-center justify-center w-16 h-16 rounded-full" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
                                 <FontAwesomeIcon icon={faArrowRight} className='text-3xl -rotate-45'/>
                             </div>
-                        </div>
-                        <div className="flex flex-col justify-center gap-2 mt-24 text-center">
-                            <h2 className="text-[28px] font-medium w-full text-center text-manrope gap-2">Follow Us</h2>
-                            <div className="flex flex-row gap-2">
+                        </Link>
+                        <div className="flex flex-col justify-center mt-24 text-center gap-7">
+                            <h2 className="text-[28px] font-medium w-full text-center text-manrope">Follow Us</h2>
+                            <div className="flex flex-row gap-7">
                                 <Link href='https://www.instagram.com/incorpX_UAE/' className="flex items-center justify-center w-10 h-10 bg-black rounded-full">
                                     <FontAwesomeIcon icon={faInstagram} className='text-xl text-white'/>
                                 </Link>
@@ -496,22 +525,19 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 <div className="relative z-10 h-full pt-0 bg-bottom pb-60 md:py-40 footer-bg" style={{ backgroundImage: "url(" + footerImage + ")" }}>
                     <div className="container flex flex-col items-center justify-center py-4 mx-auto">
                         <ApplicationLogo className="object-contain h-20 fill-current w-46" />
-                        <p>
-                            Powered by
-                        </p>
-                        <img src={hashtag} className="h-full -m-4 w-ful" />
+                        <img src={hashtag} className="-m-4 " />
                     </div>
                 </div>
                 <div className="relative z-10 bg-black">
                     <div className="container flex flex-col items-center justify-center py-4 mx-auto md:justify-between md:flex-row">
-                        <div className="text-center md:text-start">
-                            <p className="text-white">Copyrights © 2024 incorpX | Developed by <a className='font-bold' href='https://www.nayagroup.com' target='_blank'>Naya Group</a></p>
+                        <div className="pb-4 text-center border-b lg:p-0 lg:border-0 md:text-start">
+                            <p className="text-xs text-white">Copyrights © 2025 incorpX | Developed by <a className='font-bold' href='https://www.navyatechnomedia.com' target='_blank'>Navya Techno Media</a></p>
                         </div>
-                        <div className="flex items-center justify-center gap-4 md:justify-end">
-                            <Link href="#" className="text-base leading-6 text-white">
+                        <div className="flex items-center justify-center gap-4 mt-2 text-white md:justify-end">
+                            <Link href="#" className="text-xs leading-6 text-white">
                                 Terms & Conditions
-                            </Link>
-                            <Link href="#" className="text-base leading-6 text-white">
+                            </Link>|
+                            <Link href="#" className="text-xs leading-6 text-white">
                                 Privacy Policy
                             </Link>
                         </div>
