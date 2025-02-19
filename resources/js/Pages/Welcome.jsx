@@ -124,17 +124,14 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 </Link>
                 <div className="flex items-center justify-between gap-14 text-start">
                     <div className={'absolute hidden flex-col items-center gap-0 md:flex md:flex-row text-start md:gap-14 md:relative w-screen md:w-auto bg-white md:bg-transparent left-0 top-16 md:top-auto mr-10'}>
-                        <a href="#services" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
-                            Services
+                        <a href="/" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
+                            Home
                         </a>
                         <a href="#process" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
                             Process
                         </a>
                         <a href="#pricing" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
                             Pricing
-                        </a>
-                        <a href="#faqs" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
-                            FAQs
                         </a>
                         <a href="#testimonial" className="flex items-center justify-center w-full py-4 text-[18px] font-medium leading-6 text-center text-white border-b md:border-none md:py-0">
                             Testimonials
