@@ -42,7 +42,7 @@ export const FastEasyProcess = (props) => {
                 </div>
                 <div className='relative flex-col justify-between hidden w-full overflow-hidden md:flex-row md:flex md:justify-center md:w-full process-lines' data-aos="fade-up" data-aos-delay="300">
                     <div className="process-data"></div>
-                    <div className="process-data"></div>
+                    <div className="process-data-1"></div>
                     <div className='flex flex-col items-start justify-center w-3/12 process'>
                         <div className='w-40 text-center process-dot'>Step 1</div>
                         <div className='absolute h-[1px] bg-gray-200 process-line process-line-1'></div>

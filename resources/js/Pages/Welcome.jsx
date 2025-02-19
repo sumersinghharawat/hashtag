@@ -452,7 +452,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <div className="h-full py-12 overflow-hidden bg-white md:py-36" id="testimonial">
                 <div className="container flex flex-col items-center justify-between h-full mx-auto">
-                    <h3 className="w-full pb-16 text-4xl font-normal text-center capitalize lg:w-1/3 lg:text-6xl text-manrope">See what client say about incorpX</h3>
+                    <h3 className="w-full pb-16 text-4xl font-normal text-center capitalize lg:w-2/5 lg:text-6xl text-manrope">See what client say about incorpX</h3>
                 </div>
                 <div className='w-full'>
                     <Testimonial />
