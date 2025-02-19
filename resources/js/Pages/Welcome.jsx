@@ -113,7 +113,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
     return (
         <div className="bg-[#00100D] overflow-hidden">
             {popUp ? <PopUpForm showPopUp={showPopUp} emailSent={emailSent} /> : <></>}
-            <Head title="Welcome" />
+            <Head title="IncorpX" />
             {/* <div className="flex flex-col items-center justify-center h-24 gap-2 align-middle bg-black bg-center md:gap-8 md:h-14 md:flex-row">
                 <p className='text-white'>Have questions about company formation?</p> <button onClick={showPopUp} className='px-10 py-2 text-white bg-black border-2 border-white rounded-full'>Free consultation<FontAwesomeIcon style={{ fontSize: "12px" }} className='ml-3' icon={faChevronRight} /></button>
             </div> */}
