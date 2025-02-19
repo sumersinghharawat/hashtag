@@ -531,8 +531,8 @@ html {
         width: 40%;
     }
     .footer-bg {
-        background-size: 345% 55% !important;
-        background-position: 73% 100% !important;
+        background-size: 250% !important;
+        background-position: bottom center !important;
         background-repeat: no-repeat !important;
     }
     .step-form-radio {
@@ -556,7 +556,7 @@ html {
 
     .service-set {
         margin: 25px;
-        width: 60%;
+        width: 65%;
         min-height: 400px;
         border-radius: 20px;
         border: 1px;
@@ -566,12 +566,47 @@ html {
         overflow: hidden;
     }
 
+    .ellipse-animation-bg{
+        height: 700px;
+    }
+
+    /* Layer 1 */
+    .layer-1 {
+        background: linear-gradient(to right, #3FFF21, #1DDB5C);
+        filter: blur(150px); /* Simulate blur from SVG */
+        height: 600px;
+        width: 200%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%); /* Center horizontally */
+    }
+
+    /* Layer 2 */
+    .layer-2 {
+        background: linear-gradient(to right, #79B94A, #A4C871);
+        filter: blur(100px); /* Simulate blur from SVG */
+        height: 550px;
+        width: 200%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%); /* Center horizontally */
+    }
+
+    /* Layer 3 */
+    .layer-3 {
+        background: linear-gradient(to right, var(--primary-bg), var(--primary-bg));
+        filter: blur(175px); /* Simulate blur from SVG */
+        height: 500px;
+        width: 250%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%); /* Center horizontally */
+    }
+
+
     .service-set-1 {
         background: linear-gradient(101.12deg, rgba(0, 255, 208, 0.35) 0%, rgba(63, 255, 33, 0.35) 176.3%);
         backdrop-filter: blur(25px);
-        transform: translate(-50%, -20%);
-        left: 50%;
-        top: 20%;
+        transform: translate(-50%, -50%);
+        left: 42.5%;
+        top: 40%;
         z-index: 3;
         animation: moveElement1 5s linear infinite;
         transition: all 0.3s ease-in-out;
@@ -583,7 +618,7 @@ html {
         transform: translateX(-50%);
         z-index: 2;
         top: 20%;
-        left: 30%;
+        left: 20%;
         animation: moveElement2 5s linear infinite;
         transition: all 0.3s ease-in-out;
     }
@@ -592,11 +627,36 @@ html {
         border: 1px solid #ffffff;
         backdrop-filter: blur(25px);
         transform: translateX(-50%);
-        left: 70%;
+        left: 75%;
         z-index: 1;
         top: 30%;
         animation: moveElement3 5s linear infinite;
         transition: all 0.3s ease-in-out;
+    }
+
+    @keyframes moveElement1 {
+        0% {
+            top: 40%;
+        }
+        50% {
+            top: 30%;
+        }
+    }
+    @keyframes moveElement2 {
+        0% {
+            left: 20%;
+        }
+        50% {
+            left: 30%;
+        }
+    }
+    @keyframes moveElement3 {
+        0% {
+            left: 75%;
+        }
+        50% {
+            left: 65%;
+        }
     }
 
     .image-burjkhalifa{
@@ -604,6 +664,11 @@ html {
         width: 90%;
         object-fit: cover;
         border-radius: 20px;
+    }
+
+    .slider-steps-video{
+        height: auto;
+        width: 60%;
     }
 
 }

@@ -1,4 +1,4 @@
-import { faArrowAltCircleLeft, faArrowRight, faBagShopping, faBank, faBars, faBold, faBolt, faBucket, faBuilding, faBuildingShield, faBuildingUn, faBuildingWheat, faBusinessTime, faChevronRight, faCube, faGreaterThan, faMinus, faPlus, faThunderstorm, faTruckArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faArrowRight, faBagShopping, faBank, faBars, faBold, faBolt, faBucket, faBuilding, faBuildingShield, faBuildingUn, faBuildingWheat, faBusinessTime, faChevronRight, faClose, faCube, faGreaterThan, faMinus, faPlus, faThunderstorm, faTruckArrowRight, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, Head } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
@@ -36,7 +36,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
     const [packagesCount, setPackagesCount] = useState(0);
     const [serviceCount, setServiceCount] = useState(0);
     const [openAccordion, setOpenAccordion] = useState(0);
-    const [openMenu, setOpenMenu] = useState(true);
+    const [openMenu, setOpenMenu] = useState(false);
 
     const changePackage = (packageNumber) => {
         setPackagesCount(packageNumber);
@@ -118,7 +118,28 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 <p className='text-white'>Have questions about company formation?</p> <button onClick={showPopUp} className='px-10 py-2 text-white bg-black border-2 border-white rounded-full'>Free consultation<FontAwesomeIcon style={{ fontSize: "12px" }} className='ml-3' icon={faChevronRight} /></button>
             </div> */}
             <div className="relative flex items-center justify-between h-full px-2 mx-auto lg:container">
-                <div className={openMenu ? 'hidden' : 'hidden'}></div>
+                <div className={openMenu ? 'block fixed top-0 left-0 w-full bg-black bg-opacity-35 h-screen z-[9997]' : 'transition-all w-0 hidden'}>
+                    <FontAwesomeIcon icon={faClose} className='absolute right-12 top-4 text-3xl text-white md:hidden z-[9999]' onClick={() => { setOpenMenu(!openMenu) }} />
+                    <div className='relative flex float-left transition-all flex-col items-top justify-start px-2 h-full gap-2 align-middle bg-black bg-center md:gap-8 md:h-14 md:flex-row z-[9998] w-[90%]'>
+                        <Link href="/">
+                            <ApplicationLogoLight className="object-contain h-20 fill-current w-36" />
+                        </Link>
+                        <div className="flex flex-col">
+                            <a href="/" className="flex items-center justify-start w-full py-4 text-[18px] font-medium leading-6 text-left text-white border-b md:border-none md:py-0" onClick={() => { setOpenMenu(!openMenu) }} >
+                                Home
+                            </a>
+                            <a href="#process" className="flex items-center justify-start w-full py-4 text-[18px] font-medium leading-6 text-left text-white border-b md:border-none md:py-0" onClick={() => { setOpenMenu(!openMenu) }} >
+                                Process
+                            </a>
+                            <a href="#pricing" className="flex items-center justify-start w-full py-4 text-[18px] font-medium leading-6 text-left text-white border-b md:border-none md:py-0" onClick={() => { setOpenMenu(!openMenu) }} >
+                                Pricing
+                            </a>
+                            <a href="#testimonial" className="flex items-center justify-start w-full py-4 text-[18px] font-medium leading-6 text-left text-white border-b md:border-none md:py-0" onClick={() => { setOpenMenu(!openMenu) }} >
+                                Testimonials
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <Link href="/">
                     <ApplicationLogoLight className="object-contain h-20 fill-current w-36" />
                 </Link>
@@ -176,13 +197,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
 
             <div className='flex flex-col items-center w-full h-full px-4 py-20 mx-auto md:flex-row lg:container hero-section'>
-                <div className="flex flex-col justify-between w-full gap-36 lg:gap-24 md:mr-0 md:w-6/12 sm:m-0" data-aos="fade-right" data-aos-delay="500">
+                <div className="flex flex-col justify-between w-full gap-0 lg:gap-24 md:mr-0 md:w-6/12 sm:m-0" data-aos="fade-right" data-aos-delay="500">
                     <div className='flex flex-col items-start gap-4'>
                         <h2 className="text-white text-5xl lg:text-[66.58px] font-light">Form a Legal</h2>
                         <h2 className=" lg:mb-10 text-white text-5xl lg:text-[66.58px] font-bold">Entity in UAE.</h2>
                         <Link
                             href={route('register')}
-                            className="w-auto px-6 py-2 mt-16 mb-24 text-xl font-medium text-center text-white border border-white rounded-full font-mornope"
+                            className="w-auto px-6 py-2 mt-4 mb-4 text-xl font-medium text-center text-white border border-white rounded-full lg:mt-16 lg:mb-24 font-mornope"
                         >
                             Get Started
                         </Link>
@@ -194,13 +215,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 </div>
                 <div className="w-1/12"></div>
                 <div className="flex w-full h-full md:w-5/12" data-aos="fade-left" data-aos-delay="500">
-                    <div className="relative flex flex-col w-full gap-8 mt-16">
+                    <div className="relative flex flex-col w-full gap-0 mt-4 lg:gap-8 lg:mt-16">
                         <div className="flex items-center gap-2 px-2 py-1 text-lg rounded-full max-w-max" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
                             <img src={herosectionImages} className="object-contain h-5 lg:h-9" alt="incorpX" />
                             <span className="text-xl font-bold font-mornope">5k+</span> <span className="text-xl font-medium font-mornope">Happy Entrepreneurs</span>
                         </div>
-                        <h2 className="font-extrabold text-4xl lg:text-[52px] font-mornope text-white mt-9 lg:leading-[71.03px]">Business Registration</h2>
-                        <h2 className="font-light text-6xl lg:text-[91.24px] font-mornope text-white lg:leading-[91.24px] ml-[-5px]">Made Easier.</h2>
+                        <h2 className="font-extrabold text-4xl lg:text-[52px] font-mornope text-white mt-12 lg:mt-9 lg:leading-[71.03px]">Business Registration</h2>
+                        <h2 className="font-light text-5xl lg:text-[91.24px] font-mornope text-white lg:leading-[91.24px] ml-[-5px]">Made Easier.</h2>
                         <Link href="#testimonial" className="flex items-center justify-end gap-2">
                             <span className="text-2xl text-white manrope">Tesimonials</span>
                             <div className="flex items-center justify-center w-16 h-16 rounded-full" style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
@@ -212,7 +233,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
             </div>
 
             <div className="relative flex flex-col items-center justify-between mx-auto md:p-0 " id="services" data-aos="fade-up" data-aos-delay="500">
-                <div className="mx-auto text-center lg:max-w-[900px] p-12">
+                <div className="mx-auto flex justify-center text-center lg:max-w-[900px] p-12">
                     <div className="flex flex-col items-center justify-center p-6 service-set service-set-1">
                         <img src={rightTickCheck} className="object-contain w-1/3 h-full" alt="incorpX" />
                         <h3 className="text-3xl">Your Company License is Ready!</h3>
@@ -265,34 +286,34 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
             </div> */}
 
             <div className=" bg-primary">
-                <div className="container flex flex-col items-center justify-between h-full px-4 mx-auto py-14">
-                    <div className="flex flex-col pt-16 lg:gap-8 md:flex-row">
-                        <div className="w-full p-8 md:w-6/12" data-aos="fade-right" data-aos-delay="500">
+                <div className="container flex flex-col items-center justify-between h-full px-4 mx-auto lg:py-14">
+                    <div className="flex flex-col py-8 lg:pt-16 lg:gap-8 md:flex-row">
+                        <div className="w-full lg:p-8 md:w-6/12" data-aos="fade-right" data-aos-delay="500">
                             <h3 className="pb-4 text-4xl lg:text-[64px] lg:leading-[87.42px] font-normal font-mornope">Global Access to</h3>
                             <h3 className="pb-4 text-4xl lg:text-[64px] font-bold lg:leading-[87.42px] font-mornope">UAE Legal Entity</h3>
                             <h3 className="pb-4 text-4xl lg:text-[64px] lg:leading-[87.42px] font-normal font-mornope">Formation.</h3>
                         </div>
                         <div className="w-full lg:p-8 md:w-1/12"></div>
-                        <div className="w-full p-8 lg:ml-24 md:w-5/12" data-aos="fade-left" data-aos-delay="500">
+                        <div className="w-full lg:p-8 lg:ml-24 md:w-5/12" data-aos="fade-left" data-aos-delay="500">
                             <p className="lg:py-4 font-normal text-[20px] font-mornope">Starting a business in the UAE has never been simpler or more accessible. Whether you're in Europe, Asia, the Americas, or anywhere else, we empower you to form your legal entity in the UAE remotely and efficiently, with full transparency and expert support throughout the entire process.</p>
                         </div>
                     </div>
 
-                    <div className="relative flex flex-col gap-8 pt-16 md:flex-row">
-                        <div className="w-full p-8 md:w-5/12">
+                    <div className="relative flex flex-col lg:gap-8 lg:pt-16 md:flex-row">
+                        <div className="w-full p-8 md:w-6/12">
                             <div className=""  data-aos="fade-right" data-aos-delay="500">
-                                <div className="h-24 lg:h-48 overflow-hidden bg-white rounded-[20px] -ml-6 p-0 lg:px-4 flex justify-center absolute min-w-min top-1/4 shadow-inset-white">
+                                <div className="h-24 lg:h-48 overflow-hidden bg-white rounded-[20px] -ml-6 p-0 lg:px-4 flex justify-center absolute top-1/4 shadow-inset-white slider-steps-video">
                                     {/* <img src={stepSlider} className="w-full animation-scroller-image" />
                                      */}
-                                    <video className="w-full h-full overflow-hidden lg:-ml-1 form-box" style={{ objectFit: "contain", transform: "scale(1.1)" }} autoPlay muted controls={false} loop ref={videoRef} playsInline>
+                                    <video className="w-full h-full -mt-[4px] overflow-hidden lg:-ml-1 form-box" style={{ objectFit: "contain", transform: "scale(1.1)" }} autoPlay muted controls={false} loop ref={videoRef} playsInline>
                                         <source src={slideCheckpointVideo} type="video/mp4" />
                                     </video>
                                 </div>
                                 <img src={burjKhalifa} className="w-full ml-12 lg:ml-[35%] image-burjkhalifa" />
                             </div>
                         </div>
-                        <div className="w-full p-8 md:w-1/12"></div>
-                        <div className="w-full p-8 md:w-6/12" data-aos="fade-left" data-aos-delay="500">
+                        <div className="w-full lg:p-8 md:w-1/12"></div>
+                        <div className="w-full p-4 lg:p-8 md:w-6/12" data-aos="fade-left" data-aos-delay="500">
                             <h2 className="pb-4 text-[47px] leading-[64.2px] font-mornope">Effortless Online Entity Formation</h2>
                             <p className="py-4 font-normal text-[20px] font-mornope">We simplify the entire process, ensuring that you can form your business entirely online.</p>
                             <div className="flex flex-col gap-4 py-8">
@@ -301,13 +322,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                                         <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
                                             <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-6/12 font-medium font-manrope">Full Document Handling</p>
+                                        <p className="text-[20px] w-7/12 font-medium font-manrope">Full Document Handling</p>
                                     </div>
                                     <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
                                         <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
                                             <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-6/12 font-medium font-manrope">Bank Account Setup Consult</p>
+                                        <p className="text-[20px] w-7/12 font-medium font-manrope">Bank Account Setup Consult</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-row flex-wrap gap-4 lg:flex-nowrap">
@@ -315,13 +336,13 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                                         <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
                                             <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-6/12 font-medium font-manrope">Visa and Emirates ID</p>
+                                        <p className="text-[20px] w-7/12 font-medium font-manrope">Visa and Emirates ID</p>
                                     </div>
                                     <div className="flex flex-row items-center w-full gap-4 lg:w-1/2">
                                         <div className="h-16 w-16 rounded-[10px] flex justify-center items-center" style={{background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)"}}>
                                             <img src={approval} className="w-8 h-8" />
                                         </div>
-                                        <p className="text-[20px] w-6/12 font-medium font-manrope">Tax Compliance</p>
+                                        <p className="text-[20px] w-7/12 font-medium font-manrope">Tax Compliance</p>
                                     </div>
                                 </div>
                             </div>
@@ -333,15 +354,15 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <FastEasyProcess />
 
-            <div className="p-6 lg:py-24 bg-primary">
-                <div className="overflow-hidden container relative w-full flex flex-col items-center justify-between h-full p-12 lg:p-24 bg-white md:mx-auto md:flex-row rounded-[25px]" id='pricing'>
+            <div className="p-4 lg:py-24 bg-primary">
+                <div className="overflow-hidden container relative w-full flex flex-col items-center justify-between h-full p-8 lg:p-24 bg-white md:mx-auto md:flex-row rounded-[25px]" id='pricing'>
                     <div className="z-10 w-full mb-8 md:w-6/12">
                         <h3 className="pb-8 text-4xl lg:text-[64px] lg:leading-[64.2px] font-manrope"><span className="font-bold">Transparent pricing tailored</span> to your business</h3>
                         <p className="text-xl font-manrope">Whether you want to start your business in UAE or keep it compliant with local laws - you can do it all with IncorpX.</p>
                     </div>
-                    <div className="z-10 w-full mb-8 md:w-2/12"></div>
-                    <div className="z-10 w-full mb-8 md:w-4/12">
-                        <div className="flex flex-col gap-4 bg-white rounded-[20px] p-8 shadow-box">
+                    <div className="z-10 w-full lg:mb-8 md:w-2/12"></div>
+                    <div className="z-10 w-full mb-4 md:w-4/12">
+                        <div className="flex flex-col gap-4 bg-white rounded-[20px] p-4 lg:p-8 shadow-box">
                             <div className="flex flex-row items-center w-full gap-4 font-bold">
                                 Incorporating your company in UAE
                             </div>
@@ -452,7 +473,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
 
             <div className="h-full py-12 overflow-hidden bg-white md:py-36" id="testimonial">
                 <div className="container flex flex-col items-center justify-between h-full mx-auto">
-                    <h3 className="w-full pb-16 text-4xl font-normal text-center capitalize lg:w-2/5 lg:text-6xl text-manrope">See what client say about incorpX</h3>
+                    <h3 className="w-full pt-4 text-4xl font-normal text-center capitalize lg:pb-16 lg:w-2/5 lg:text-6xl text-manrope">See what client say about incorpX</h3>
                 </div>
                 <div className='w-full'>
                     <Testimonial />
@@ -499,19 +520,19 @@ export default function Welcome({ auth, laravelVersion, phpVersion, emailSent, p
                 <div className="relative z-10 h-full pt-0 bg-bottom pb-60 md:py-40 footer-bg" style={{ backgroundImage: "url(" + footerImage + ")" }}>
                     <div className="container flex flex-col items-center justify-center py-4 mx-auto">
                         <ApplicationLogoLight className="object-contain h-20 mb-2 fill-current w-46" />
-                        <img src={hashtag} className="w-1/6 h-full -m-4" />
+                        <img src={hashtag} className="h-full -m-4 lg:w-1/6" />
                     </div>
                 </div>
                 <div className="relative z-10 bg-black">
                     <div className="container flex flex-col items-center justify-center py-4 mx-auto md:justify-between md:flex-row">
                         <div className="text-center md:text-start">
-                            <p className="text-white">Copyrights © 2024 incorpX | Developed by <a className='font-bold' href='https://www.nayagroup.com' target='_blank'>Naya Group</a></p>
+                            <p className="text-xs text-white font-manrope">Copyrights © 2024 incorpX | Developed by <a className='font-bold' href='http://navyatechnomedia.com/' target='_blank'>Navya Technomedia</a></p>
                         </div>
                         <div className="flex items-center justify-center gap-4 md:justify-end">
-                            <Link href="#" className="text-base leading-6 text-white">
+                            <Link href="#" className="text-xs text-white font-manrope">
                                 Terms & Conditions
                             </Link>
-                            <Link href="#" className="text-base leading-6 text-white">
+                            <Link href="#" className="text-xs text-white font-manrope">
                                 Privacy Policy
                             </Link>
                         </div>

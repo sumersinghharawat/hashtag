@@ -102,15 +102,15 @@ export const Testimonial = (props) => {
                     breakpoints={{
                         0: {
                             slidesPerView: 1,
-                            spaceBetween: 10,
+                            spaceBetween: 100,
                         },
                         640: {
                             slidesPerView: 2,
-                            spaceBetween: 20,
+                            spaceBetween: 100,
                         },
                         768: {
                             slidesPerView: 3,
-                            spaceBetween: 40,
+                            spaceBetween: 100,
                         },
                         1024: {
                             slidesPerView: 4,
@@ -128,7 +128,7 @@ export const Testimonial = (props) => {
                     modules={[Autoplay, Navigation]}
                     >
             {testimonials.map((testimonial, index) => {
-                return <SwiperSlide key={index} className="my-24" slot={index==0?"container-start":index==testimonials.length-1?"container-end":""}>
+                return <SwiperSlide key={index} className="my-16 lg:my-24" slot={index==0?"container-start":index==testimonials.length-1?"container-end":""}>
                     <div className="flex flex-col w-full h-full gap-8 p-8 bg-white rounded-3xl shadow-box" style={{minHeight:"350px"}}>
                         <div className="flex items-center gap-4">
                             <img src={testimonial.image} className="w-11 h-11"/>
