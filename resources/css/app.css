@@ -82,11 +82,11 @@ body {
     background: linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%);
     border-radius: 40px;
     z-index: 2;
-    margin-left: 15px;
+    margin-left: 20px;
 }
 .process-line {
-    width: 80%;
-    left: 40%;
+    width: 90%;
+    left: 24%;
     top: 48%;
 }
 
@@ -96,7 +96,7 @@ body {
 }
 
 .process {
-    padding: 16px 30px;
+    padding: 30px;
     position: relative;
 }
 
@@ -113,10 +113,10 @@ body {
 
 @keyframes progress {
     0% {
-        transform: translateY(26px) translateX(-450px);
+        transform: translateY(40px) translateX(-500px);
     }
     100% {
-        transform: translateY(26px) translateX(450px);
+        transform: translateY(40px) translateX(490px);
     }
 }
 
@@ -227,8 +227,8 @@ html {
     scroll-behavior: smooth;
 }
 .footer-bg {
-    background-size: contain;
-    background-position: 100% 100%;
+    background-size: cover;
+    background-position: bottom center;
     /* background-position: 30% 100%; */
     background-repeat: no-repeat;
 }
@@ -291,8 +291,8 @@ html {
 }
 
 .service-set {
-    width: 21%;
-    min-height: 450px;
+    width: 387px;
+    min-height: 600px;
     border-radius: 20px;
     border: 1px;
     border: 1px solid #ffffff;
@@ -303,7 +303,7 @@ html {
 .service-set-1 {
     background: linear-gradient(101.12deg, rgba(0, 255, 208, 0.35) 0%, rgba(63, 255, 33, 0.35) 176.3%);
     backdrop-filter: blur(25px);
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, -20%);
     left: 50%;
     top: 20%;
     z-index: 3;
@@ -316,7 +316,7 @@ html {
     backdrop-filter: blur(25%);
     transform: translateX(-50%);
     z-index: 2;
-    top: 22%;
+    top: 15%;
     left: 30%;
     animation: moveElement2 5s linear infinite;
     transition: all 0.3s ease-in-out;
@@ -328,7 +328,7 @@ html {
     transform: translateX(-50%);
     left: 70%;
     z-index: 1;
-    top: 25%;
+    top: 20%;
     animation: moveElement3 5s linear infinite;
     transition: all 0.3s ease-in-out;
 }
@@ -364,11 +364,12 @@ html {
 }
 
 .ellipse-animation-bg {
-    /* background: #00100D; */
-    height: 650px;
+    background: #00100D;
+    height: 900px;
     width: 100%;
-    /* position: relative; Allow absolute positioning of layers */
-    /* overflow: hidden; Ensure layers don't overflow the container */
+    /* z-index: 0; */
+    position: relative; /* Allow absolute positioning of layers */
+    overflow: hidden; /* Ensure layers don't overflow the container */
 }
 
 /* Common styles for all layers */
@@ -384,13 +385,32 @@ html {
 
 /* Layer 1 */
 .layer-1 {
-    background: linear-gradient(0deg, rgba(252,247,237,1) 65%, rgba(63,255,33,1) 75%, rgba(121,185,74,1) 85%, rgba(0,16,13,1) 100%);
+    background: linear-gradient(to right, #3FFF21, #1DDB5C);
     filter: blur(150px); /* Simulate blur from SVG */
-    height: 1200px;
-    width: 300%;
+    height: 1000px;
+    width: 200%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%); /* Center horizontally */
-    border-radius: 50%;
+}
+
+/* Layer 2 */
+.layer-2 {
+    background: linear-gradient(to right, #79B94A, #A4C871);
+    filter: blur(100px); /* Simulate blur from SVG */
+    height: 950px;
+    width: 200%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%); /* Center horizontally */
+}
+
+/* Layer 3 */
+.layer-3 {
+    background: linear-gradient(to right, var(--primary-bg), var(--primary-bg));
+    filter: blur(175px); /* Simulate blur from SVG */
+    height: 900px;
+    width: 250%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%); /* Center horizontally */
 }
 
 /* Layer 4 */
@@ -457,10 +477,9 @@ html {
 }
 
 .image-burjkhalifa{
-    height: 600px;
-    width: 450px;
+    height: 700px;
+    width: 500px;
     object-fit: cover;
-    object-position: 40% 100%;
     border-radius: 20px;
 }
 
@@ -540,7 +559,7 @@ html {
         background: linear-gradient(101.12deg, rgba(0, 255, 208, 0.35) 0%, rgba(63, 255, 33, 0.35) 176.3%);
         backdrop-filter: blur(25px);
         transform: translate(-50%, -20%);
-        left: 45%;
+        left: 50%;
         top: 20%;
         z-index: 3;
         animation: moveElement1 5s linear infinite;
@@ -553,7 +572,7 @@ html {
         transform: translateX(-50%);
         z-index: 2;
         top: 20%;
-        left: 20%;
+        left: 30%;
         animation: moveElement2 5s linear infinite;
         transition: all 0.3s ease-in-out;
     }
@@ -569,42 +588,8 @@ html {
         transition: all 0.3s ease-in-out;
     }
 
-    @keyframes moveElement1 {
-        0% {
-            top: 20%;
-        }
-        50% {
-            top: 10%;
-        }
-    }
-    @keyframes moveElement2 {
-        0% {
-            left: 20%;
-        }
-        50% {
-            left: 30%;
-        }
-    }
-    @keyframes moveElement3 {
-        0% {
-            left: 70%;
-        }
-        50% {
-            left: 60%;
-        }
-    }
-
-    /* image scroller */
-    .animation-scroller-image{
-        object-position: bottom;
-        animation: imageScroll 10s linear infinite;
-        object-fit: cover;
-        height: 100%;
-        width: 100%;
-    }
-
     .image-burjkhalifa{
-        height: 350px;
+        height: 400px;
         width: 90%;
         object-fit: cover;
         border-radius: 20px;

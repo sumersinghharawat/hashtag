@@ -25,8 +25,8 @@ export default function FinalPayment({auth, company_info, step, registration_com
         );
     }
 
-    const updateSelectedPackge = (package_id) => {
-        setSelectedPackage(package_id);
+    const updateSelectedPackge = (variant_id) => {
+        setSelectedPackage(variant_id);
     }
 
     const goBack = () => {
@@ -45,20 +45,18 @@ export default function FinalPayment({auth, company_info, step, registration_com
                 <InputError message={errors['selectedPackage']} className="mt-2" />
                 {packages_with_variants.map((element, index)=>{
 
-                    let totalPackagePrice = 0;
-                    for(let variant in element.variants){
-                        totalPackagePrice += parseInt(element.variants[variant].price);
-                    }
-
-                    return <div className={"cursor-pointer flex flex-col w-full h-full p-6 mb-4 bg-white border rounded-xl "+(selectedPackage==element.id?'border-color-primary':'border-gray-300')} onClick={()=>{updateSelectedPackge(element.id)}}>
-                        <div className={"flex flex-row justify-between w-full h-full font-bold flex-nowrap mb-2 "+(selectedPackage==element.id?'text-primary':'')}>
-                            <div>{element.title}</div>
-                            <div>{formatCurrency(totalPackagePrice)}</div>
+                    return <div key={index} className={"flex flex-col w-full h-full mb-4  gap-2 mt-10"}>
+                        <div className={"flex flex-col justify-between w-full h-full flex-nowrap mb-2"}>
+                            <div className="font-bold ">{element.title}</div>
+                            <div className="text-xs text-gray-500" dangerouslySetInnerHTML={{__html: (element.description)}}></div>
                         </div>
                         {element.variants.map((variantElement)=>{
-                            return <div className="flex flex-row justify-between w-full h-full">
-                                <div>{variantElement.title}</div>
-                                <div>{formatCurrency(parseInt(variantElement.price))}</div>
+                            return <div key={variantElement.id} className="flex flex-row justify-between w-full h-full gap-5 px-4 py-4 bg-white border border-gray-400 border-opacity-25 rounded-xl" onClick={()=>updateSelectedPackge(variantElement.id)}>
+                                <div className="">
+                                    <label for={"input-price-"+variantElement.id} className={"font-medium cursor-pointer "+ (selectedPackage==variantElement.id?'text-primary':'')}>{variantElement.title}</label>
+                                    <input type="checkbox" id={"input-price-"+variantElement.id} className="hidden"/>
+                                </div>
+                                <div className={"font-medium cursor-pointer "+ (selectedPackage==variantElement.id?'text-primary':'')}>{formatCurrency(parseInt(variantElement.price))}</div>
                             </div>})}
                     </div>
                 })}

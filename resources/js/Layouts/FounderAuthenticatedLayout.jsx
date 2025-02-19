@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import addmore from '../Icons/add-more.svg';
+import ApplicationLogoDark from '@/Components/ApplicationLogoDark';
 
 export default function FounderAuthenticated({ user, header, children, company_count }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -17,7 +17,7 @@ export default function FounderAuthenticated({ user, header, children, company_c
                         <div className="flex">
                             <div className="flex items-center justify-between w-full shrink-0">
                                 <Link href="/">
-                                    <ApplicationLogo className="block object-contain w-64 h-12 text-gray-800 fill-current" />
+                                    <ApplicationLogoDark className="block object-contain w-64 h-12 text-gray-800 fill-current" />
                                 </Link>
                             </div>
                         </div>

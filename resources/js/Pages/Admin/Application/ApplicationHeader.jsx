@@ -18,6 +18,10 @@ export const ApplicationHeader = ({company_id, rejected_fields_count}) => {
             {rejected_fields_count == 0?<li className="me-2">
                 <Link href={route('admin.dashboard.adminuploaddocumentview', company_id)} className={"inline-block p-4 rounded-t-lg " +(route().current('admin.dashboard.adminuploaddocumentview')?"text-primary border":"text-gray-400")}>Upload Documents</Link>
             </li>:<></>}
+            <li className="me-2">
+            {/* Package */}
+                <Link href={route('admin.dashboard.viewrequestpackage', company_id)} className={"inline-block p-4 rounded-t-lg " +(route().current('admin.dashboard.viewrequestpackage')?"text-primary border":"text-gray-400")}>Package</Link>
+            </li>
         </ul></>
     );
 };

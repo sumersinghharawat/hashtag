@@ -97,6 +97,8 @@ class VariantController extends Controller
     {
         //
 
+        // dd($request->all());
+
         $user = Auth::user();
 
         $request->validate([
@@ -109,7 +111,7 @@ class VariantController extends Controller
 
         Variant::where(['id'=>$id, 'package_id'=>$package_id])->update([
             'title' => $request->title,
-            'description' => $request->description?$request->description:null,
+            'description' => !empty($request->description)?$request->description:null,
             'price' => $request->price,
             'discount_price' => $request->discount_price?$request->discount_price:0,
             'variant_type' => $request->variant_type,

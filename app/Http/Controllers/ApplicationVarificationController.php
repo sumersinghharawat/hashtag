@@ -9,7 +9,9 @@ use App\Models\Company;
 use App\Models\Document;
 use App\Models\FormSubmission;
 use App\Models\Founder;
+use App\Models\Packages;
 use App\Models\User;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -156,6 +158,21 @@ class ApplicationVarificationController extends Controller
 
         return Inertia::render('Admin/Application/Shareholders',['company_info'=>$company_info]);
 
+    }
+
+    public function adminviewsubmitedrequestpackage($id){
+        //
+        $user = Auth::user();
+
+        $company_info = Company::where(['id'=>$id])->first();
+
+        $variantDetails = Variant::where(['id'=>$company_info->package])->first();
+
+        $package_id = $variantDetails->package_id;
+
+        $packageDetails = Packages::where(['id'=>$package_id])->first();
+
+        return Inertia::render('Admin/Application/PackageDetails',['company_info'=>$company_info, 'packageDetails'=>$packageDetails, 'variantDetails' => $variantDetails]);
     }
 
     /**

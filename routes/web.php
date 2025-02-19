@@ -156,6 +156,7 @@ Route::middleware(['auth', 'verified', 'role:agent'])->group(function(){
     Route::get('/admin/viewrequest/{id}/general-information',[ApplicationVarificationController::class,'adminviewsubmitedrequest'])->name('admin.dashboard.viewrequestinformation');
     Route::get('/admin/viewrequest/{id}/general-document',[ApplicationVarificationController::class,'adminviewsubmitedrequestdocument'])->name('admin.dashboard.viewrequestdocument');
     Route::get('/admin/viewrequest/{id}/shareholder-details',[ApplicationVarificationController::class,'adminviewsubmitedrequestshareholder'])->name('admin.dashboard.viewrequestshareholder');
+    Route::get('/admin/viewrequest/{id}/package-details',[ApplicationVarificationController::class,'adminviewsubmitedrequestpackage'])->name('admin.dashboard.viewrequestpackage');
     Route::get('/admin/viewrequest/{id}/upload-document-view',[ApplicationVarificationController::class,'adminuploaddocumentview'])->name('admin.dashboard.adminuploaddocumentview');
     Route::put('/admin/viewrequest/{id}/upload-document-view',[ApplicationVarificationController::class,'adminuploaddocumentstore'])->name('admin.dashboard.adminuploaddocumentstore');
 

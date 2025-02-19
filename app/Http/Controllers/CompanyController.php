@@ -446,20 +446,20 @@ class CompanyController extends Controller
         $packagesWithVariants = Packages::where('status', 1)
         ->whereHas('variants', function ($query) use ($founder_visa) {
             $query->where(function ($query) use ($founder_visa) {
-                $query->where('variant_type', 'visa')
-                      ->where('visa_count', $founder_visa);
+                $query->where('variant_type', 'visa');
+                    //   ->where('visa_count', $founder_visa);
             })->orWhere(function ($query) {
-                $query->where('variant_type', 'license')
-                      ->whereNull('visa_count');
+                $query->where('variant_type', 'license');
+                    //   ->whereNull('visa_count');
             });
         })
         ->with(['variants' => function ($query) use ($founder_visa) {
             $query->where(function ($query) use ($founder_visa) {
-                $query->where('variant_type', 'visa')
-                      ->where('visa_count', $founder_visa);
+                $query->where('variant_type', 'visa');
+                    //   ->where('visa_count', $founder_visa);
             })->orWhere(function ($query) {
-                $query->where('variant_type', 'license')
-                      ->whereNull('visa_count');
+                $query->where('variant_type', 'license');
+                    //   ->whereNull('visa_count')->orWhere('visa_count',0);
             });
         }])
         ->get();

@@ -109,7 +109,7 @@ class PackagesController extends Controller
         $package = Packages::where(['id'=>$id])->first();
 
         Packages::where(['id'=>$id])->update([
-            'status' => $package->status?0:1,
+            'status' => isset($package->status)?0:1,
         ]);
 
         return redirect(route('admin.dashboard.packagesofproduct'));

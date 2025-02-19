@@ -21,7 +21,6 @@ export const PopUpForm = ({showPopUp,emailSent}) => {
             );
             const data = await response.json();
 
-
             setCountryCode(data.country);
         } catch (error) {
             console.error("Error getting country code:", error);

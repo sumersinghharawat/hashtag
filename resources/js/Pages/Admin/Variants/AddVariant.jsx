@@ -96,7 +96,7 @@ export default function AddPackage ({auth, packageofproduct, variantofproduct}) 
                                         <InputLabel htmlFor="visa_count" value="Visa Count" />
 
                                         <TextInput
-                                            type="number"
+                                            type="text"
                                             id="visa_count"
                                             name="visa_count"
                                             value={data.visa_count}
@@ -107,7 +107,7 @@ export default function AddPackage ({auth, packageofproduct, variantofproduct}) 
 
                                         <InputError message={errors.visa_count} className="mt-2" />
                                     </div>:<></>}
-                                    <div className={data.variant_type=='visa'?'hidden':''}>
+                                    <div className={''}>
                                         <InputLabel htmlFor="title" value="Variant Title" />
 
                                         <TextInput
@@ -160,6 +160,7 @@ export default function AddPackage ({auth, packageofproduct, variantofproduct}) 
                                             className="block w-full mt-1"
                                             autoComplete="description"
                                             onChange={(e) => setData('description', e.target.value)}
+                                            value={data.description}
                                         >{data.description}</TextareaInput>
 
                                         <InputError message={errors.description} className="mt-2" />

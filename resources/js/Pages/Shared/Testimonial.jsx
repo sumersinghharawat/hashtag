@@ -101,11 +101,11 @@ export const Testimonial = (props) => {
                     className="mySwiper"
                     breakpoints={{
                         0: {
-                            slidesPerView: 1.25,
+                            slidesPerView: 1,
                             spaceBetween: 10,
                         },
-                        300: {
-                            slidesPerView: 1.25,
+                        640: {
+                            slidesPerView: 2,
                             spaceBetween: 20,
                         },
                         768: {
@@ -128,21 +128,21 @@ export const Testimonial = (props) => {
                     modules={[Autoplay, Navigation]}
                     >
             {testimonials.map((testimonial, index) => {
-                return <SwiperSlide key={index} className="w-2/3 my-10" slot={index==0?"container-start":index==testimonials.length-1?"container-end":""}>
-                    <div className="flex flex-col w-full gap-2 p-8 bg-white h-80 lg:h-72 rounded-3xl shadow-box">
-                        <div className="flex items-center gap-8">
+                return <SwiperSlide key={index} className="my-24" slot={index==0?"container-start":index==testimonials.length-1?"container-end":""}>
+                    <div className="flex flex-col w-full gap-8 p-8 bg-white h-80 rounded-3xl shadow-box">
+                        <div className="flex items-center gap-4">
                             <img src={testimonial.image} className="w-11 h-11"/>
                             <div className="flex flex-col justify-start">
-                                <h2 className="mb-0 text-2xl font-bold">{testimonial.name}</h2>
-                                <p className="text-xs text-gray-500">{testimonial.title}</p>
+                                <h2 className="text-2xl font-bold">{testimonial.name}</h2>
+                                <p className="text-sm text-gray-500">{testimonial.title}</p>
                             </div>
                         </div>
-                        <p className="text-sm font-mornope">{testimonial.description}</p>
+                        <p>{testimonial.description}</p>
                     </div>
                 </SwiperSlide>
             })}
         </Swiper>
-            <div className="items-center justify-center hidden gap-4">
+            <div className="flex items-center justify-center hidden gap-4">
                 <button className={"flex items-center justify-center w-16 h-16 rounded-full "} onClick={handlePrev} style={{ background: "linear-gradient(101.12deg, #B6D99C 0%, #78B948 176.3%)" }}>
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </button>

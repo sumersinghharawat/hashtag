@@ -1,6 +1,7 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import ApplicationLogo from '@/Components/ApplicationLogoLight';
 import { Link } from '@inertiajs/react';
 import guestBanner from '../images/guest-banner.png';
+import ApplicationLogoDark from '@/Components/ApplicationLogoDark';
 
 export default function Guest({ children }) {
     return (
@@ -12,7 +13,7 @@ export default function Guest({ children }) {
                 <div className='w-full mx-auto' style={{maxWidth:"440px"}}>
                     <div className="flex justify-center">
                         <Link href="/">
-                            <ApplicationLogo className="h-20" />
+                            <ApplicationLogoDark className="h-20" />
                         </Link>
                     </div>
                     <div className="w-full px-4">
