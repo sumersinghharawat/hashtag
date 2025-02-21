@@ -33,7 +33,7 @@ export default function PayNow({ company_info, auth, step, registration_complete
                             incorpX Service Fee
                         </div>
                         <div className="w-3/6 text-2xl font-bold text-end">
-                            $599.00
+                            $799.00
                             <p className="text-base text-gray-500">one time fee</p>
                         </div>
                     </div>
