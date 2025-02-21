@@ -24,16 +24,16 @@ export default function FounderAuthenticated({ user, header, children, company_c
 
                         <div className="flex items-center justify-end w-full h-full gap-4">
                             {company_count?<><div className='w-auto'>
-                                <NavLink href={route('founder.dashboard.index')} active={route().current('founder.dashboard.index')} className='focus:border-0 active:text-green-500'>Dashboard</NavLink>
+                                <NavLink href={route('founder.dashboard.index')} active={route().current('founder.dashboard.index')} className='focus:border-0 active:text-primary'>Dashboard</NavLink>
                             </div>
                             <div className='w-auto'>
-                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'>My Applications</NavLink>
+                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-primary'>My Applications</NavLink>
                             </div>
                             <div className='w-auto'>
-                                <NavLink href={route('founder.dashboard.support')} active={route().current('founder.dashboard.support')} className='focus:border-0 active:text-green-500'>Support</NavLink>
+                                <NavLink href={route('founder.dashboard.support')} active={route().current('founder.dashboard.support')} className='focus:border-0 active:text-primary'>Support</NavLink>
                             </div>
                             <div className='w-auto'>
-                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-green-500'><img src={addmore} style={{marginTop:4,height:16,width:16}} /></NavLink>
+                                <NavLink href={route('founder.dashboard.applications')} active={route().current('founder.dashboard.applications')} className='focus:border-0 active:text-primary'><img src={addmore} style={{marginTop:4,height:16,width:16}} /></NavLink>
                             </div></>:<></>}
                         </div>
 

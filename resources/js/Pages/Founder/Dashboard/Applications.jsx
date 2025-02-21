@@ -86,7 +86,7 @@ export default function Applications({ auth, request, companies, company_count }
                                     {parseInt(company.rejected_document_count)?<span><b>Rejected Documents & Details:</b> {parseInt(company.rejected_document_count)}</span>:<></>}
                                 </div>
                             </div>
-                            <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold text-green-600 -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full -bottom-4 left-1/2 btn-status">
+                            <div className="absolute flex items-center gap-2 p-1 px-4 font-semibold -translate-x-1/2 bg-white border border-gray-300 border-solid rounded-full text-primary -bottom-4 left-1/2 btn-status">
                                 {company.next_step} <FontAwesomeIcon icon={faChevronRight} style={{ height: 12, width: 12 }} />
                             </div>
                         </Link>
